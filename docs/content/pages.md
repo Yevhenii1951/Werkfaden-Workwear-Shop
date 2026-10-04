@@ -39,7 +39,7 @@ So statten Sie Ihr Team aus:
 
 1. Wählen Sie den gewünschten Artikel und die Variante (Farbe/Größe).
 2. Füllen Sie das Anfrageformular aus (Firma optional, Name, E-Mail, Menge, Kommentar).
-3. Laden Sie Ihre Logodatei (Vektorformat bevorzugt) hoch und bestätigen Sie, dass Sie die Nutzungsrechte besitzen.
+3. Laden Sie Ihre Logodatei (nur .PNG, .JPG oder .WebP) hoch und bestätigen Sie, dass Sie die Nutzungsrechte besitzen.
    **Was passiert danach?**
    Ihre Anfrage wird manuell geprüft. Wir melden uns per E-Mail mit einer Machbarkeitsprüfung, einem Preisangebot und einem geschätzten Zeitrahmen. Diese Anfrage ist kein Kaufvertrag und reserviert keine Warenbestände.
 

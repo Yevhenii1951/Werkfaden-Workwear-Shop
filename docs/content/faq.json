@@ -1,19 +1,110 @@
 [
-  {"id": "faq-size-1", "topic": "size_care", "question_de": "Wie finde ich die richtige Größe?", "answer_de": "Bitte messen Sie Ihren Brustumfang, Taillenumfang und Ihre Hüfte mit einem Maßband. Vergleichen Sie diese Werte mit unseren Größentabellen in der Größenberatung. Wenn Sie zwischen zwei Größen liegen, empfehlen wir bei Oberteilen die größere Größe für mehr Bewegungsfreiheit."},
-  {"id": "faq-size-2", "topic": "size_care", "question_de": "Laufen die Kleidungsstücke nach dem Waschen ein?", "answer_de": "Unsere Textilien sind auf Formstabilität ausgelegt. Bei Einhaltung der angegebenen Pflegehinweise (z. B. Maschinenwäsche bei max. 60 °C, kein Trockner bei bestimmten Materialien) ist mit keinem merklichen Einlaufen zu rechnen."},
-  {"id": "faq-size-3", "topic": "size_care", "question_de": "Wie pflege ich meine Arbeitskleidung richtig?", "answer_de": "Waschen Sie helle und dunkle Textilien getrennt. Beachten Sie die spezifischen Pflegeetiketten jedes Artikels. Vermeiden Sie Weichspüler bei Funktionsmaterialien, da dies die Atmungsaktivität beeinträchtigen kann. Diese Kleidung ist keine zertifizierte PSA."},
-  {"id": "faq-size-4", "topic": "size_care", "question_de": "Sind die Größenangaben Körpermaße oder Kleidungsmaße?", "answer_de": "Die Angaben in unseren Größentabellen beziehen sich auf die Körpermaße in Zentimetern. Sie dienen als Richtwert für die Auswahl der passenden Konfektionsgröße."},
-  {"id": "faq-size-5", "topic": "size_care", "question_de": "Verfärbt sich die Kleidung bei häufiger Wäsche?", "answer_de": "Die verwendeten Materialien sind auf Farbechtheit geprüft. Bei Einhaltung der empfohlenen Waschtemperaturen und Verwendung von Colorwaschmitteln bleibt die Farbe auch nach vielen Wäschen erhalten."},
-  {"id": "faq-order-1", "topic": "order_delivery", "question_de": "Wie lange dauert die Lieferung?", "answer_de": "Der demonstrierte Lieferzeitraum beträgt 3–5 Werktage innerhalb Deutschlands. Bitte beachten Sie, dass dies ein simulierter Wert für dieses Demo-Portfolio ist und im realen Betrieb vom Händler bestätigt werden muss."},
-  {"id": "faq-order-2", "topic": "order_delivery", "question_de": "Wie hoch sind die Versandkosten?", "answer_de": "Der Standardversand innerhalb Deutschlands kostet 5,90 € (brutto). Ab einem Warenwert von 100,00 € entfallen die Versandkosten. Rabatte sind im aktuellen MVP nicht aktiv."},
-  {"id": "faq-order-3", "topic": "order_delivery", "question_de": "Liefern Sie auch ins Ausland?", "answer_de": "Nein, im aktuellen MVP ist der Versand ausschließlich innerhalb Deutschlands (DE) verfügbar. Internationale Lieferungen sind derzeit nicht vorgesehen."},
-  {"id": "faq-order-4", "topic": "order_delivery", "question_de": "Erhalte ich eine Sendungsverfolgung?", "answer_de": "Im realen Betrieb erhalten Sie nach dem Versand eine E-Mail mit einem Tracking-Link. In diesem Demo-Shop wird der Versandprozess nur simuliert."},
-  {"id": "faq-payment-1", "topic": "payment_demo", "question_de": "Welche Zahlungsmethoden werden akzeptiert?", "answer_de": "In diesem Demo-Shop ist ausschließlich der Stripe-Testmodus aktiv. Es werden keine echten Zahlungen verarbeitet. Zahlungsmethoden wie PayPal, Klarna oder Rechnungskauf sind im MVP nicht implementiert."},
-  {"id": "faq-payment-2", "topic": "payment_demo", "question_de": "Warum sehe ich einen Demo-Hinweis im Shop?", "answer_de": "Dieser Shop ist ein Konzept-Portfolio. Der Hinweis „Demo-Shop — keine echten Bestellungen oder Zahlungen“ stellt sicher, dass Besucher wissen, dass keine reale Transaktion stattfindet und alle Daten simuliert sind."},
-  {"id": "faq-payment-3", "topic": "payment_demo", "question_de": "Was passiert, wenn ich eine Testzahlung auslöse?", "answer_de": "Es wird keine echte Abbuchung vorgenommen. Die Bestellung wird im System nur als simulierter Datensatz angelegt, um den Checkout-Prozess zu demonstrieren."},
-  {"id": "faq-custom-1", "topic": "customization", "question_de": "Wie kann ich eine Veredelung mit meinem Logo anfragen?", "answer_de": "Wählen Sie den gewünschten Artikel, nutzen Sie das Veredelungsanfrage-Formular, laden Sie Ihre Logodatei (vorzugsweise Vektorformat) hoch und nennen Sie die gewünschte Menge. Wir prüfen dies manuell."},
-  {"id": "faq-custom-2", "topic": "customization", "question_de": "Gibt es eine Mindestbestellmenge für Veredelungen?", "answer_de": "Es gibt keinen festen Mindestbestellwert. Jeder Auftrag wird individuell auf Machbarkeit und Preis geprüft, nachdem wir Ihre Designdatei erhalten haben."},
-  {"id": "faq-custom-3", "topic": "customization", "question_de": "Welche Dateiformate werden für Logos akzeptiert?", "answer_de": "Für optimale Ergebnisse bevorzugen wir Vektorformate wie .AI, .EPS oder .SVG. Hochauflösende .PNG-Dateien mit transparentem Hintergrund werden ebenfalls geprüft."},
-  {"id": "faq-return-1", "topic": "return_contact", "question_de": "Wie funktioniert die Rückgabe?", "answer_de": "Im Demo-Betrieb füllen Sie bitte das Kontaktformular aus, um eine fiktive Rücksendenummer zu erhalten. Im realen Live-Betrieb gelten die gesetzlichen Widerrufsfristen und ein vom Händler bereitgestelltes Rücksendeverfahren."},
-  {"id": "faq-return-2", "topic": "return_contact", "question_de": "Wie kann ich den Kundenservice kontaktieren?", "answer_de": "Nutzen Sie das Kontaktformular auf der Website oder senden Sie eine E-Mail an [KONTAKT_EMAIL_PLACEHOLDER]. Wir melden uns innerhalb der simulierten Bearbeitungszeit bei Ihnen."},
-  {"id": "faq-return-3", "topic": "return_contact", "question_de": "Werden veredelte Artikel zurückgenommen?", "answer_de":
+  {
+    "id": "faq-size-1",
+    "topic": "size_care",
+    "question_de": "Wie finde ich die richtige Größe?",
+    "answer_de": "Bitte messen Sie Ihren Brustumfang, Taillenumfang und Ihre Hüfte mit einem Maßband. Vergleichen Sie diese Werte mit unseren Größentabellen in der Größenberatung. Wenn Sie zwischen zwei Größen liegen, empfehlen wir bei Oberteilen die größere Größe für mehr Bewegungsfreiheit."
+  },
+  {
+    "id": "faq-size-2",
+    "topic": "size_care",
+    "question_de": "Laufen die Kleidungsstücke nach dem Waschen ein?",
+    "answer_de": "Unsere Textilien sind auf Formstabilität ausgelegt. Bei Einhaltung der angegebenen Pflegehinweise (z. B. Maschinenwäsche bei max. 60 °C, kein Trockner bei bestimmten Materialien) ist mit keinem merklichen Einlaufen zu rechnen."
+  },
+  {
+    "id": "faq-size-3",
+    "topic": "size_care",
+    "question_de": "Wie pflege ich meine Arbeitskleidung richtig?",
+    "answer_de": "Waschen Sie helle und dunkle Textilien getrennt. Beachten Sie die spezifischen Pflegeetiketten jedes Artikels. Vermeiden Sie Weichspüler bei Funktionsmaterialien, da dies die Atmungsaktivität beeinträchtigen kann. Diese Kleidung ist keine zertifizierte PSA."
+  },
+  {
+    "id": "faq-size-4",
+    "topic": "size_care",
+    "question_de": "Sind die Größenangaben Körpermaße oder Kleidungsmaße?",
+    "answer_de": "Die Angaben in unseren Größentabellen beziehen sich auf die Körpermaße in Zentimetern. Sie dienen als Richtwert für die Auswahl der passenden Konfektionsgröße."
+  },
+  {
+    "id": "faq-size-5",
+    "topic": "size_care",
+    "question_de": "Verfärbt sich die Kleidung bei häufiger Wäsche?",
+    "answer_de": "Die verwendeten Materialien sind auf Farbechtheit geprüft. Bei Einhaltung der empfohlenen Waschtemperaturen und Verwendung von Colorwaschmitteln bleibt die Farbe auch nach vielen Wäschen erhalten."
+  },
+  {
+    "id": "faq-order-1",
+    "topic": "order_delivery",
+    "question_de": "Wie lange dauert die Lieferung?",
+    "answer_de": "Der demonstrierte Lieferzeitraum beträgt 3–5 Werktage innerhalb Deutschlands. Bitte beachten Sie, dass dies ein simulierter Wert für dieses Demo-Portfolio ist und im realen Betrieb vom Händler bestätigt werden muss."
+  },
+  {
+    "id": "faq-order-2",
+    "topic": "order_delivery",
+    "question_de": "Wie hoch sind die Versandkosten?",
+    "answer_de": "Der Standardversand innerhalb Deutschlands kostet 5,90 € (brutto). Ab einem Warenwert von 100,00 € entfallen die Versandkosten. Rabatte sind im aktuellen MVP nicht aktiv."
+  },
+  {
+    "id": "faq-order-3",
+    "topic": "order_delivery",
+    "question_de": "Liefern Sie auch ins Ausland?",
+    "answer_de": "Nein, im aktuellen MVP ist der Versand ausschließlich innerhalb Deutschlands (DE) verfügbar. Internationale Lieferungen sind derzeit nicht vorgesehen."
+  },
+  {
+    "id": "faq-order-4",
+    "topic": "order_delivery",
+    "question_de": "Erhalte ich eine Sendungsverfolgung?",
+    "answer_de": "Im realen Betrieb erhalten Sie nach dem Versand eine E-Mail mit einem Tracking-Link. In diesem Demo-Shop wird der Versandprozess nur simuliert."
+  },
+  {
+    "id": "faq-payment-1",
+    "topic": "payment_demo",
+    "question_de": "Welche Zahlungsmethoden werden akzeptiert?",
+    "answer_de": "In diesem Demo-Shop ist ausschließlich der Stripe-Testmodus aktiv. Es werden keine echten Zahlungen verarbeitet. Zahlungsmethoden wie PayPal, Klarna oder Rechnungskauf sind im MVP nicht implementiert."
+  },
+  {
+    "id": "faq-payment-2",
+    "topic": "payment_demo",
+    "question_de": "Warum sehe ich einen Demo-Hinweis im Shop?",
+    "answer_de": "Dieser Shop ist ein Konzept-Portfolio. Der Hinweis „Demo-Shop — keine echten Bestellungen oder Zahlungen“ stellt sicher, dass Besucher wissen, dass keine reale Transaktion stattfindet und alle Daten simuliert sind."
+  },
+  {
+    "id": "faq-payment-3",
+    "topic": "payment_demo",
+    "question_de": "Was passiert, wenn ich eine Testzahlung auslöse?",
+    "answer_de": "Es wird keine echte Abbuchung vorgenommen. Die Bestellung wird im System nur als simulierter Datensatz angelegt, um den Checkout-Prozess zu demonstrieren."
+  },
+  {
+    "id": "faq-custom-1",
+    "topic": "customization",
+    "question_de": "Wie kann ich eine Veredelung mit meinem Logo anfragen?",
+    "answer_de": "Wählen Sie den gewünschten Artikel, nutzen Sie das Veredelungsanfrage-Formular, laden Sie Ihre Logodatei (vorzugsweise Vektorformat) hoch und nennen Sie die gewünschte Menge. Wir prüfen dies manuell."
+  },
+  {
+    "id": "faq-custom-2",
+    "topic": "customization",
+    "question_de": "Gibt es eine Mindestbestellmenge für Veredelungen?",
+    "answer_de": "Es gibt keinen festen Mindestbestellwert. Jeder Auftrag wird individuell auf Machbarkeit und Preis geprüft, nachdem wir Ihre Designdatei erhalten haben."
+  },
+  {
+    "id": "faq-custom-3",
+    "topic": "customization",
+    "question_de": "Welche Dateiformate werden für Logos akzeptiert?",
+    "answer_de": "Für eine Upload-Prüfung im Demo werden nur Rasterformate akzeptiert: .PNG, .JPG und .WebP. SVG/PDF sind im MVP nicht zugelassen (Sicherheitsgrundlage: Spec). Vektorformate bleiben bei manueller Prüfung außerhalb dieses Uploads."
+  },
+  {
+    "id": "faq-return-1",
+    "topic": "return_contact",
+    "question_de": "Wie funktioniert die Rückgabe?",
+    "answer_de": "Im Demo-Betrieb füllen Sie bitte das Kontaktformular aus, um eine fiktive Rücksendenummer zu erhalten. Im realen Live-Betrieb gelten die gesetzlichen Widerrufsfristen und ein vom Händler bereitgestelltes Rücksendeverfahren."
+  },
+  {
+    "id": "faq-return-2",
+    "topic": "return_contact",
+    "question_de": "Wie kann ich den Kundenservice kontaktieren?",
+    "answer_de": "Nutzen Sie das Kontaktformular auf der Website oder senden Sie eine E-Mail an [KONTAKT_EMAIL_PLACEHOLDER]. Wir melden uns innerhalb der simulierten Bearbeitungszeit bei Ihnen."
+  },
+  {
+    "id": "faq-return-3",
+    "topic": "return_contact",
+    "question_de": "Werden veredelte Artikel zurückgenommen?",
+    "answer_de": "Veredelte Artikel sind für eine Rückgabe im Rahmen des Widerrufsrechts in der Regel ausgeschlossen, da sie nach Kundenwunsch individuell angefertigt wurden. Ausnahmen sind nur bei Mängeln, offensichtlichen Fehlern oder nach individueller Prüfung im Rahmen des gesetzlich zulässigen Rahmens vorgesehen. Dies ist ein Demo-Hinweis; im Live-Betrieb gelten die von einem Rechtsanwalt geprüften AGB."
+  }
+]
