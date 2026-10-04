@@ -1,0 +1,90 @@
+[
+	{
+		"image_key": "category-tshirts-hero",
+		"suggested_filename": "cat-tshirts-hero.jpg",
+		"product_content_id": null,
+		"role": "category_hero",
+		"aspect_ratio": "16:9",
+		"alt_de": "Robuste T-Shirts für den Arbeitsalltag",
+		"prompt_en": "Editorial photography, flat lay of folded navy and black work t-shirts on a textured concrete background, soft diffused daylight, medium format film aesthetic, muted charcoal and warm paper tones with brick-orange accent, no text, no logos.",
+		"status": "needed",
+		"source_license": "not_provided"
+	},
+	{
+		"image_key": "category-poloshirts-hero",
+		"suggested_filename": "cat-poloshirts-hero.jpg",
+		"product_content_id": null,
+		"role": "category_hero",
+		"aspect_ratio": "16:9",
+		"alt_de": "Professionelle Poloshirts für Handwerk",
+		"prompt_en": "Editorial photography, neatly arranged white and navy polo shirts on a wooden workbench, soft diffused daylight, medium format film aesthetic, muted tones, no text, no logos.",
+		"status": "needed",
+		"source_license": "not_provided"
+	},
+	{
+		"image_key": "category-sweatshirts-hero",
+		"suggested_filename": "cat-sweatshirts-hero.jpg",
+		"product_content_id": null,
+		"role": "category_hero",
+		"aspect_ratio": "16:9",
+		"alt_de": "Warme Sweatshirts und Hoodies",
+		"prompt_en": "Editorial photography, anthracite and olive hoodies casually draped over a workshop chair, soft diffused daylight, medium format film aesthetic, muted tones, no text, no logos.",
+		"status": "needed",
+		"source_license": "not_provided"
+	},
+	{
+		"image_key": "category-jacken-westen-hero",
+		"suggested_filename": "cat-jacken-westen-hero.jpg",
+		"product_content_id": null,
+		"role": "category_hero",
+		"aspect_ratio": "16:9",
+		"alt_de": "Funktionale Jacken und Westen",
+		"prompt_en": "Editorial photography, black softshell jacket and olive work vest hanging on a wooden pegboard, soft diffused daylight, medium format film aesthetic, muted tones, no text, no logos.",
+		"status": "needed",
+		"source_license": "not_provided"
+	},
+	{
+		"image_key": "category-arbeitshosen-hero",
+		"suggested_filename": "cat-arbeitshosen-hero.jpg",
+		"product_content_id": null,
+		"role": "category_hero",
+		"aspect_ratio": "16:9",
+		"alt_de": "Robuste Arbeitshosen mit Taschen",
+		"prompt_en": "Editorial photography, navy and black work trousers with reinforced knees folded on a clean workbench, soft diffused daylight, medium format film aesthetic, muted tones, no text, no logos.",
+		"status": "needed",
+		"source_license": "not_provided"
+	},
+	{
+		"image_key": "lifestyle-workshop-1",
+		"suggested_filename": "lifestyle-workshop-1.jpg",
+		"product_content_id": null,
+		"role": "lifestyle",
+		"aspect_ratio": "4:5",
+		"alt_de": "Handwerker in Arbeitskleidung bei der Planung",
+		"prompt_en": "Editorial lifestyle photography, a man in his 40s wearing a navy polo shirt and black work trousers, reviewing blueprints in a well-lit carpentry workshop, soft diffused daylight, medium format film aesthetic, muted charcoal and warm paper tones, authentic expression of focus, no text, no logos.",
+		"status": "needed",
+		"source_license": "not_provided"
+	},
+	{
+		"image_key": "lifestyle-garden-1",
+		"suggested_filename": "lifestyle-garden-1.jpg",
+		"product_content_id": null,
+		"role": "lifestyle",
+		"aspect_ratio": "4:5",
+		"alt_de": "Gärtnerin in funktioneller Kleidung",
+		"prompt_en": "Editorial lifestyle photography, a woman in her 30s wearing an olive work vest and navy trousers, tending to plants in a sunny garden, soft diffused daylight, medium format film aesthetic, muted tones with brick-orange accent, authentic expression of enjoyment, no text, no logos.",
+		"status": "needed",
+		"source_license": "not_provided"
+	},
+	{
+		"image_key": "lifestyle-painting-1",
+		"suggested_filename": "lifestyle-painting-1.jpg",
+		"product_content_id": null,
+		"role": "lifestyle",
+		"aspect_ratio": "4:5",
+		"alt_de": "Maler in Arbeitskleidung beim Streichen",
+		"prompt_en": "Editorial lifestyle photography, a man in his 50s wearing an anthracite sweatshirt and black work trousers, painting a wall with a roller, soft diffused daylight, medium format film aesthetic, muted tones, authentic expression of craftsmanship, no text, no logos.",
+		"status": "needed",
+		"source_license": "not_provided"
+	}
+]

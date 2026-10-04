@@ -1,0 +1,52 @@
+[
+	{
+		"id": "t-shirts",
+		"slug": "t-shirts",
+		"name_de": "T-Shirts",
+		"intro_de": "Robuste T-Shirts für den täglichen Einsatz. Atmungsaktiv, pflegeleicht und in klassischen Farben erhältlich. Ideal als Basis für Teamkleidung oder für private Heimwerker-Projekte. Alle Modelle sind für eine individuelle Veredelung geeignet.",
+		"seo_title_de": "Robuste Arbeits-T-Shirts für Handwerk & Team | Werkfaden",
+		"seo_description_de": "Entdecken Sie langlebige T-Shirts für den Arbeitsalltag. Atmungsaktiv, pflegeleicht und perfekt für individuelle Logos. Demo-Shop.",
+		"filter_suggestions": ["größe", "farbe", "preis", "veredelung_eligible"],
+		"image_key": "category-tshirts-hero"
+	},
+	{
+		"id": "poloshirts",
+		"slug": "poloshirts",
+		"name_de": "Poloshirts",
+		"intro_de": "Poloshirts verbinden professionelles Auftreten mit dem Komfort von Arbeitskleidung. Mit verstärkten Nähten und formstabilen Kragen sind sie die richtige Wahl für Kundentermine oder den gehobenen Handwerksbetrieb.",
+		"seo_title_de": "Professionelle Arbeits-Poloshirts mit Logo-Option | Werkfaden",
+		"seo_description_de": "Hochwertige Poloshirts für Handwerk und Dienstleistung. Formstabil, atmungsaktiv und ideal für Firmenlogos. Jetzt im Demo-Shop ansehen.",
+		"filter_suggestions": ["größe", "farbe", "preis", "veredelung_eligible"],
+		"image_key": "category-poloshirts-hero"
+	},
+	{
+		"id": "sweatshirts-hoodies",
+		"slug": "sweatshirts-hoodies",
+		"name_de": "Sweatshirts & Hoodies",
+		"intro_de": "Warm und bequem für kühle Tage auf der Baustelle oder im Garten. Unsere Sweatshirts und Hoodies bieten eine lockere Passform und robuste Materialien, die auch häufigen Wäschen standhalten.",
+		"seo_title_de": "Arbeits-Sweatshirts & Hoodies für kühle Tage | Werkfaden",
+		"seo_description_de": "Warme und langlebige Sweatshirts und Hoodies für den Arbeitsalltag. Bequeme Passform, robuste Qualität. Demo-Produkte für Ihr Portfolio.",
+		"filter_suggestions": ["größe", "farbe", "preis", "veredelung_eligible"],
+		"image_key": "category-sweatshirts-hero"
+	},
+	{
+		"id": "jacken-westen",
+		"slug": "jacken-westen",
+		"name_de": "Jacken & Westen",
+		"intro_de": "Wetterfeste Jacken und praktische Westen für wechselhafte Bedingungen. Mit funktionalen Taschen und strapazierfähigem Obermaterial schützen sie vor Wind und leichter Nässe.",
+		"seo_title_de": "Funktions-Jacken & Westen für die Arbeit | Werkfaden",
+		"seo_description_de": "Strapazierfähige Arbeitsjacken und Westen mit vielen Taschen. Praktisch und wetterbeständig für Handwerk und Garten. Demo-Katalog.",
+		"filter_suggestions": ["größe", "farbe", "preis", "veredelung_eligible"],
+		"image_key": "category-jacken-westen-hero"
+	},
+	{
+		"id": "arbeitshosen",
+		"slug": "arbeitshosen",
+		"name_de": "Arbeitshosen",
+		"intro_de": "Funktionale Arbeitshosen mit verstärkten Zonen und praktischen Taschen. Entwickelt für Bewegungsfreiheit und Haltbarkeit bei körperlicher Arbeit. Keine zertifizierte Schutzkleidung.",
+		"seo_title_de": "Robuste Arbeitshosen mit Taschen | Werkfaden Demo",
+		"seo_description_de": "Bequeme und langlebige Arbeitshosen für Handwerk und Garten. Mit verstärkten Nähten und praktischer Aufteilung. Demo-Shop.",
+		"filter_suggestions": ["größe", "farbe", "preis", "veredelung_eligible"],
+		"image_key": "category-arbeitshosen-hero"
+	}
+]

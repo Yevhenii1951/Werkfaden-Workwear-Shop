@@ -1,0 +1,77 @@
+{
+	"tops-regular": {
+		"name_de": "Größentabelle für Oberteile (Regular Fit)",
+		"measurements_de": "Körpermaße in cm",
+		"sizes": [
+			{
+				"size": "S",
+				"chest_cm": "96-100",
+				"waist_cm": "80-84",
+				"length_cm": "70"
+			},
+			{
+				"size": "M",
+				"chest_cm": "100-104",
+				"waist_cm": "84-88",
+				"length_cm": "72"
+			},
+			{
+				"size": "L",
+				"chest_cm": "104-108",
+				"waist_cm": "88-92",
+				"length_cm": "74"
+			}
+		]
+	},
+	"outerwear-regular": {
+		"name_de": "Größentabelle für Jacken & Sweatshirts (Regular Fit)",
+		"measurements_de": "Körpermaße in cm",
+		"sizes": [
+			{
+				"size": "S",
+				"chest_cm": "96-100",
+				"waist_cm": "80-84",
+				"length_cm": "72"
+			},
+			{
+				"size": "M",
+				"chest_cm": "100-104",
+				"waist_cm": "84-88",
+				"length_cm": "74"
+			},
+			{
+				"size": "L",
+				"chest_cm": "104-108",
+				"waist_cm": "88-92",
+				"length_cm": "76"
+			}
+		]
+	},
+	"trousers-regular": {
+		"name_de": "Größentabelle für Arbeitshosen (Regular Fit)",
+		"measurements_de": "Körpermaße in cm",
+		"sizes": [
+			{
+				"size": "48",
+				"waist_cm": "82-86",
+				"hip_cm": "98-102",
+				"inseam_cm": "82",
+				"total_length_cm": "108"
+			},
+			{
+				"size": "50",
+				"waist_cm": "86-90",
+				"hip_cm": "102-106",
+				"inseam_cm": "83",
+				"total_length_cm": "109"
+			},
+			{
+				"size": "52",
+				"waist_cm": "90-94",
+				"hip_cm": "106-110",
+				"inseam_cm": "84",
+				"total_length_cm": "110"
+			}
+		]
+	}
+}

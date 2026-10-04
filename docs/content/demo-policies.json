@@ -1,0 +1,27 @@
+{
+	"shop_region": "DE",
+	"currency": "EUR",
+	"price_display": "brutto",
+	"vat_rate_percent": 19,
+	"shipping": {
+		"allowed_countries": ["DE"],
+		"standard_cost_gross_eur_cents": 590,
+		"free_shipping_threshold_gross_eur_cents": 10000,
+		"demo_delivery_time": "3–5 Werktage",
+		"demo_delivery_disclaimer": "Dies ist ein demonstrierter Lieferzeitraum. Im realen Betrieb muss dieser vom Händler bestätigt werden."
+	},
+	"customization": {
+		"eligible_products_note": "Nur für gekennzeichnete Artikel verfügbar.",
+		"pricing_model": "Preis und Dauer nach manueller Prüfung der Designdatei.",
+		"no_minimum_order_guarantee": "Kein fester Mindestbestellwert, keine garantierte Antwortzeit im Demo-Betrieb."
+	},
+	"payment": {
+		"allowed_methods": ["Stripe-Testmodus"],
+		"demo_payment_disclaimer": "Es werden keine echten Zahlungen verarbeitet. PayPal, Klarna oder Rechnungskauf sind im MVP nicht aktiv."
+	},
+	"returns": {
+		"process": "Demo-Rückgabeprozess: Kontaktformular ausfüllen, fiktive Rücksendenummer erhalten.",
+		"demo_return_disclaimer": "Keine echten Rücksendeadressen oder rechtlich bindenden Widerrufsbelehrungen in diesem Paket. Für den Live-Betrieb muss ein Rechtsanwalt die AGB und Widerrufsbelehrung prüfen."
+	},
+	"global_demo_banner": "Demo-Shop — keine echten Bestellungen oder Zahlungen"
+}

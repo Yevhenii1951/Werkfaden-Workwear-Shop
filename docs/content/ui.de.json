@@ -1,0 +1,93 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "shop": "Sortiment",
+    "about": "Über uns",
+    "business": "Für Unternehmen",
+    "customization": "Veredelung anfragen",
+    "contact": "Kontakt",
+    "cart": "Warenkorb",
+    "account": "Konto"
+  },
+  "catalog": {
+    "filter_category": "Kategorie",
+    "filter_size": "Größe",
+    "filter_color": "Farbe",
+    "filter_price": "Preis",
+    "filter_availability": "Verfügbarkeit",
+    "sort_by": "Sortieren nach",
+    "results_count": "{count} Artikel gefunden",
+    "no_results": "Keine Artikel gefunden. Bitte passen Sie Ihre Filter an."
+  },
+  "product": {
+    "price_label": "Preis",
+    "vat_included": "inkl. MwSt.",
+    "select_size": "Größe wählen",
+    "select_color": "Farbe wählen",
+    "add_to_cart": "In den Warenkorb",
+    "sold_out": "Derzeit nicht auf Lager",
+    "low_stock": "Nur noch {count} Stück verfügbar",
+    "customization_eligible": "Für individuelle Veredelung geeignet",
+    "customization_note": "Preis und Dauer nach manueller Prüfung der Designdatei.",
+    "details": "Produktdetails",
+    "care_instructions": "Pflegehinweise",
+    "size_guide_link": "Größentabelle ansehen"
+  },
+  "cart": {
+    "title": "Ihr Warenkorb",
+    "empty": "Ihr Warenkorb ist leer.",
+    "continue_shopping": "Weiter einkaufen",
+    "subtotal": "Zwischensumme",
+    "shipping": "Versand",
+    "free_shipping_threshold": "Kostenloser Versand ab 100,00 €",
+    "checkout": "Zur Kasse",
+    "price_changed": "Der Preis für einen Artikel in Ihrem Warenkorb hat sich geändert.",
+    "stock_changed": "Die Verfügbarkeit eines Artikels hat sich geändert. Bitte prüfen Sie Ihren Warenkorb."
+  },
+  "checkout": {
+    "title": "Kasse",
+    "guest_checkout": "Als Gast bestellen",
+    "shipping_address": "Lieferadresse",
+    "payment_method": "Zahlungsart",
+    "place_order": "Kostenpflichtig bestellen",
+    "demo_payment_notice": "Demo-Modus: Es wird keine echte Zahlung verarbeitet (Stripe Test).",
+    "processing": "Bestellung wird verarbeitet..."
+  },
+  "account": {
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "forgot_password": "Passwort vergessen?",
+    "orders": "Meine Bestellungen",
+    "addresses": "Adressen",
+    "logout": "Abmelden"
+  },
+  "orders": {
+    "order_number": "Bestellnummer: {orderNumber}",
+    "status_pending": "Ausstehend",
+    "status_completed": "Abgeschlossen",
+    "status_cancelled": "Storniert",
+    "no_orders": "Sie haben noch keine Bestellungen aufgegeben."
+  },
+  "customization": {
+    "request_title": "Veredelungsanfrage starten",
+    "company_optional": "Firma (optional)",
+    "name": "Name",
+    "email": "E-Mail",
+    "product_variant": "Gewünschter Artikel und Variante",
+    "quantity": "Menge",
+    "comment": "Kommentar oder Sonderwünsche",
+    "file_upload": "Logodatei hochladen",
+    "file_rights_confirm": "Ich bestätige, dass ich die Nutzungsrechte an dem hochgeladenen Logo besitze.",
+    "submit_request": "Anfrage absenden",
+    "success_message": "Vielen Dank. Wir prüfen Ihre Anfrage und melden uns in Kürze.",
+    "duplicate_request": "Diese Anfrage wurde bereits gesendet. Bitte warten Sie auf unsere Rückmeldung."
+  },
+  "forms": {
+    "required_field": "Dieses Feld ist erforderlich.",
+    "invalid_email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    "file_too_large": "Die Datei ist zu groß. Maximale Größe: 5 MB.",
+    "invalid_file_type": "Nicht unterstütztes Dateiformat. Bitte laden Sie .AI, .EPS, .SVG oder .PNG hoch."
+  },
+  "errors
