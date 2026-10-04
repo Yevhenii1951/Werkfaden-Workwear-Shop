@@ -96,9 +96,7 @@
 				"image_keys": ["wf-ts-001-black-front"]
 			}
 		]
-	}
-]
-  ,
+	},
   {
     "content_id": "WF-TS-002",
     "slug": "heavy-t-shirt",
@@ -368,9 +366,7 @@
       {"sku": "WF-AH-003-BK-50", "size": "50", "color_id": "black", "color_name_de": "Schwarz", "color_hex": "#111111", "price_gross_eur_cents": 5490, "stock_quantity": 3, "weight_g": 500, "image_keys": ["wf-ah-003-black-front"]},
       {"sku": "WF-AH-003-BK-52", "size": "52", "color_id": "black", "color_name_de": "Schwarz", "color_hex": "#111111", "price_gross_eur_cents": 5490, "stock_quantity": 7, "weight_g": 520, "image_keys": ["wf-ah-003-black-front"]}
     ]
-  }
-]
-  ,
+  },
   {
     "content_id": "WF-TS-003", "slug": "langarmshirt-basic", "name_de": "Langarmshirt Basic", "category_id": "t-shirts",
     "subtitle_de": "Klassisches Langarmshirt für kühle Arbeitstage",

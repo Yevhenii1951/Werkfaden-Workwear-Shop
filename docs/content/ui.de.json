@@ -88,6 +88,13 @@
     "required_field": "Dieses Feld ist erforderlich.",
     "invalid_email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
     "file_too_large": "Die Datei ist zu groß. Maximale Größe: 5 MB.",
-    "invalid_file_type": "Nicht unterstütztes Dateiformat. Bitte laden Sie .AI, .EPS, .SVG oder .PNG hoch."
+    "invalid_file_type": "Nicht unterstütztes Dateiformat. Erlaubt sind nur .PNG, .JPG und .WebP."
   },
-  "errors
+  "errors": {
+    "general": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "payment_failed": "Die Zahlung konnte nicht verarbeitet werden. Bitte wählen Sie eine andere Zahlungsmethode oder versuchen Sie es später erneut.",
+    "stock_unavailable": "Ein oder mehrere Artikel sind nicht mehr in ausreichender Menge verfügbar.",
+    "session_expired": "Ihre Sitzung ist abgelaufen. Bitte laden Sie die Seite neu und versuchen Sie es erneut.",
+    "unauthorized": "Sie sind nicht berechtigt, diese Aktion auszuführen."
+  }
+}

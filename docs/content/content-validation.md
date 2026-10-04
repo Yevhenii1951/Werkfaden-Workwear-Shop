@@ -32,3 +32,6 @@
 4. **GTIN/EAN:** Намеренно исключены из MVP. Если потребуются для реального склада, их необходимо запросить у поставщика, а не генерировать.
 
 **Заключение:** Контент-пакет внутренне согласован, полностью соответствует ограничениям портфолио и готов к передаче разработчику для интеграции в Medusa + Next.js.
+
+
+**Hinweis (Agent-Korrektur, [Agent-author]:** Die ursprünglich unvollständigen JSON/CSV-Fragmente wurden repariert und der Widerspruch zu NFR-S2 (zulässige Upload-Formate) wurde zugunsten des Sicherheitsgates auf rein rasterbasiert (.PNG/.JPG/.WebP) korrigiert. Diese Änderungen sind nur syntaktisch bzw. restriktiver, nicht werblich.)
