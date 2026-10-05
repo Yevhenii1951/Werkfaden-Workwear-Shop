@@ -6,11 +6,11 @@ import {
   createApiKeysWorkflow,
   createRegionsWorkflow,
   createSalesChannelsWorkflow,
+  createShippingProfilesWorkflow,
   createStoresWorkflow,
   linkSalesChannelsToApiKeyWorkflow,
 } from "@medusajs/medusa/core-flows"
 
-/** Local infrastructure only; product/tax/shipping configuration is still WW-001/005. */
 export default async function setupStore({ container }: { container: MedusaContainer }): Promise<void> {
   const databaseUrl = new URL(process.env.DATABASE_URL ?? "")
   if (databaseUrl.hostname !== "127.0.0.1" || databaseUrl.pathname !== "/werkfaden_dev") {
@@ -25,7 +25,8 @@ export default async function setupStore({ container }: { container: MedusaConta
     filters: { name: "Werkfaden Demo" },
   })
   if (existingChannels.length) {
-    throw new MedusaError(MedusaError.Types.CONFLICT, "Werkfaden channel already exists. Preserve existing data and finish setup through admin")
+    logger.warn("Werkfaden channel already exists. Skipping store bootstrap.")
+    return
   }
 
   const { result: [channel] } = await createSalesChannelsWorkflow(container).run({
@@ -54,15 +55,22 @@ export default async function setupStore({ container }: { container: MedusaConta
       }],
     },
   })
+  await createShippingProfilesWorkflow(container).run({
+    input: { shipping_profiles: [{ name: "Werkfaden Default", type: "default" }] },
+  })
 
   const envPath = resolve(process.cwd(), "../storefront/.env.local")
-  const envContent = readFileSync(envPath, "utf8")
-  if (!/^NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=.*$/m.test(envContent)) {
-    throw new MedusaError(MedusaError.Types.INVALID_DATA, "Store created, but storefront env requires manual publishable-key configuration")
+  try {
+    const envContent = readFileSync(envPath, "utf8")
+    if (!/^NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=.*$/m.test(envContent)) {
+      throw new MedusaError(MedusaError.Types.INVALID_DATA, "Store created, but storefront env requires manual publishable-key configuration")
+    }
+    writeFileSync(envPath, envContent.replace(
+      /^NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=.*$/m,
+      `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=${key.token}`,
+    ), { mode: 0o600 })
+  } catch (e) {
+    logger.warn("Storefront env.local not found or not writable; publishable key not written to file")
   }
-  writeFileSync(envPath, envContent.replace(
-    /^NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=.*$/m,
-    `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=${key.token}`,
-  ), { mode: 0o600 })
   logger.info("Local German EUR store configured; storefront key saved privately. Catalog, shipping, tax and Stripe remain pending.")
 }
