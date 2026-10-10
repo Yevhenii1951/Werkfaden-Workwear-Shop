@@ -2,11 +2,15 @@
 
 import { addToCart } from "@lib/data/cart"
 import { useIntersection } from "@lib/hooks/use-in-view"
+import {
+  findExactVariant,
+  isOptionValueAvailable,
+  isVariantInStock,
+} from "@lib/util/variant-availability"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@modules/common/components/ui"
 import Divider from "@modules/common/components/divider"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
-import { isEqual } from "lodash"
 import { useParams, usePathname, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
@@ -53,10 +57,7 @@ export default function ProductActions({
       return
     }
 
-    return product.variants.find((v) => {
-      const variantOptions = optionsAsKeymap(v.options)
-      return isEqual(variantOptions, options)
-    })
+    return findExactVariant(product.variants, options)
   }, [product.variants, options])
 
   // update the options when a variant is selected
@@ -68,12 +69,7 @@ export default function ProductActions({
   }
 
   //check if the selected options produce a valid variant
-  const isValidVariant = useMemo(() => {
-    return product.variants?.some((v) => {
-      const variantOptions = optionsAsKeymap(v.options)
-      return isEqual(variantOptions, options)
-    })
-  }, [product.variants, options])
+  const isValidVariant = Boolean(selectedVariant)
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString())
@@ -93,28 +89,20 @@ export default function ProductActions({
   }, [selectedVariant, isValidVariant])
 
   // check if the selected variant is in stock
-  const inStock = useMemo(() => {
-    // If we don't manage inventory, we can always add to cart
-    if (selectedVariant && !selectedVariant.manage_inventory) {
-      return true
-    }
+  const inStock = useMemo(() => isVariantInStock(selectedVariant), [selectedVariant])
 
-    // If we allow back orders on the variant, we can add to cart
-    if (selectedVariant?.allow_backorder) {
-      return true
-    }
+  // value is selectable when at least one in-stock variant can match it
+  const isValueAvailable = useMemo(
+    () => (optionId: string, value: string) =>
+      isOptionValueAvailable(product.variants ?? [], options, optionId, value),
+    [product.variants, options]
+  )
 
-    // If there is inventory available, we can add to cart
-    if (
-      selectedVariant?.manage_inventory &&
-      (selectedVariant?.inventory_quantity || 0) > 0
-    ) {
-      return true
-    }
-
-    // Otherwise, we can't add to cart
-    return false
-  }, [selectedVariant])
+  const isSelectionIncomplete = useMemo(
+    () =>
+      (product.options ?? []).some((option) => options[option.id] === undefined),
+    [product.options, options]
+  )
 
   const actionsRef = useRef<HTMLDivElement>(null)
 
@@ -151,6 +139,7 @@ export default function ProductActions({
                       title={option.title ?? ""}
                       data-testid="product-options"
                       disabled={!!disabled || isAdding}
+                      available={isValueAvailable}
                     />
                   </div>
                 )
@@ -164,23 +153,19 @@ export default function ProductActions({
 
         <Button
           onClick={handleAddToCart}
-          disabled={
-            !inStock ||
-            !selectedVariant ||
-            !!disabled ||
-            isAdding ||
-            !isValidVariant
-          }
+          disabled={!inStock || !selectedVariant || !!disabled || isAdding}
           variant="primary"
           className="w-full h-10"
           isLoading={isAdding}
           data-testid="add-product-button"
         >
           {!selectedVariant
-            ? "Select variant"
-            : !inStock || !isValidVariant
-            ? "Out of stock"
-            : "Add to cart"}
+            ? isSelectionIncomplete
+              ? "Variante wählen"
+              : "Variante nicht verfügbar"
+            : !inStock
+            ? "Ausverkauft"
+            : "In den Warenkorb"}
         </Button>
         <MobileActions
           product={product}

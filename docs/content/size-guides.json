@@ -2,6 +2,11 @@
 	"tops-regular": {
 		"name_de": "Größentabelle für Oberteile (Regular Fit)",
 		"measurements_de": "Körpermaße in cm",
+		"columns_de": [
+			["chest_cm", "Brustweite"],
+			["waist_cm", "Taillenweite"],
+			["length_cm", "Länge"]
+		],
 		"sizes": [
 			{
 				"size": "S",
@@ -26,6 +31,11 @@
 	"outerwear-regular": {
 		"name_de": "Größentabelle für Jacken & Sweatshirts (Regular Fit)",
 		"measurements_de": "Körpermaße in cm",
+		"columns_de": [
+			["chest_cm", "Brustweite"],
+			["waist_cm", "Taillenweite"],
+			["length_cm", "Länge"]
+		],
 		"sizes": [
 			{
 				"size": "S",
@@ -50,6 +60,12 @@
 	"trousers-regular": {
 		"name_de": "Größentabelle für Arbeitshosen (Regular Fit)",
 		"measurements_de": "Körpermaße in cm",
+		"columns_de": [
+			["waist_cm", "Taillenweite"],
+			["hip_cm", "Hüftumfang"],
+			["inseam_cm", "Schrittlänge"],
+			["total_length_cm", "Gesamtlänge"]
+		],
 		"sizes": [
 			{
 				"size": "48",
