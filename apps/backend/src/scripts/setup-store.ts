@@ -56,7 +56,7 @@ export default async function setupStore({ container }: { container: MedusaConta
     },
   })
   await createShippingProfilesWorkflow(container).run({
-    input: { shipping_profiles: [{ name: "Werkfaden Default", type: "default" }] },
+    input: { data: [{ name: "Werkfaden Default", type: "default" }] },
   })
 
   const envPath = resolve(process.cwd(), "../storefront/.env.local")

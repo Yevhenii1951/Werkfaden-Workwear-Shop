@@ -19,7 +19,7 @@
     "infra:down": "docker compose stop",
     "db:migrate": "pnpm --filter @dtc/backend exec medusa db:migrate --skip-scripts --execute-safe-links --execute-safe-search",
     "typecheck": "pnpm --filter @dtc/backend exec tsc --noEmit && pnpm --filter @dtc/storefront exec tsc --noEmit",
-    "check": "npx --yes pnpm@10.11.1 run lint && npx --yes pnpm@10.11.1 run typecheck && npx --yes pnpm@10.11.1 --filter @dtc/backend run test:unit && npx --yes pnpm@10.11.1 --filter @dtc/backend run test:integration:http",
+    "check": "npx --yes pnpm@10.11.1 run lint && npx --yes pnpm@10.11.1 run typecheck && npx --yes pnpm@10.11.1 --filter @dtc/backend run test:unit && npx --yes pnpm@10.11.1 --filter @dtc/storefront run test:unit && npx --yes pnpm@10.11.1 --filter @dtc/backend run test:integration:http",
     "setup:store": "pnpm --filter @dtc/backend exec medusa exec ./src/scripts/setup-store.ts"
   },
   "pnpm": {

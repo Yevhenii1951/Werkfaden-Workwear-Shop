@@ -16,6 +16,53 @@ export interface ValidationResult {
   stats?: Record<string, unknown>
 }
 
+export interface CatalogContentProduct {
+  slug: string
+  category_id: string
+}
+
+export interface CatalogContentCategory {
+  slug: string
+  id?: string
+  category_id?: string
+}
+
+export function validateCatalogIntegrity(
+  products: CatalogContentProduct[],
+  categories: CatalogContentCategory[]
+): string[] {
+  const errors: string[] = []
+  const categoryKeys = new Set<string>()
+  const categorySlugs = new Set<string>()
+
+  for (const category of categories) {
+    const key = category.category_id ?? category.id
+    if (!key) {
+      errors.push(`categories.json: category "${category.slug}" missing category_id or id`)
+      continue
+    }
+    if (categoryKeys.has(key)) {
+      errors.push(`categories.json: duplicate category id "${key}"`)
+    }
+    categoryKeys.add(key)
+
+    if (categorySlugs.has(category.slug)) {
+      errors.push(`categories.json: duplicate category slug "${category.slug}"`)
+    }
+    categorySlugs.add(category.slug)
+  }
+
+  for (const product of products) {
+    if (!categoryKeys.has(product.category_id)) {
+      errors.push(
+        `products.json: product "${product.slug}" references unknown category "${product.category_id}"`
+      )
+    }
+  }
+
+  return errors
+}
+
 function readJson(file: string) {
   const full = path.join(CONTENT_DIR, file)
   if (!fs.existsSync(full)) {
@@ -28,6 +75,8 @@ function readJson(file: string) {
 export function validateContentPackage(): ValidationResult {
   const errors: string[] = []
   const stats: Record<string, unknown> = {}
+  const productList: unknown[] = []
+  const categoryList: unknown[] = []
 
   try {
     const products = readJson("products.json") as unknown[]
@@ -35,6 +84,7 @@ export function validateContentPackage(): ValidationResult {
     if (!pRes.success) {
       errors.push(`products.json: ${pRes.error.message}`)
     } else {
+      productList.push(...products)
       stats.productCount = products.length
       const skus = new Set<string>()
       for (const pr of products) {
@@ -70,11 +120,8 @@ export function validateContentPackage(): ValidationResult {
     if (!cRes.success) {
       errors.push(`categories.json: ${cRes.error.message}`)
     } else {
+      categoryList.push(...cats)
       stats.categoryCount = cats.length
-      const hasCatId = cats.every((c: any) => c.category_id || c.id)
-      if (!hasCatId) {
-        errors.push("categories.json: every category must have category_id or id")
-      }
     }
   } catch (e) {
     errors.push(`categories.json: ${(e as Error).message}`)
@@ -153,6 +200,15 @@ export function validateContentPackage(): ValidationResult {
   try {
     checkForbidden(fs.readFileSync(path.join(CONTENT_DIR, "pages.md"), "utf8"), "pages.md")
   } catch {}
+
+  if (productList.length && categoryList.length) {
+    errors.push(
+      ...validateCatalogIntegrity(
+        productList as CatalogContentProduct[],
+        categoryList as CatalogContentCategory[]
+      )
+    )
+  }
 
   return {
     ok: errors.length === 0,
