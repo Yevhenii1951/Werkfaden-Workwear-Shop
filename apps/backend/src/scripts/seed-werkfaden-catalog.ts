@@ -32,6 +32,22 @@ export default async function seedWerkfadenCatalog({ container }: ExecArgs) {
   const contentDir = path.resolve(process.cwd(), "..", "..", "docs", "content")
   const products = JSON.parse(fs.readFileSync(path.join(contentDir, "products.json"), "utf8"))
   const categories = JSON.parse(fs.readFileSync(path.join(contentDir, "categories.json"), "utf8"))
+  const sizeGuides = JSON.parse(
+    fs.readFileSync(path.join(contentDir, "size-guides.json"), "utf8")
+  )
+
+  const sizeGuideMetadata = (sizeGuideId: string | undefined) => {
+    const guide = sizeGuides[sizeGuideId ?? ""]
+    if (!guide) return undefined
+    return {
+      size_guide: {
+        name_de: guide.name_de,
+        measurements_de: guide.measurements_de,
+        columns_de: guide.columns_de,
+        sizes: guide.sizes,
+      },
+    }
+  }
 
   const { data: salesChannels } = await query.graph({ entity: "sales_channel", fields: ["id", "name"] })
   const { data: shippingProfiles } = await query.graph({ entity: "shipping_profile", fields: ["id"] })
@@ -93,7 +109,7 @@ export default async function seedWerkfadenCatalog({ container }: ExecArgs) {
 
   const { data: existingProducts } = await query.graph({
     entity: "product",
-    fields: ["id", "handle", "categories.id", "variants.id", "variants.sku", "variants.prices.amount", "variants.prices.currency_code"],
+    fields: ["id", "handle", "metadata", "material", "categories.id", "variants.id", "variants.sku", "variants.prices.amount", "variants.prices.currency_code"],
   })
   const existingByHandle = new Map(existingProducts.map((p: any) => [p.handle, p]))
 
@@ -140,7 +156,23 @@ export default async function seedWerkfadenCatalog({ container }: ExecArgs) {
         update.variants = variantUpdates
       }
 
-      if (update.category_ids || update.variants) {
+      const desiredMaterial = p.material_de
+      if (existing.material !== desiredMaterial) {
+        update.material = desiredMaterial
+      }
+
+      const desiredMetadata = sizeGuideMetadata(p.size_guide_id)
+      if (
+        JSON.stringify(existing.metadata ?? {}) !== JSON.stringify(desiredMetadata ?? {})
+      ) {
+        update.metadata = desiredMetadata
+          ? { ...(existing.metadata ?? {}), ...desiredMetadata }
+          : existing.metadata
+      } else if (desiredMetadata) {
+        update.metadata = { ...(existing.metadata ?? {}), ...desiredMetadata }
+      }
+
+      if (Object.keys(update).length > 1) {
         toUpdate.push(update)
       }
       continue
@@ -152,6 +184,8 @@ export default async function seedWerkfadenCatalog({ container }: ExecArgs) {
       handle,
       subtitle: p.subtitle_de,
       description: p.description_de,
+      material: p.material_de,
+      metadata: sizeGuideMetadata(p.size_guide_id),
       status: ProductStatus.PUBLISHED,
       shipping_profile_id: shippingProfile.id,
       collection_id: col?.id,

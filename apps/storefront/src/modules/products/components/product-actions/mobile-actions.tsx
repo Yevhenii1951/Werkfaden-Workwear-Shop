@@ -7,6 +7,7 @@ import ChevronDown from "@modules/common/icons/chevron-down"
 import X from "@modules/common/icons/x"
 
 import { getProductPrice } from "@lib/util/get-product-price"
+import { isOptionValueAvailable } from "@lib/util/variant-availability"
 import OptionSelect from "./option-select"
 import { HttpTypes } from "@medusajs/types"
 import { isSimpleProduct } from "@lib/util/product"
@@ -51,6 +52,12 @@ const MobileActions: React.FC<MobileActionsProps> = ({
   }, [price])
 
   const isSimple = isSimpleProduct(product)
+
+  const isValueAvailable = useMemo(
+    () => (optionId: string, value: string) =>
+      isOptionValueAvailable(product.variants ?? [], options, optionId, value),
+    [product.variants, options]
+  )
 
   return (
     <>
@@ -108,10 +115,10 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                 data-testid="mobile-actions-button"
               >
                 <div className="flex items-center justify-between w-full">
-                  <span>
+<span>
                     {variant
-                      ? Object.values(options).join(" / ")
-                      : "Select Options"}
+                      ? Object.values(options).join(" / ")
+                      : "Optionen wählen"}
                   </span>
                   <ChevronDown />
                 </div>
@@ -124,10 +131,10 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                 data-testid="mobile-cart-button"
               >
                 {!variant
-                  ? "Select variant"
+                  ? "Variante wählen"
                   : !inStock
-                  ? "Out of stock"
-                  : "Add to cart"}
+                  ? "Ausverkauft"
+                  : "In den Warenkorb"}
               </Button>
             </div>
           </div>
@@ -183,6 +190,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                                 updateOption={updateOptions}
                                 title={option.title ?? ""}
                                 disabled={optionsDisabled}
+                                available={isValueAvailable}
                               />
                             </div>
                           )
