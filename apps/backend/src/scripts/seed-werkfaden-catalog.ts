@@ -3,8 +3,10 @@ import * as path from "path"
 import type { ExecArgs } from "@medusajs/framework/types"
 import {
   createCollectionsWorkflow,
+  createProductCategoriesWorkflow,
   createProductOptionsWorkflow,
   createProductsWorkflow,
+  updateProductsWorkflow,
 } from "@medusajs/medusa/core-flows"
 import {
   ContainerRegistrationKeys,
@@ -44,11 +46,28 @@ export default async function seedWerkfadenCatalog({ container }: ExecArgs) {
     .filter((c: any): c is string => Boolean(c))
   if (!currencyCodes.length) throw new MedusaError(MedusaError.Types.NOT_FOUND, "No currencies")
 
+  const { data: existingCats } = await query.graph({ entity: "product_category", fields: ["id", "handle"] })
+  const existingCatHandles = new Set(existingCats.map((c: any) => (c.handle || "").toLowerCase()))
+  const missingCats = categories.filter((c: any) => !existingCatHandles.has(String(c.slug).toLowerCase()))
+  if (missingCats.length) {
+    await createProductCategoriesWorkflow(container).run({
+      input: {
+        product_categories: missingCats.map((c: any) => ({
+          name: c.name_de,
+          handle: c.slug,
+          description: c.intro_de,
+          is_active: true,
+        })),
+      },
+    })
+    logger.info(`Created ${missingCats.length} product categories`)
+  }
+
   const { data: allCat } = await query.graph({ entity: "product_category", fields: ["id", "handle", "name"] })
   const catMap = new Map(allCat.map((c: any) => [(c.handle || "").toLowerCase(), c.id]))
 
   const { data: existingCols } = await query.graph({ entity: "product_collection", fields: ["id", "title"] })
-  const colTitles = Array.from(new Set(products.map((p: any) => String(p.category_id))))
+  const colTitles: string[] = Array.from(new Set(products.map((p: any) => String(p.category_id))))
   const missingCols = colTitles.filter((t) => !existingCols.some((ec: any) => ec.title === t))
   if (missingCols.length) {
     await createCollectionsWorkflow(container).run({ input: { collections: missingCols.map((t) => ({ title: t })) } })
@@ -72,16 +91,61 @@ export default async function seedWerkfadenCatalog({ container }: ExecArgs) {
   const colorOpt = optRows.find((o: any) => o.title === "Color")
   if (!sizeOpt || !colorOpt) throw new MedusaError(MedusaError.Types.NOT_FOUND, "Options missing")
 
-  const { data: already } = await query.graph({ entity: "product", fields: ["handle"] })
-  const taken = new Set(already.map((a: any) => a.handle).filter(Boolean))
+  const { data: existingProducts } = await query.graph({
+    entity: "product",
+    fields: ["id", "handle", "categories.id", "variants.id", "variants.sku", "variants.prices.amount", "variants.prices.currency_code"],
+  })
+  const existingByHandle = new Map(existingProducts.map((p: any) => [p.handle, p]))
+
+  const categoryIdFor = (categoryId: unknown) => catMap.get(String(categoryId || "").toLowerCase())
+  // Medusa v2 stores prices in the currency's major unit, the content file
+  // stores gross cents, so the two differ by a factor of 100.
+  const priceFor = (variant: any) => Number(variant.price_gross_eur_cents) / 100
 
   const toCreate: any[] = []
+  const toUpdate: any[] = []
   for (const p of products) {
     const handle = String(p.slug)
-    if (taken.has(handle)) continue
-    const chosenCats: any[] = []
-    const ch = catMap.get(String(p.category_id || "").toLowerCase())
-    if (ch) chosenCats.push({ id: ch })
+    const categoryId = categoryIdFor(p.category_id)
+    const categoryIds = categoryId ? [categoryId] : []
+    const existing = existingByHandle.get(handle)
+
+    if (existing) {
+      const update: any = { id: existing.id }
+
+      const currentIds = (existing.categories ?? []).map((c: any) => c.id)
+      if (categoryId && !currentIds.includes(categoryId)) {
+        update.category_ids = categoryIds
+      }
+
+      const variantBySku = new Map((existing.variants ?? []).map((v: any) => [v.sku, v]))
+      const variantUpdates: any[] = []
+      for (const v of p.variants) {
+        const existingVariant: any = variantBySku.get(v.sku)
+        if (!existingVariant) continue
+        const desired = priceFor(v)
+        const current = existingVariant.prices ?? []
+        const needsFix = currencyCodes.some((cc) => {
+          const match = current.find((pr: any) => pr.currency_code === cc)
+          return !match || Number(match.amount) !== desired
+        })
+        if (needsFix) {
+          variantUpdates.push({
+            id: existingVariant.id,
+            prices: currencyCodes.map((cc) => ({ amount: desired, currency_code: cc })),
+          })
+        }
+      }
+      if (variantUpdates.length) {
+        update.variants = variantUpdates
+      }
+
+      if (update.category_ids || update.variants) {
+        toUpdate.push(update)
+      }
+      continue
+    }
+
     const col = colMap.get(String(p.category_id))
     toCreate.push({
       title: p.name_de,
@@ -91,14 +155,14 @@ export default async function seedWerkfadenCatalog({ container }: ExecArgs) {
       status: ProductStatus.PUBLISHED,
       shipping_profile_id: shippingProfile.id,
       collection_id: col?.id,
-      category_ids: chosenCats,
+      category_ids: categoryIds,
       sales_channels: [{ id: salesChannel.id }],
       options: [{ id: sizeOpt.id }, { id: colorOpt.id }],
       variants: p.variants.map((v: any) => ({
         title: `${v.color_name_de} / ${v.size}`,
         sku: v.sku,
         options: { Size: String(v.size), Color: String(v.color_name_de) },
-        prices: currencyCodes.map((cc) => ({ amount: Number(v.price_gross_eur_cents), currency_code: cc })),
+        prices: currencyCodes.map((cc) => ({ amount: priceFor(v), currency_code: cc })),
         manage_inventory: true,
         allow_backorder: false,
         inventory_quantity: Number(v.stock_quantity),
@@ -106,14 +170,22 @@ export default async function seedWerkfadenCatalog({ container }: ExecArgs) {
     })
   }
 
-  if (!toCreate.length) {
-    logger.info("Werkfaden catalog already up to date")
-    return
-  }
   for (let i = 0; i < toCreate.length; i += 10) {
     const batch = toCreate.slice(i, i + 10)
     await createProductsWorkflow(container).run({ input: { products: batch } })
     logger.info(`Created ${Math.min(i + 10, toCreate.length)}/${toCreate.length} products`)
+  }
+
+  if (toUpdate.length) {
+    for (let i = 0; i < toUpdate.length; i += 10) {
+      await updateProductsWorkflow(container).run({ input: { products: toUpdate.slice(i, i + 10) } })
+    }
+    logger.info(`Updated ${toUpdate.length} existing products (categories/prices)`)
+  }
+
+  if (!toCreate.length && !toUpdate.length) {
+    logger.info("Werkfaden catalog already up to date")
+    return
   }
   logger.info("Werkfaden catalog seed complete")
 }

@@ -7,7 +7,9 @@ import {
   OPTION_VALUE_QUERY_KEY,
   parseOptionValueIds,
 } from "@lib/util/product-option-filters"
+import AvailabilityToggle from "./availability-toggle"
 import OptionsPicker from "./options-picker"
+import PriceRange from "./price-range"
 import SortProducts, { SortOptions } from "./sort-products"
 
 type RefinementListProps = {
@@ -47,8 +49,19 @@ const RefinementList = ({
     [pathname, router, searchParams]
   )
 
+  const setParams = (updates: Record<string, string | null>) =>
+    updateQueryParams((params) => {
+      for (const [name, value] of Object.entries(updates)) {
+        if (value === null || value === "") {
+          params.delete(name)
+        } else {
+          params.set(name, value)
+        }
+      }
+    })
+
   const setQueryParams = (name: string, value: string) =>
-    updateQueryParams((params) => params.set(name, value))
+    setParams({ [name]: value })
 
   const selectedOptionValueIds = useMemo(
     () => parseOptionValueIds(searchParams),
@@ -76,6 +89,11 @@ const RefinementList = ({
           setOptionValueIds={setOptionValueIds}
         />
       )}
+      <PriceRange
+        setParams={setParams}
+        data-testid="price-range-container"
+      />
+      <AvailabilityToggle setParams={setParams} />
     </div>
   )
 }

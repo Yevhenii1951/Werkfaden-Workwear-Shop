@@ -4,27 +4,22 @@ import { Suspense } from "react"
 import InteractiveLink from "@modules/common/components/interactive-link"
 import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
 import RefinementList from "@modules/store/components/refinement-list"
-import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import PaginatedProducts from "@modules/store/templates/paginated-products"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
-import { OptionValueIds } from "@lib/util/product-option-filters"
+import { ListingFilters } from "@lib/util/listing-filters"
 
 export default function CategoryTemplate({
   category,
-  sortBy,
-  page,
+  filters,
   countryCode,
-  optionValueIds,
 }: {
   category: HttpTypes.StoreProductCategory
-  sortBy?: SortOptions
-  page?: string
+  filters?: ListingFilters
   countryCode: string
-  optionValueIds?: OptionValueIds
 }) {
-  const pageNumber = page ? parseInt(page) : 1
-  const sort = sortBy || "created_at"
+  const pageNumber = filters?.page ?? 1
+  const sort = filters?.sortBy ?? "created_at"
 
   if (!category || !countryCode) notFound()
 
@@ -44,11 +39,7 @@ export default function CategoryTemplate({
       className="flex flex-col small:flex-row small:items-start py-6 content-container"
       data-testid="category-container"
     >
-      <RefinementList
-        sortBy={sort}
-        data-testid="sort-by-container"
-        hideOptionsPicker
-      />
+      <RefinementList sortBy={sort} data-testid="sort-by-container" />
       <div className="w-full">
         <div className="flex flex-row mb-8 text-2xl-semi gap-4">
           {parents &&
@@ -96,7 +87,8 @@ export default function CategoryTemplate({
             page={pageNumber}
             categoryId={category.id}
             countryCode={countryCode}
-            optionValueIds={optionValueIds}
+            optionValueIds={filters?.optionValueIds}
+            filters={filters}
           />
         </Suspense>
       </div>

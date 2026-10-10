@@ -7,6 +7,6 @@ export default async function ensureShipping({ container }: ExecArgs) {
   const { data } = await query.graph({ entity: "shipping_profile", fields: ["id"] })
   if (data.length) return
   await createShippingProfilesWorkflow(container).run({
-    input: { shipping_profiles: [{ name: "Werkfaden Default", type: "default", shipping_options: [] as any }] },
+    input: { data: [{ name: "Werkfaden Default", type: "default" }] },
   })
 }

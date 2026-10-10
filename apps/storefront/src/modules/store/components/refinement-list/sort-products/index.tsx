@@ -1,5 +1,6 @@
 "use client"
 
+import { DEMO_COPY } from "@lib/content/demo-copy"
 import FilterRadioGroup from "@modules/common/components/filter-radio-group"
 
 export type SortOptions = "price_asc" | "price_desc" | "created_at"
@@ -13,15 +14,15 @@ type SortProductsProps = {
 const sortOptions = [
   {
     value: "created_at",
-    label: "Latest Arrivals",
+    label: DEMO_COPY.catalog.sortCreatedAt,
   },
   {
     value: "price_asc",
-    label: "Price: Low -> High",
+    label: DEMO_COPY.catalog.sortPriceAsc,
   },
   {
     value: "price_desc",
-    label: "Price: High -> Low",
+    label: DEMO_COPY.catalog.sortPriceDesc,
   },
 ]
 
@@ -36,7 +37,7 @@ const SortProducts = ({
 
   return (
     <FilterRadioGroup
-      title="Sort by"
+      title={DEMO_COPY.catalog.sortBy}
       items={sortOptions}
       value={sortBy}
       handleChange={handleChange}

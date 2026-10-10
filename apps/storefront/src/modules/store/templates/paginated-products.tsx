@@ -1,5 +1,7 @@
+import { DEMO_COPY } from "@lib/content/demo-copy"
 import { listProductsWithSort } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
+import { ListingFilters } from "@lib/util/listing-filters"
 import { OptionValueIds } from "@lib/util/product-option-filters"
 import ProductPreview from "@modules/products/components/product-preview"
 import { Pagination } from "@modules/store/components/pagination"
@@ -23,6 +25,7 @@ export default async function PaginatedProducts({
   productsIds,
   countryCode,
   optionValueIds,
+  filters,
 }: {
   sortBy?: SortOptions
   page: number
@@ -31,6 +34,7 @@ export default async function PaginatedProducts({
   productsIds?: string[]
   countryCode: string
   optionValueIds?: OptionValueIds
+  filters?: ListingFilters
 }) {
   const queryParams: PaginatedProductsParams = {
     limit: 12,
@@ -66,9 +70,21 @@ export default async function PaginatedProducts({
     sortBy,
     countryCode,
     optionValueIds,
+    filters,
   })
 
   const totalPages = Math.ceil(count / PRODUCT_LIMIT)
+
+  if (!products.length) {
+    return (
+      <p
+        className="py-12 text-center text-base-regular text-ui-fg-subtle"
+        data-testid="no-products"
+      >
+        {DEMO_COPY.catalog.noResults}
+      </p>
+    )
+  }
 
   return (
     <>
