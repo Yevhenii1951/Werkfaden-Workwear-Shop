@@ -1,28 +1,23 @@
-# Bootstrap handover
+# Bootstrap handover (corrected 2026-10-10)
 
-## Delivered
+## Delivered (real)
 
-Locked PORTFOLIO/Standard tier, spec/stack/contract, 10 vertical tickets, security review checklist and detailed content LLM prompt. Official starter, pinned dependency lockfile, isolated Compose services, private local env generation, database migrations and Germany/EUR channel/region setup. Separate local git repository without commits or remote.
+- Locked PORTFOLIO/Standard tier: `spec.md`, `contract.md`, `stack-decision.md`, 11 tickets, security checklist, content LLM prompt.
+- Official Medusa 2.21.2 + Next.js 15 DTC starter on pinned pnpm `10.11.1` / Node 22.22.1; single lockfile.
+- Isolated Compose Postgres (5544) + Redis (6384); DB migrated; Germany/EUR region + sales channel + publishable key configured privately.
+- WW-000 (`d8ee081`): content package repaired (broken JSON, SVG contradiction) and enforced by a Zod validator plus a unit test.
+- WW-001 partial (`811df1a`): `seed-werkfaden-catalog.ts` (25 products / 150 variants, collections/options, DB guard), shipping profile helper, `setup-store.ts` guard.
 
-Removed starter build bypasses, fixed inherited lint errors without disabling rules, retained three hooks warnings for the relevant tickets. Unused gift-card/discount stubs were removed (no call sites); storefront error catches narrowed to unknown and address payload typed. Size/color/filter/checkout business behavior has not been verified yet.
+## Not delivered
 
-## Evidence
+- WW-002 … WW-010: catalog filters, product page, cart validation, checkout totals/shipping, Stripe sandbox, auth + order ownership, admin ops, personalization module + logo upload + admin surface, email sink, legal drafts, accessibility/browser evidence.
+- Admin login account, stock location, computed tax/shipping verification, guarded test DB.
+- `npm run check` green (integration suite empty; only the content spec exists).
 
-- `npx --yes pnpm@10.11.1 install --frozen-lockfile` — exit 0.
-- `docker compose up -d --wait` — exit 0, both services healthy.
-- Medusa `db:migrate --skip-scripts --execute-safe-links --execute-safe-search` — exit 0 on isolated local DB.
-- Medusa `exec ./src/scripts/setup-store.ts` — exit 0; key written privately, not printed.
-- lint and typecheck — exit 0, three inherited React Hook warnings.
-- `npx --yes pnpm@10.11.1 run build` — exit 0 for both apps with type/lint errors enforced.
-- HTTP `/health`, `/app`, storefront root and `/de/store` — 200; this is HTTP smoke, not a browser test.
-- `npm run check` — exit 1 at `test:unit`: no tests found. Integration was not run. No `passWithNoTests` workaround.
+## Corrected
 
-## Not yet delivered
-
-Admin credentials/login, product/variant content seed and stock location, German UI, computed tax/shipping verification, Stripe sandbox, real DB reject/concurrency tests and test DB fuse, local email sink/provider, personalization module/uploads/admin UI, legal drafts, security review, accessibility and full buyer/operator browser evidence.
-
-No portfolio release, live trading or public deployment approved/completed. Local event bus/locking are inherited in-memory defaults; configure and verify persistent modules before demonstrating restart/concurrency guarantees.
+- Commits labelled WW-002…WW-010 (PRs #3–#11) were empty (0 changed files); git history was rewritten 2026-10-10 back to the last real commit. Nothing real was lost.
 
 ## Content handoff
 
-Send `docs/content/llm-prompt-ru.md` to the content LLM. Return brand/demo policies/categories/one product first, then full JSON+CSV and image manifest. No content or legal claims become approved simply because generated.
+Send `docs/content/llm-prompt-ru.md` to the content LLM; return files for validation. Returned facts remain fictional fixtures until approved. Generated content is not commercial product truth.
