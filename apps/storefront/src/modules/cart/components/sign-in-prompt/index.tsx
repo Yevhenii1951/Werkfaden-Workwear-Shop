@@ -9,7 +9,8 @@ const SignInPrompt = () => {
           Sie haben bereits ein Konto?
         </Heading>
         <Text className="txt-medium text-ui-fg-subtle mt-2">
-          Melden Sie sich an für ein besseres Erlebnis.
+          Melden Sie sich an und profitieren Sie von einem besseren
+          Einkaufserlebnis.
         </Text>
       </div>
       <div>

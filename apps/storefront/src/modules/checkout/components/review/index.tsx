@@ -43,7 +43,8 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
                 Mit Klick auf „Bestellung aufgeben“ bestätigen Sie, dass Sie
                 unsere Nutzungsbedingungen, Verkaufsbedingungen und
                 Rückgabebedingungen gelesen, verstanden und akzeptiert haben und
-                dass Sie die Datenschutzerklärung zur Kenntnis genommen haben.
+                dass Sie die Datenschutzerklärung von Medusa Store zur Kenntnis
+                genommen haben.
               </Text>
             </div>
           </div>

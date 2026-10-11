@@ -12,8 +12,8 @@ const EmptyCartMessage = () => {
         Warenkorb
       </Heading>
       <Text className="text-base-regular mt-4 mb-6 max-w-[32rem]">
-        Ihr Warenkorb ist leer. Stöbern Sie über den folgenden Link in unseren
-        Produkten.
+        Ihr Warenkorb ist leer. Entdecken Sie unsere Produkte – folgen Sie dem
+        Link unten.
       </Text>
       <div>
         <InteractiveLink href="/store">Produkte entdecken</InteractiveLink>
