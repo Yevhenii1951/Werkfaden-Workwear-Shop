@@ -8,6 +8,8 @@ Official starter: Medusa backend in `apps/backend`, Next.js storefront in `apps/
 
 Medusa routing is file-based; business logic belongs to workflows/module services. No separate NestJS app or Supabase commerce database. Backend framework rules remain enabled. Use official docs matching installed versions before changing APIs.
 
+Before writing code, verify whether Medusa core or the official starter already does the job (check the installed package source and a live request); implement only what is genuinely missing. Do not re-implement cart/checkout/price/inventory logic that core already enforces.
+
 New code follows parent readability/security/file-size standards; do not refactor inherited starter merely to change conventions. Keep MIT attribution. No editing build output or hand-editing lockfiles.
 
 German UI; working name Werkfaden; every public page clearly says demo. Never invent operator/legal/product certification facts. Existing starter design first; landing redesign needs separate design intake.

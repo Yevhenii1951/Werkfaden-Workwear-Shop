@@ -1,13 +1,11 @@
-# State — 2026-10-10 (WW-003 implemented, ready for review)
+# State — 2026-10-11 (WW-004 delivered by the template/core)
 
 - Purpose PORTFOLIO / Standard. Brand Werkfaden. de-DE, EUR, Germany only, sandbox payments.
-- Delivered: WW-000 (d8ee081), WW-001 (811df1a), WW-002 MERGED to main (PR #12 01c7be4), WW-003 implemented on `feature/ww-003-product-page`.
-- WW-003 (FR-3): Buyer selects an available variant.
-  - Storefront: German variant UI (labels "Größe wählen"/"Farbe wählen", button texts "Variante wählen"/"Variante nicht verfügbar"/"Ausverkauft"/"In den Warenkorb"); `option-select` disables unavailable option values via server logic; `product-actions` uses URL `v_id` and new availability utilities.
-  - Logic: new `lib/util/variant-availability.ts` — `isVariantInStock`, `findExactVariant`, `variantMatchesOptions`, `isOptionValueAvailable` (computations with explicit reject paths).
-  - Components: new `modules/products/components/size-guide` renders table from `product.metadata.size_guide` (German column labels, measurements); product tabs extended with "Größentabelle".
-  - Backend: seed writes `material` and `metadata.size_guide` (German column names for tops/outerwear/trousers), idempotent update checks.
-  - Tests: 9 unit tests in `variant-availability.unit.spec.ts` (sold-out rejection, backorder/unmanaged, exact match, partial selection, unavailable options). All pass. Existing 18 unit tests still pass.
-- Checks: `npm run check` GREEN (lint+typecheck+backend unit+storefront unit+integration empty harness). Storefront build green. No console errors observed.
-- Browser-verified: Team T-Shirt Basic — option labels German, size guide table correct, disabled unavailable sizes/colors, URL has `v_id` after exact selection; Heavy T-Shirt — sold-out variants blocked ("Variante wählen" when incomplete, disabled unavailable values). Mobile bar shows selected variant/price, no horizontal overflow at 390px.
-- Next: run two-axis review (Standards + Spec) for WW-003, open PR, merge after green (following WW-002 pattern).
+- Delivered: WW-000, WW-001, WW-002 MERGED (PR #12), WW-003 MERGED to main (PR #13 3fda05d).
+- WW-003 (FR-3): Buyer selects an available variant. German labels, URL `v_id`, disabled unavailable options, size guide from metadata, server-derived price. Pure availability utilities + 9 unit tests; `npm run check` GREEN.
+- WW-004 (FR-4) on `feature/ww-004-cart`: delivered entirely by the Medusa template + core. The starter server actions handle add/update/remove; core enforces stock (`confirmVariantInventoryWorkflow` with the summed quantity), rejects unknown body fields (`unit_price`) and derives price from the pricing module. No custom backend code.
+- WW-004 rejected approach: an earlier revision added a custom `cart-stock` middleware + `cart-guards` + 21 unit tests that duplicated core; removed (AGENTS.md: business logic belongs to workflows/module services). Error copy stays Medusa English (decision).
+- WW-004 verified: `npm run check` and `npm run build` GREEN (backend unit 7, storefront unit 24); API throwaway cart (stock 20): add 20 → 200, add 1 more → 400 "Some variant does not have the required inventory", update 21 → 400, update 20 → 200, update 0 → line removed; browser cart qty 2 at stock 1 rejected by core, page intact. No inventory changed. Fresh read-only review still required before merge.
+- WW-004 known core limitations (not our code): fractional quantity accepted; empty `variant_id` → HTTP 500; create-cart duplicate `items` not aggregated; cart API does not expose `inventory_quantity` for a line item variant.
+- Open: WW-004 Cart (FR-4), WW-005 Checkout totals (FR-5), WW-006 Stripe sandbox (FR-6), WW-007 Account/orders (FR-7), WW-008 Admin ops (FR-8,FR-9), WW-009 Personalization (FR-10), WW-010 Legal/demo (FR-11–13). `/store` InstantSearch 404, integration harness empty, admin login missing, legal pages pending.
+- Services: Postgres :5544, Redis :6384, backend :9000, storefront :8000 (cache cleared). Seeds write material + metadata.size_guide.
