@@ -13,5 +13,28 @@ module.exports = defineConfig({
       jwtSecret: process.env.JWT_SECRET,
       cookieSecret: process.env.COOKIE_SECRET,
     }
-  }
+  },
+  modules: [
+    {
+      resolve: './src/modules/personalization',
+    },
+    {
+      resolve: '@medusajs/medusa/file',
+      options: {
+        providers: [
+          {
+            resolve: '@medusajs/file-local',
+            id: 'local',
+            options: {
+              upload_dir: 'static',
+              private_upload_dir: 'static',
+              backend_url: `${
+                process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000'
+              }/static`,
+            },
+          },
+        ],
+      },
+    },
+  ],
 })
