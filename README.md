@@ -53,7 +53,7 @@ npx --yes pnpm@10.11.1 run backend:dev
 npx --yes pnpm@10.11.1 run storefront:dev
 ```
 
-Backend: localhost:9000; admin: localhost:9000/app; storefront: localhost:8000. Admin account creation is a local setup step; no shared/default admin password is embedded. Stripe and email are not configured merely by installing the starter.
+Backend: localhost:9000; admin: localhost:9000/app; storefront: localhost:8000. Admin account creation is a local setup step; no shared/default admin password is embedded. Paying for an order needs Stripe **test-mode** keys: `STRIPE_API_KEY` + `STRIPE_WEBHOOK_SECRET` in `apps/backend/.env` and `NEXT_PUBLIC_STRIPE_KEY` in `apps/storefront/.env.local`; forward webhooks with `stripe listen`. Nothing is configured merely by installing the starter.
 
 ## Verification
 
@@ -63,6 +63,8 @@ npx --yes pnpm@10.11.1 run build
 ```
 
 Checks are strict and sequential. Missing tests/credentials are reported, never converted to green via `passWithNoTests` or ignored build errors. DB integration tests will use a separate guarded test DB. See `docs/sdd/state.md` for actual evidence; a scaffold is not a passing release.
+
+The DB integration suite needs `apps/backend/.env.test` (gitignored): copy `apps/backend/.env.test.template` and set `DB_PASSWORD` to the `WORKWEAR_DB_PASSWORD` from `npm run setup:env`. The runner creates an ephemeral database on `DB_HOST:DB_PORT`; without this file `npm run check` fails at the integration step.
 
 ## Content
 
