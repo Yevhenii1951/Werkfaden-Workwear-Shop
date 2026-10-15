@@ -1,11 +1,14 @@
 import {
+  MedusaStoreRequest,
   MedusaNextFunction,
   MedusaRequest,
   MedusaResponse,
+  authenticate,
   configureStoreSearch,
   defineMiddlewares,
   validateAndTransformBody,
 } from '@medusajs/framework/http'
+import { ContainerRegistrationKeys, MedusaError } from '@medusajs/framework/utils'
 import multer from 'multer'
 import { createRateLimiter } from '../lib/rate-limit'
 import { MAX_LOGO_BYTES } from '../modules/personalization/lib/validation'
@@ -42,6 +45,45 @@ function uploadLogo(
   })
 }
 
+async function enforceCustomerOrderOwnership(
+  req: MedusaStoreRequest,
+  _: MedusaResponse,
+  next: MedusaNextFunction
+): Promise<void> {
+  const customerId = req.auth_context?.actor_id
+
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+  const { data: [order] } = await query.graph({
+    entity: 'order',
+    fields: ['id', 'customer_id'],
+    filters: { id: req.params.id },
+  })
+
+  let orderBelongsToRequester = !order?.customer_id
+
+  if (customerId) {
+    orderBelongsToRequester = order?.customer_id === customerId
+  } else if (order?.customer_id) {
+    const { data: [customer] } = await query.graph({
+      entity: 'customer',
+      fields: ['id', 'has_account'],
+      filters: { id: order.customer_id },
+    })
+    orderBelongsToRequester = customer?.has_account === false
+  }
+
+  if (order && !orderBelongsToRequester) {
+    return next(
+      new MedusaError(
+        MedusaError.Types.UNAUTHORIZED,
+        'You are not allowed to retrieve this order.'
+      )
+    )
+  }
+
+  next()
+}
+
 const personalizationRateLimiter = createRateLimiter({
   windowMs: 60_000,
   max: 5,
@@ -51,6 +93,16 @@ const personalizationRateLimiter = createRateLimiter({
 // the route narrows it to published products in the key's sales channels.
 export default defineMiddlewares({
   routes: [
+    {
+      method: ['GET'],
+      matcher: '/store/orders/:id',
+      middlewares: [
+        authenticate('customer', ['session', 'bearer'], {
+          allowUnauthenticated: true,
+        }),
+        enforceCustomerOrderOwnership,
+      ],
+    },
     {
       method: ['POST'],
       matcher: '/store/search',
