@@ -19,6 +19,7 @@ const FULFILLMENT_PROVIDER_ID = "manual_manual"
 const SHIPPING_PRICE = 5.9
 const FREE_SHIPPING_THRESHOLD = 100
 const VAT_RATE = 19
+const STRIPE_PROVIDER_ID = "pp_stripe_stripe"
 
 function assertIsolatedDb() {
   const databaseUrl = new URL(process.env.DATABASE_URL ?? "")
@@ -38,7 +39,7 @@ export default async function setupCheckout({ container }: ExecArgs): Promise<vo
 
   const { data: regions } = await query.graph({
     entity: "region",
-    fields: ["id", "name"],
+    fields: ["id", "name", "payment_providers.id"],
     filters: { name: REGION_NAME },
   })
   const region = regions[0]
@@ -48,6 +49,20 @@ export default async function setupCheckout({ container }: ExecArgs): Promise<vo
   await updateRegionsWorkflow(container).run({
     input: { selector: { id: region.id }, update: { is_tax_inclusive: true } },
   })
+
+  const existingRegion = region as { payment_providers?: { id: string }[] }
+  const paymentProviderIds = (existingRegion.payment_providers ?? []).map((provider) => provider.id)
+  if (!paymentProviderIds.includes(STRIPE_PROVIDER_ID)) {
+    await updateRegionsWorkflow(container).run({
+      input: {
+        selector: { id: region.id },
+        update: { payment_providers: [...paymentProviderIds, STRIPE_PROVIDER_ID] },
+      },
+    })
+    logger.info(`Enabled payment provider "${STRIPE_PROVIDER_ID}" on region "${region.name}"`)
+  } else {
+    logger.info(`Payment provider "${STRIPE_PROVIDER_ID}" already enabled`)
+  }
   // Catalog prices carry no region price-rule, so the effective tax-inclusive
   // switch for them is the currency-level price preference, not the region one.
   await updatePricePreferencesWorkflow(container).run({

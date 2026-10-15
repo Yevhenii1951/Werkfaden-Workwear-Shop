@@ -31,6 +31,8 @@ writeFileSync(backendPath, [
   "REDIS_URL=redis://127.0.0.1:6384",
   `JWT_SECRET=${jwtSecret}`,
   `COOKIE_SECRET=${cookieSecret}`,
+  "STRIPE_API_KEY=",
+  "STRIPE_WEBHOOK_SECRET=",
   "",
 ].join("\n"), { mode: 0o600, flag: "wx" });
 writeFileSync(storefrontPath, [
@@ -42,4 +44,4 @@ writeFileSync(storefrontPath, [
   "",
 ].join("\n"), { mode: 0o600, flag: "wx" });
 
-process.stdout.write("Local env created privately. Add storefront publishable key after catalog setup. No payment provider configured.\n");
+process.stdout.write("Local env created privately. Add storefront publishable key after catalog setup. Stripe (test-mode) keys are left empty and must be filled to enable card payments.\n");
