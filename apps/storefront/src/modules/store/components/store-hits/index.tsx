@@ -69,7 +69,7 @@ const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
           className="py-16 text-center text-ui-fg-subtle"
           data-testid="no-products"
         >
-          No products matched these filters.
+          Keine Produkte entsprechen diesen Filtern.
         </Text>
       ) : (
         <ul

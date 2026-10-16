@@ -61,3 +61,6 @@ Thumbs.db
 .opencode/memory/
 **/.medusa/
 **/*.tsbuildinfo
+
+# Local mail sink (FR-11): generated demo emails must never be committed
+apps/backend/mail-sink/

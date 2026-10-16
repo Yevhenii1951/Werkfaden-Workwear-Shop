@@ -34,7 +34,7 @@ function refinementLabel(refinement: Refinement, currencyCode: string) {
   }
 
   if (attribute === priceAttribute("on_sale", currencyCode)) {
-    return "On sale"
+    return "Im Angebot"
   }
 
   if (attribute === priceAttribute("min_price", currencyCode)) {
@@ -45,12 +45,12 @@ function refinementLabel(refinement: Refinement, currencyCode: string) {
     })
 
     return operator === "<=" || operator === "<"
-      ? `Up to ${amount}`
-      : `From ${amount}`
+      ? `Bis ${amount}`
+      : `Ab ${amount}`
   }
 
   if (attribute === CATEGORY_ATTRIBUTE) {
-    return `Category: ${label}`
+    return `Kategorie: ${label}`
   }
 
   if (attribute === LABELS_ATTRIBUTE) {
@@ -87,7 +87,7 @@ const CurrentRefinements = ({ currencyCode }: { currencyCode: string }) => {
             className="txt-compact-small-plus text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
             data-testid="clear-refinements"
           >
-            Clear all
+            Alle zurücksetzen
           </button>
         )}
       </div>

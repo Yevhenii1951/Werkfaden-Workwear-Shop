@@ -5,6 +5,7 @@ import {
   StepResponse,
   WorkflowResponse,
 } from "@medusajs/framework/workflows-sdk"
+import { emitEventStep } from "@medusajs/medusa/core-flows"
 import { PERSONALIZATION_MODULE } from "../modules/personalization"
 import PersonalizationModuleService from "../modules/personalization/service"
 import { PersonalizationRequestInput, LogoFormat } from "../modules/personalization/lib/validation"
@@ -94,6 +95,11 @@ export const createPersonalizationRequestWorkflow = createWorkflow(
     })
 
     const request = createPersonalizationRequestRecordStep(input)
+
+    emitEventStep({
+      eventName: "personalization-request.created",
+      data: { id: request.id },
+    })
 
     return new WorkflowResponse(request)
   }

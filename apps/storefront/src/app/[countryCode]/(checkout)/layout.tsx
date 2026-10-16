@@ -29,13 +29,30 @@ export default function CheckoutLayout({
             className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
             data-testid="store-link"
           >
-            Medusa Store
+            Werkfaden
           </LocalizedClientLink>
           <div className="flex-1 basis-0" />
         </nav>
       </div>
       <div className="relative" data-testid="checkout-container">{children}</div>
-      <div className="py-4 w-full flex items-center justify-center">
+      <div className="py-4 w-full flex flex-col items-center gap-y-3">
+        <nav
+          className="flex gap-x-4 txt-compact-small text-ui-fg-subtle"
+          data-testid="checkout-legal-links"
+        >
+          <LocalizedClientLink className="hover:text-ui-fg-base" href="/impressum">
+            Impressum
+          </LocalizedClientLink>
+          <LocalizedClientLink className="hover:text-ui-fg-base" href="/datenschutz">
+            Datenschutz
+          </LocalizedClientLink>
+          <LocalizedClientLink className="hover:text-ui-fg-base" href="/agb">
+            AGB
+          </LocalizedClientLink>
+          <LocalizedClientLink className="hover:text-ui-fg-base" href="/widerruf">
+            Widerrufsbelehrung
+          </LocalizedClientLink>
+        </nav>
         <MedusaCTA />
       </div>
     </div>

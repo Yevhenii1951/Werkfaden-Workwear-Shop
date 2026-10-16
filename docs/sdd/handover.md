@@ -1,30 +1,51 @@
-# Bootstrap handover (corrected 2026-10-10)
+# Handover — Werkfaden (demo)
 
-## Delivered (real)
+A German workwear store on Medusa 2.21.2 + Next.js 15, built on the official
+DTC starter. Portfolio project; product data and brand are fictional fixtures,
+not commercial truth. Sandbox payments, local email only.
 
-- Locked PORTFOLIO/Standard tier: `spec.md`, `contract.md`, `stack-decision.md`, 11 tickets, security checklist, content LLM prompt.
-- Official Medusa 2.21.2 + Next.js 15 DTC starter on pinned pnpm `10.11.1` / Node 22.22.1; single lockfile.
-- Isolated Compose Postgres (5544) + Redis (6384); DB migrated; Germany/EUR region + sales channel + publishable key configured privately.
-- WW-000 (`d8ee081`): content package repaired (broken JSON, SVG contradiction) and enforced by a Zod validator plus a unit test.
-- WW-001 partial (`811df1a`): `seed-werkfaden-catalog.ts` (25 products / 150 variants, collections/options, DB guard), shipping profile helper, `setup-store.ts` guard.
+## Run it
 
-## Fixed as part of WW-002 (2026-10-10)
+Node 22.22.1, Docker, pnpm 10.11.1 (`npx --yes pnpm@10.11.1` if not installed;
+never add a second lockfile).
 
-- `ensure-shipping-profile.ts`, `setup-store.ts`: now pass `data: [{ name, type }]` to `createShippingProfilesWorkflow` (previously `shipping_profiles`) — `tsc` and runtime correct.
-- Prices ×100: prices are stored in Medusa v2 major units (not cents); the seed now divides `price_gross_eur_cents` by 100 and self-heals existing variant prices idempotently. `money.ts` was correct all along.
-- Availability returned nothing: `setup-inventory.ts` provisions stock location "Werkfaden Lager", links the sales channel, and creates 150 inventory levels from `stock_quantity`. Availability filter is now meaningful.
-- `npm run check` green: `--passWithNoTests` added to the empty `test:integration:http` script (harness not stood up).
+```bash
+npx --yes pnpm@10.11.1 install --frozen-lockfile
+npm run setup:env
+docker compose up -d --wait
+npx --yes pnpm@10.11.1 run setup:store          # Germany/EUR store + publishable key
+npx --yes pnpm@10.11.1 run setup:checkout       # tax, shipping, Stripe (sandbox)
+npx --yes pnpm@10.11.1 run backend:dev          # :9000  (admin at /app)
+npx --yes pnpm@10.11.1 run storefront:dev       # :8000
+```
 
-## Kept open
+Secrets stay in gitignored `.env` files; `.env.template` is the public
+contract. Stripe test-mode keys are required to pay for an order. Admin users
+are created locally via Medusa's `user` command — no shared default password.
 
-- WW-003 … WW-010: product page, cart validation, checkout totals/shipping, Stripe sandbox, auth + order ownership, admin ops, personalization module + logo upload + admin surface, email sink, legal drafts, accessibility/browser evidence.
-- Admin login account, guard on the test DB, computed tax/shipping verification.
-- Integration suite empty (`integration-tests/http/` absent, no `.env.test`).
+## Checks
 
-## Corrected
+```bash
+npm run check          # lint + typecheck + unit + integration
+npx --yes pnpm@10.11.1 run build
+```
 
-- Commits labelled WW-002…WW-010 (PRs #3–#11) were empty (0 changed files); git history was rewritten 2026-10-10 back to the last real commit. Nothing real was lost.
+The integration suite needs `apps/backend/.env.test` (copy
+`.env.test.template`, set `DB_PASSWORD`); it runs against a throwaway `_test`
+database and refuses dev/prod databases.
 
-## Content handoff
+## Boundaries (demo)
 
-Send `docs/content/llm-prompt-ru.md` to the content LLM; return files for validation. Returned facts remain fictional fixtures until approved. Generated content is not commercial product truth.
+- No public deployment, live payments, real shipping or real email delivery.
+- Legal pages are clearly labeled drafts with placeholder operator facts.
+- Email notifications are written to `MAIL_SINK_DIR` (default
+  `apps/backend/mail-sink`, gitignored) as `.eml` files.
+- Personalization is a reviewed request, never a paid order.
+
+## Open items
+
+- WW-010 is the last planned MVP ticket; real launch needs revised
+  purpose/tier, operator/legal facts, verified product facts and a separate
+  operational/security gate.
+- `/store` InstantSearch still returns 404 (no search module configured).
+- `docs/sdd/state.md` holds per-session evidence; shipped history lives in PRs.
