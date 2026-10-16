@@ -19,6 +19,22 @@ module.exports = defineConfig({
       resolve: './src/modules/personalization',
     },
     {
+      resolve: '@medusajs/medusa/notification',
+      options: {
+        providers: [
+          {
+            resolve: './src/modules/notification-sink',
+            id: 'mail-sink',
+            options: {
+              dir: process.env.MAIL_SINK_DIR || 'mail-sink',
+              from: process.env.MAIL_FROM,
+              channels: ['email'],
+            },
+          },
+        ],
+      },
+    },
+    {
       resolve: '@medusajs/medusa/payment',
       options: {
         providers: [

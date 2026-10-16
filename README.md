@@ -10,7 +10,7 @@ German workwear store with a separate team-logo request flow.
 
 ## Status
 
-SDD baseline and official starter scaffold are in place. This is not a completed store: German catalog import, checkout verification, Stripe sandbox, notifications and personalization remain tracked work.
+Portfolio demo of a German workwear store built on Medusa + Next.js. The German catalog, checkout (Stripe sandbox), notifications, team-logo personalization and legal drafts are implemented. The catalog, checkout, ownership and notification paths are covered by tests and build checks; the legal pages are drafts, not verified legal text. This is still a demo, not a launchable shop: no live payments, shipping or operator facts.
 
 Working name is not trademark-cleared. No trading company, real payments, commercial delivery guarantees or legal launch readiness implied.
 
@@ -65,6 +65,17 @@ npx --yes pnpm@10.11.1 run build
 Checks are strict and sequential. Missing tests/credentials are reported, never converted to green via `passWithNoTests` or ignored build errors. DB integration tests will use a separate guarded test DB. See `docs/sdd/state.md` for actual evidence; a scaffold is not a passing release.
 
 The DB integration suite needs `apps/backend/.env.test` (gitignored): copy `apps/backend/.env.test.template` and set `DB_PASSWORD` to the `WORKWEAR_DB_PASSWORD` from `npm run setup:env`. The runner creates an ephemeral database on `DB_HOST:DB_PORT`; without this file `npm run check` fails at the integration step.
+
+## Notifications (demo)
+
+Email is local: order confirmations and team-logo acknowledgments are written as `.eml` files by a file-based notification provider (`apps/backend/src/modules/notification-sink`) instead of being delivered. Files land in `MAIL_SINK_DIR` (default `apps/backend/mail-sink`, gitignored). Send failures are logged and surface as `FAILURE` notification records, so a missing acknowledgment is observable rather than silent. No external mail provider is configured; nothing leaves the machine.
+
+- Order confirmation (`order.placed`) and personalization acknowledgment (`personalization-request.created`) are idempotent per order/request.
+- Provider options: `MAIL_FROM` and `MAIL_SINK_DIR` (see `apps/backend/.env.template`).
+
+## Legal drafts
+
+`/impressum`, `/datenschutz`, `/agb` and `/widerruf` are **clearly labeled drafts** for the demo. Operator facts (company, address, register, VAT ID, contact) are explicit `[…]` placeholders and must be completed by a real operator. They are reachable from the footer and the persistent demo banner on every page, including checkout.
 
 ## Content
 

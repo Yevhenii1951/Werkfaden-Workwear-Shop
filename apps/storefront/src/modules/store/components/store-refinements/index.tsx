@@ -20,7 +20,7 @@ const SortProducts = ({ currencyCode }: { currencyCode: string }) => {
 
   return (
     <FilterRadioGroup
-      title="Sort by"
+      title="Sortieren nach"
       items={items}
       value={currentRefinement}
       handleChange={refine}

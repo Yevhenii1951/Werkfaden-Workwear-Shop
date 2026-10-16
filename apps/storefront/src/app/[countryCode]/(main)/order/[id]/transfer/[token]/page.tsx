@@ -14,21 +14,21 @@ export default async function TransferPage({
       <TransferImage />
       <div className="flex flex-col gap-y-6">
         <Heading level="h1" className="text-xl text-zinc-900">
-          Transfer request for order {id}
+          Übertragungsanfrage für Bestellung {id}
         </Heading>
         <Text className="text-zinc-600">
-          You&#39;ve received a request to transfer ownership of your order ({id}).
-          If you agree to this request, you can approve the transfer by clicking
-          the button below.
+          Sie haben eine Anfrage zum Besitzwechsel Ihrer Bestellung ({id})
+          erhalten. Wenn Sie zustimmen, können Sie die Übertragung mit dem Button
+          unten bestätigen.
         </Text>
         <div className="w-full h-px bg-zinc-200" />
         <Text className="text-zinc-600">
-          If you accept, the new owner will take over all responsibilities and
-          permissions associated with this order.
+          Bei Zustimmung übernimmt der neue Inhaber alle Rechte und Pflichten,
+          die mit dieser Bestellung verbunden sind.
         </Text>
         <Text className="text-zinc-600">
-          If you do not recognize this request or wish to retain ownership, no
-          further action is required.
+          Wenn Sie diese Anfrage nicht kennen oder Eigentümer bleiben möchten,
+          ist keine weitere Maßnahme erforderlich.
         </Text>
         <div className="w-full h-px bg-zinc-200" />
         <TransferActions id={id} token={token} />
