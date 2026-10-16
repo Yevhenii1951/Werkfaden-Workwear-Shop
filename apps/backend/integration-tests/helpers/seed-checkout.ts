@@ -12,6 +12,7 @@ import {
   createShippingOptionsWorkflow,
   createShippingProfilesWorkflow,
   createStockLocationsWorkflow,
+  linkSalesChannelsToApiKeyWorkflow,
 } from "@medusajs/medusa/core-flows"
 import type { MedusaSuiteOptions } from "@medusajs/test-utils"
 
@@ -25,10 +26,13 @@ type Headers = { headers: Record<string, string> }
 
 export interface CheckoutSeed {
   cart: { id: string }
+  productId: string
   variantId: string
   shippingOptionId: string
   regionId: string
   salesChannelId: string
+  locationId: string
+  inventoryItemId?: string
   storeHeaders: Headers
 }
 
@@ -74,6 +78,9 @@ export async function seedCheckout(
   const publishableKey = await container
     .resolve(Modules.API_KEY)
     .createApiKeys({ title: "test key", type: "publishable", created_by: "test" })
+  await linkSalesChannelsToApiKeyWorkflow(container).run({
+    input: { id: publishableKey.id, add: [salesChannel.id] },
+  })
   const storeHeaders: Headers = { headers: { "x-publishable-api-key": publishableKey.token } }
 
   const { result: profiles } = await createShippingProfilesWorkflow(container).run({
@@ -126,17 +133,20 @@ export async function seedCheckout(
     },
   })
 
+  let inventoryItemId: string | undefined
+
   if (manageInventory) {
     const { data: inventoryItems } = await query().graph({
       entity: "inventory_item",
       fields: ["id", "sku"],
       filters: { sku: "TEST-VARIANT" },
     })
+    inventoryItemId = inventoryItems[0].id as string
     await createInventoryLevelsWorkflow(container).run({
       input: {
         inventory_levels: [
           {
-            inventory_item_id: inventoryItems[0].id,
+            inventory_item_id: inventoryItemId,
             location_id: location.id,
             stocked_quantity: 1,
           },
@@ -192,10 +202,13 @@ export async function seedCheckout(
 
   return {
     cart,
+    productId: product.id,
     variantId,
     shippingOptionId,
     regionId: region.id,
     salesChannelId: salesChannel.id,
+    locationId: location.id,
+    inventoryItemId,
     storeHeaders,
   }
 }
