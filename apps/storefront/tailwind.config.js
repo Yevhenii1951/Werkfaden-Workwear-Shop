@@ -33,6 +33,17 @@ module.exports = {
           80: "#1F2937",
           90: "#111827",
         },
+        wf: {
+          bone: "rgb(var(--wf-bone-rgb) / <alpha-value>)",
+          "bone-dark": "rgb(var(--wf-bone-dark-rgb) / <alpha-value>)",
+          surface: "rgb(var(--wf-surface-rgb) / <alpha-value>)",
+          ink: "rgb(var(--wf-ink-rgb) / <alpha-value>)",
+          "ink-soft": "rgb(var(--wf-ink-soft-rgb) / <alpha-value>)",
+          muted: "rgb(var(--wf-muted-rgb) / <alpha-value>)",
+          line: "rgb(var(--wf-line-rgb) / <alpha-value>)",
+          accent: "rgb(var(--wf-accent-rgb) / <alpha-value>)",
+          "accent-strong": "rgb(var(--wf-accent-strong-rgb) / <alpha-value>)",
+        },
       },
       borderRadius: {
         none: "0px",
@@ -40,7 +51,14 @@ module.exports = {
         base: "4px",
         rounded: "8px",
         large: "16px",
+        card: "14px",
+        field: "10px",
         circle: "9999px",
+      },
+      boxShadow: {
+        wf: "0 1px 2px rgba(22,21,15,.06), 0 12px 32px -12px rgba(22,21,15,.18)",
+        "wf-hover":
+          "0 2px 4px rgba(22,21,15,.08), 0 20px 40px -16px rgba(22,21,15,.24)",
       },
       maxWidth: {
         "8xl": "100rem",
@@ -59,7 +77,7 @@ module.exports = {
       },
       fontFamily: {
         sans: [
-          "Inter",
+          "var(--font-instrument)",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
@@ -67,6 +85,18 @@ module.exports = {
           "Helvetica Neue",
           "Ubuntu",
           "sans-serif",
+        ],
+        display: [
+          "var(--font-bricolage)",
+          "var(--font-instrument)",
+          "sans-serif",
+        ],
+        mono: [
+          "var(--font-jetbrains)",
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "monospace",
         ],
       },
       keyframes: {

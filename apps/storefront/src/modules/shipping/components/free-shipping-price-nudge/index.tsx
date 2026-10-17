@@ -9,7 +9,7 @@ import {
   StorePrice,
 } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import { Button, clx } from "@modules/common/components/ui"
+import { clx } from "@modules/common/components/ui"
 import { useState } from "react"
 import { StoreFreeShippingPrice } from "types/global"
 
@@ -142,14 +142,14 @@ function FreeShippingInline({
   }
 }) {
   return (
-    <div className="bg-neutral-100 p-2 rounded-lg border">
+    <div className="bg-wf-surface p-3 rounded-card border border-wf-line">
       <div className="space-y-1.5">
-        <div className="flex justify-between text-xs text-neutral-600">
+        <div className="flex justify-between text-xs text-wf-muted">
           <div>
             {price.target_reached ? (
               <div className="flex items-center gap-1.5">
                 {" "}
-                <CheckCircleSolid className="text-green-500 inline-block" />{" "}
+                <CheckCircleSolid className="text-green-600 inline-block" />{" "}
                 Kostenloser Versand freigeschaltet!
               </div>
             ) : (
@@ -163,7 +163,7 @@ function FreeShippingInline({
             })}
           >
             Noch{" "}
-            <span className="text-neutral-950">
+            <span className="text-wf-ink">
               {convertToLocale({
                 amount: price.target_remaining,
                 currency_code: cart.currency_code,
@@ -175,14 +175,14 @@ function FreeShippingInline({
         <div className="flex justify-between gap-1">
           <div
             className={clx(
-              "bg-gradient-to-r from-zinc-400 to-zinc-500 h-1 rounded-full max-w-full duration-500 ease-in-out",
+              "bg-gradient-to-r from-wf-accent-strong to-wf-accent h-1 rounded-full max-w-full duration-500 ease-in-out",
               {
                 "from-green-400 to-green-500": price.target_reached,
               }
             )}
             style={{ width: `${price.remaining_percentage}%` }}
           ></div>
-          <div className="bg-neutral-300 h-1 rounded-full w-fit flex-grow"></div>
+          <div className="bg-wf-bone-dark h-1 rounded-full w-fit flex-grow"></div>
         </div>
       </div>
     </div>
@@ -210,19 +210,20 @@ function FreeShippingPopup({
       )}
     >
       <div>
-        <Button
-          className="rounded-full bg-neutral-900 shadow-none outline-none border-none text-[15px] p-2"
+        <button
+          type="button"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-wf-ink text-wf-bone shadow-none outline-none transition-colors hover:bg-wf-ink/80 focus-visible:ring-2 focus-visible:ring-wf-accent focus-visible:ring-offset-2"
           onClick={() => setIsClosed(true)}
           aria-label="Hinweis zum kostenlosen Versand schließen"
         >
           <XMark />
-        </Button>
+        </button>
       </div>
 
-      <div className="w-[400px] bg-black text-white p-6 rounded-lg ">
+      <div className="w-[400px] max-w-[calc(100vw-2.5rem)] bg-wf-ink text-wf-bone p-6 rounded-card">
         <div className="pb-4">
           <div className="space-y-3">
-            <div className="flex justify-between text-[15px] text-neutral-400">
+            <div className="flex justify-between text-[15px] text-wf-bone/60">
               <div>
                 {price.target_reached ? (
                   <div className="flex items-center gap-1.5">
@@ -252,28 +253,28 @@ function FreeShippingPopup({
             <div className="flex justify-between gap-1">
               <div
                 className={clx(
-                  "bg-gradient-to-r from-zinc-400 to-zinc-500 h-1.5 rounded-full max-w-full duration-500 ease-in-out",
+                  "bg-gradient-to-r from-wf-accent-strong to-wf-accent h-1.5 rounded-full max-w-full duration-500 ease-in-out",
                   {
                     "from-green-400 to-green-500": price.target_reached,
                   }
                 )}
                 style={{ width: `${price.remaining_percentage}%` }}
               ></div>
-              <div className="bg-zinc-600 h-1.5 rounded-full w-fit flex-grow"></div>
+              <div className="bg-white/20 h-1.5 rounded-full w-fit flex-grow"></div>
             </div>
           </div>
         </div>
 
         <div className="flex gap-3">
           <LocalizedClientLink
-            className="rounded-2xl bg-transparent shadow-none outline-none border-[1px] border-white text-[15px] py-2.5 px-4"
+            className="rounded-full bg-transparent shadow-none outline-none border border-wf-bone/40 text-wf-bone text-[15px] py-2.5 px-4 hover:bg-white/10 transition-colors"
             href="/cart"
           >
             Warenkorb ansehen
           </LocalizedClientLink>
 
           <LocalizedClientLink
-            className="flex-grow rounded-2xl bg-white text-neutral-950 shadow-none outline-none border-[1px] border-white text-[15px] py-2.5 px-4 text-center"
+            className="flex-grow rounded-full bg-wf-accent text-wf-ink shadow-none outline-none text-[15px] py-2.5 px-4 text-center hover:bg-[#ef6f33] transition-colors"
             href="/categories/t-shirts"
           >
             Produkte ansehen
