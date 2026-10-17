@@ -1,4 +1,3 @@
-import { Text } from "@modules/common/components/ui"
 import { getProductPrice } from "@lib/util/get-product-price"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
@@ -14,15 +13,6 @@ export default async function ProductPreview({
   isFeatured?: boolean
   region: HttpTypes.StoreRegion
 }) {
-  // const pricedProduct = await listProducts({
-  //   regionId: region.id,
-  //   queryParams: { id: [product.id!] },
-  // }).then(({ response }) => response.products[0])
-
-  // if (!pricedProduct) {
-  //   return null
-  // }
-
   const { cheapestPrice } = getProductPrice({
     product,
   })
@@ -30,23 +20,31 @@ export default async function ProductPreview({
   return (
     <LocalizedClientLink
       href={`/products/${product.handle}`}
-      className="group"
+      className="group block h-full focus-visible:outline-none"
       aria-label={product.title}
     >
-      <div data-testid="product-wrapper">
+      <div
+        data-testid="product-wrapper"
+        className="wf-card flex h-full flex-col overflow-hidden"
+      >
         <Thumbnail
           thumbnail={product.thumbnail}
           images={product.images}
           size="full"
           isFeatured={isFeatured}
         />
-        <div className="flex txt-compact-medium mt-4 justify-between">
-          <Text className="text-ui-fg-subtle" data-testid="product-title">
+        <div className="flex flex-1 items-start justify-between gap-3 p-4">
+          <h3
+            className="text-sm font-medium leading-5 text-wf-ink"
+            data-testid="product-title"
+          >
             {product.title}
-          </Text>
-          <div className="flex items-center gap-x-2">
-            {cheapestPrice && <PreviewPrice price={cheapestPrice} />}
-          </div>
+          </h3>
+          {cheapestPrice && (
+            <div className="shrink-0 font-mono text-sm text-wf-ink">
+              <PreviewPrice price={cheapestPrice} />
+            </div>
+          )}
         </div>
       </div>
     </LocalizedClientLink>
