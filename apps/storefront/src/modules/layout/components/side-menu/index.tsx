@@ -14,7 +14,7 @@ import { Locale } from "@lib/data/locales"
 
 const SideMenuItems = {
   Startseite: "/",
-  Shop: "/store",
+  Produkte: "/categories/t-shirts",
   "Logo-Veredelung": "/personalization",
   Konto: "/account",
   Warenkorb: "/cart",

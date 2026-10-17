@@ -2,10 +2,12 @@ import * as fs from "fs"
 import * as path from "path"
 import type { ExecArgs } from "@medusajs/framework/types"
 import {
+  batchLinkProductsToCollectionWorkflow,
   createCollectionsWorkflow,
   createProductCategoriesWorkflow,
   createProductOptionsWorkflow,
   createProductsWorkflow,
+  updateCollectionsWorkflow,
   updateProductsWorkflow,
 } from "@medusajs/medusa/core-flows"
 import {
@@ -82,14 +84,40 @@ export default async function seedWerkfadenCatalog({ container }: ExecArgs) {
   const { data: allCat } = await query.graph({ entity: "product_category", fields: ["id", "handle", "name"] })
   const catMap = new Map(allCat.map((c: any) => [(c.handle || "").toLowerCase(), c.id]))
 
-  const { data: existingCols } = await query.graph({ entity: "product_collection", fields: ["id", "title"] })
+  const { data: existingCols } = await query.graph({ entity: "product_collection", fields: ["id", "title", "handle"] })
   const colTitles: string[] = Array.from(new Set(products.map((p: any) => String(p.category_id))))
-  const missingCols = colTitles.filter((t) => !existingCols.some((ec: any) => ec.title === t))
-  if (missingCols.length) {
-    await createCollectionsWorkflow(container).run({ input: { collections: missingCols.map((t) => ({ title: t })) } })
+  const categoryNames = new Map<string, string>()
+  for (const category of categories) {
+    categoryNames.set(String(category.slug), String(category.name_de))
   }
-  const { data: allCols } = await query.graph({ entity: "product_collection", fields: ["id", "title"] })
-  const colMap = new Map(allCols.map((c: any) => [c.title, c.id]))
+  const existingColHandles = new Set(existingCols.map((collection: any) => collection.handle))
+  const missingCols = colTitles.filter((handle) => !existingColHandles.has(handle))
+  if (missingCols.length) {
+    await createCollectionsWorkflow(container).run({
+      input: {
+        collections: missingCols.map((handle) => ({
+          title: categoryNames.get(handle) ?? handle,
+          handle,
+        })),
+      },
+    })
+  }
+  const { data: allCols } = await query.graph({ entity: "product_collection", fields: ["id", "title", "handle"] })
+  const colMap = new Map(allCols.map((collection: any) => [collection.handle, collection.id]))
+  const collectionUpdates = allCols.flatMap((collection: any) => {
+    const title = categoryNames.get(collection.handle)
+    return title && title !== collection.title
+      ? [{ id: collection.id, title }]
+      : []
+  })
+  for (const collection of collectionUpdates) {
+    await updateCollectionsWorkflow(container).run({
+      input: {
+        selector: { id: collection.id },
+        update: { title: collection.title },
+      },
+    })
+  }
 
   const allSizes = Array.from(new Set(products.flatMap((p: any) => p.variants.map((v: any) => String(v.size)))))
   const allColors = Array.from(new Set(products.flatMap((p: any) => p.variants.map((v: any) => String(v.color_name_de)))))
@@ -217,9 +245,39 @@ export default async function seedWerkfadenCatalog({ container }: ExecArgs) {
     logger.info(`Updated ${toUpdate.length} existing products (categories/prices)`)
   }
 
-  if (!toCreate.length && !toUpdate.length) {
+  const collectionByHandle = new Map<string, string>()
+  for (const product of products) {
+    const collectionId = colMap.get(String(product.category_id))
+    if (typeof collectionId === "string") {
+      collectionByHandle.set(String(product.slug), collectionId)
+    }
+  }
+  const { data: currentProducts } = await query.graph({
+    entity: "product",
+    fields: ["id", "handle", "collection_id"],
+  })
+  const productsToLink = new Map<string, string[]>()
+
+  for (const product of currentProducts) {
+    const collectionId = collectionByHandle.get(product.handle)
+    if (!collectionId || product.collection_id === collectionId) continue
+
+    const productIds = productsToLink.get(collectionId) ?? []
+    productIds.push(product.id)
+    productsToLink.set(collectionId, productIds)
+  }
+
+  for (const [collectionId, productIds] of productsToLink) {
+    await batchLinkProductsToCollectionWorkflow(container).run({
+      input: { id: collectionId, add: productIds },
+    })
+  }
+
+  if (!toCreate.length && !toUpdate.length && !productsToLink.size) {
     logger.info("Werkfaden catalog already up to date")
     return
   }
-  logger.info("Werkfaden catalog seed complete")
+  logger.info(
+    `Werkfaden catalog seed complete; linked ${Array.from(productsToLink.values()).reduce((count, ids) => count + ids.length, 0)} products to collections`
+  )
 }

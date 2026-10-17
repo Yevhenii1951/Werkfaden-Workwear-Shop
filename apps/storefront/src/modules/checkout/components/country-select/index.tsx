@@ -33,6 +33,7 @@ const CountrySelect = forwardRef<
     <NativeSelect
       ref={innerRef}
       placeholder={placeholder}
+      aria-label={placeholder}
       defaultValue={defaultValue}
       {...props}
     >

@@ -162,14 +162,14 @@ function FreeShippingInline({
               "opacity-0 invisible": price.target_reached,
             })}
           >
-            Only{" "}
+            Noch{" "}
             <span className="text-neutral-950">
               {convertToLocale({
                 amount: price.target_remaining,
                 currency_code: cart.currency_code,
               })}
             </span>{" "}
-            away
+            bis zum kostenlosen Versand
           </div>
         </div>
         <div className="flex justify-between gap-1">
@@ -213,6 +213,7 @@ function FreeShippingPopup({
         <Button
           className="rounded-full bg-neutral-900 shadow-none outline-none border-none text-[15px] p-2"
           onClick={() => setIsClosed(true)}
+          aria-label="Hinweis zum kostenlosen Versand schließen"
         >
           <XMark />
         </Button>
@@ -238,14 +239,14 @@ function FreeShippingPopup({
                   "opacity-0 invisible": price.target_reached,
                 })}
               >
-                Only{" "}
+                Noch{" "}
                 <span className="text-white">
                   {convertToLocale({
                     amount: price.target_remaining,
                     currency_code: cart.currency_code,
                   })}
                 </span>{" "}
-                away
+                bis zum kostenlosen Versand
               </div>
             </div>
             <div className="flex justify-between gap-1">
@@ -273,7 +274,7 @@ function FreeShippingPopup({
 
           <LocalizedClientLink
             className="flex-grow rounded-2xl bg-white text-neutral-950 shadow-none outline-none border-[1px] border-white text-[15px] py-2.5 px-4 text-center"
-            href="/store"
+            href="/categories/t-shirts"
           >
             Produkte ansehen
           </LocalizedClientLink>

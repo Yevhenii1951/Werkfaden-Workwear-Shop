@@ -47,7 +47,7 @@ const PersonalizationForm = ({ products }: Props) => {
           Dies ist eine Demo — es wurde kein Auftrag erstellt und keine
           Bestellung ausgelöst.
         </p>
-        <LocalizedClientLink href="/store" className="underline">
+        <LocalizedClientLink href="/categories/t-shirts" className="underline">
           Weiter stöbern
         </LocalizedClientLink>
       </div>
