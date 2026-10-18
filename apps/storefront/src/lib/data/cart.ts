@@ -1,6 +1,10 @@
 "use server"
 
 import { sdk } from "@lib/config"
+import {
+  getUnappliedPromotionCode,
+  parsePromotionCodes,
+} from "@lib/util/promotion-codes"
 import medusaError from "@lib/util/medusa-error"
 import { HttpTypes } from "@medusajs/types"
 import { revalidateTag } from "next/cache"
@@ -255,27 +259,62 @@ export async function initiatePaymentSession(
     .catch(medusaError)
 }
 
-export async function applyPromotions(codes: string[]) {
+export async function applyPromotions(
+  input: unknown
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const error =
+    "Der Rabattcode ist ungültig oder kann auf diesen Warenkorb nicht angewendet werden."
+  const codes = parsePromotionCodes(input)
+
+  if (!codes) {
+    return { ok: false, error }
+  }
+
   const cartId = await getCartId()
 
   if (!cartId) {
-    throw new Error("No existing cart found")
+    return {
+      ok: false,
+      error: "Ihr Warenkorb ist nicht verfügbar. Bitte laden Sie die Seite neu.",
+    }
   }
 
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  return sdk.store.cart
-    .update(cartId, { promo_codes: codes }, {}, headers)
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
+  let response: HttpTypes.StoreCartResponse
+  try {
+    response = await sdk.store.cart.update(
+      cartId,
+      { promo_codes: codes },
+      {},
+      headers
+    )
+  } catch (caught: unknown) {
+    if (
+      caught instanceof Error &&
+      caught.message.startsWith("The promotion code ") &&
+      caught.message.endsWith(" is invalid")
+    ) {
+      return { ok: false, error }
+    }
 
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
-    })
-    .catch(medusaError)
+    throw caught
+  }
+  const { cart } = response
+
+  const cartCacheTag = await getCacheTag("carts")
+  revalidateTag(cartCacheTag)
+
+  const fulfillmentCacheTag = await getCacheTag("fulfillment")
+  revalidateTag(fulfillmentCacheTag)
+
+  if (getUnappliedPromotionCode(cart.promotions, codes)) {
+    return { ok: false, error }
+  }
+
+  return { ok: true }
 }
 
 export async function submitPromotionForm(

@@ -15,6 +15,7 @@ npm run setup:env
 docker compose up -d --wait
 npx --yes pnpm@10.11.1 run setup:store          # Germany/EUR store + publishable key
 npx --yes pnpm@10.11.1 run setup:checkout       # tax, shipping, Stripe (sandbox)
+npx --yes pnpm@10.11.1 run setup:promotions     # local demo discount codes
 npx --yes pnpm@10.11.1 run backend:dev          # :9000  (admin at /app)
 npx --yes pnpm@10.11.1 run storefront:dev       # :8000
 ```
@@ -41,11 +42,13 @@ database and refuses dev/prod databases.
 - Email notifications are written to `MAIL_SINK_DIR` (default
   `apps/backend/mail-sink`, gitignored) as `.eml` files.
 - Personalization is a reviewed request, never a paid order.
+- Discount codes are server-calculated local demo fixtures; see `README.md`.
 
 ## Open items
 
-- WW-010 is the last planned MVP ticket; real launch needs revised
-  purpose/tier, operator/legal facts, verified product facts and a separate
-  operational/security gate.
-- `/store` InstantSearch still returns 404 (no search module configured).
+- WW-012 discount codes are server-calculated local demo fixtures; a real
+  launch needs revised purpose/tier, operator/legal facts, verified product
+  facts and a separate operational/security gate.
+- WW-011 search coverage is in its own unmerged feature branch.
+- `/store` InstantSearch is still unavailable because no search module is configured.
 - `docs/sdd/state.md` holds per-session evidence; shipped history lives in PRs.
