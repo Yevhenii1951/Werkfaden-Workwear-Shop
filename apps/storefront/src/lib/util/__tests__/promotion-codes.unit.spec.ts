@@ -1,4 +1,21 @@
-import { getUnappliedPromotionCode } from "../promotion-codes"
+import {
+  getUnappliedPromotionCode,
+  parsePromotionCodes,
+} from "../promotion-codes"
+
+describe("parsePromotionCodes", () => {
+  it("trims and returns an array of non-empty codes", () => {
+    expect(parsePromotionCodes([" WERKFADEN10 ", "WERKFADEN5"])).toEqual([
+      "WERKFADEN10",
+      "WERKFADEN5",
+    ])
+  })
+
+  it("rejects malformed action input", () => {
+    expect(parsePromotionCodes("WERKFADEN10")).toBeNull()
+    expect(parsePromotionCodes([" "])).toBeNull()
+  })
+})
 
 describe("getUnappliedPromotionCode", () => {
   it("accepts applied codes without regard to letter case or surrounding spaces", () => {

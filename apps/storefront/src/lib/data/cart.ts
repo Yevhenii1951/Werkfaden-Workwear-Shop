@@ -1,7 +1,10 @@
 "use server"
 
 import { sdk } from "@lib/config"
-import { getUnappliedPromotionCode } from "@lib/util/promotion-codes"
+import {
+  getUnappliedPromotionCode,
+  parsePromotionCodes,
+} from "@lib/util/promotion-codes"
 import medusaError from "@lib/util/medusa-error"
 import { HttpTypes } from "@medusajs/types"
 import { revalidateTag } from "next/cache"
@@ -257,10 +260,16 @@ export async function initiatePaymentSession(
 }
 
 export async function applyPromotions(
-  codes: string[]
+  input: unknown
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   const error =
     "Der Rabattcode ist ungültig oder kann auf diesen Warenkorb nicht angewendet werden."
+  const codes = parsePromotionCodes(input)
+
+  if (!codes) {
+    return { ok: false, error }
+  }
+
   const cartId = await getCartId()
 
   if (!cartId) {
@@ -295,15 +304,15 @@ export async function applyPromotions(
   }
   const { cart } = response
 
-  if (getUnappliedPromotionCode(cart.promotions, codes)) {
-    return { ok: false, error }
-  }
-
   const cartCacheTag = await getCacheTag("carts")
   revalidateTag(cartCacheTag)
 
   const fulfillmentCacheTag = await getCacheTag("fulfillment")
   revalidateTag(fulfillmentCacheTag)
+
+  if (getUnappliedPromotionCode(cart.promotions, codes)) {
+    return { ok: false, error }
+  }
 
   return { ok: true }
 }
