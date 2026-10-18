@@ -1,8 +1,9 @@
 import { getBaseURL } from "@lib/util/env"
+import CookieBanner from "@modules/layout/components/cookie-banner"
 import DemoNotice from "@modules/layout/components/demo-notice"
 import { Metadata } from "next"
 import {
-  Bricolage_Grotesque,
+  Barlow_Condensed,
   Instrument_Sans,
   JetBrains_Mono,
 } from "next/font/google"
@@ -15,10 +16,10 @@ const instrumentSans = Instrument_Sans({
   display: "swap",
 })
 
-const bricolageGrotesque = Bricolage_Grotesque({
+const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-bricolage",
+  weight: ["500", "600", "700"],
+  variable: "--font-barlow",
   display: "swap",
 })
 
@@ -38,11 +39,12 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     <html
       lang="de"
       data-mode="light"
-      className={`${instrumentSans.variable} ${bricolageGrotesque.variable} ${jetbrainsMono.variable}`}
+      className={`${instrumentSans.variable} ${barlowCondensed.variable} ${jetbrainsMono.variable}`}
     >
       <body>
         <DemoNotice />
         <main className="relative">{props.children}</main>
+        <CookieBanner />
       </body>
     </html>
   )

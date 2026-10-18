@@ -1,11 +1,14 @@
 import { Suspense } from "react"
 
+import { User, ShoppingCart } from "@medusajs/icons"
 import { listLocales } from "@lib/data/locales"
 import { getLocale } from "@lib/data/locale-actions"
 import { listRegions } from "@lib/data/regions"
 import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import AnnouncementBar from "@modules/layout/components/announcement-bar"
 import CartButton from "@modules/layout/components/cart-button"
+import NavLinks from "@modules/layout/components/nav-links"
 import Search from "@modules/layout/components/search"
 import SideMenu from "@modules/layout/components/side-menu"
 
@@ -17,65 +20,60 @@ export default async function Nav() {
   ])
 
   return (
-    <div className="sticky top-0 inset-x-0 z-50 group">
-      <header className="relative h-16 mx-auto border-b border-wf-line duration-200 bg-wf-bone/90 backdrop-blur">
-        <nav className="content-container txt-xsmall-plus text-wf-ink-soft flex items-center justify-between w-full h-full text-small-regular">
-          <div className="flex-1 basis-0 h-full flex items-center">
-            <div className="h-full">
-              <SideMenu regions={regions} locales={locales} currentLocale={currentLocale} />
-            </div>
+    <div className="sticky top-0 inset-x-0 z-50">
+      <AnnouncementBar />
+      <header className="relative bg-wf-bone">
+        {/* Single row: burger (mobile) | logo | nav | utilities */}
+        <div className="content-container flex h-14 items-center gap-6 md:h-16 md:gap-8">
+          <div className="flex items-center lg:hidden">
+            <SideMenu
+              regions={regions}
+              locales={locales}
+              currentLocale={currentLocale}
+            />
           </div>
 
-          <div className="flex items-center h-full">
-            <LocalizedClientLink
-              href="/"
-              className="wf-display text-xl tracking-[-0.01em]"
-              data-testid="nav-store-link"
-            >
-              Werkfaden
-            </LocalizedClientLink>
+          <LocalizedClientLink
+            href="/"
+            className="wf-display shrink-0 text-[22px] text-wf-ink md:text-[26px]"
+            data-testid="nav-store-link"
+          >
+            Werkfaden
+          </LocalizedClientLink>
+
+          <div className="hidden lg:flex lg:flex-1 lg:justify-center lg:absolute lg:left-1/2 lg:-translate-x-1/2">
+            <NavLinks />
           </div>
 
-          <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
+          <div className="ml-auto flex items-center gap-4 text-wf-ink-soft md:gap-5">
             <Search />
-            <div className="hidden small:flex items-center gap-x-6 h-full">
-              <LocalizedClientLink
-                className="wf-link-sweep hover:text-wf-ink"
-                href="/store"
-                data-testid="nav-store-catalog-link"
-              >
-                Kollektion
-              </LocalizedClientLink>
-              <LocalizedClientLink
-                className="wf-link-sweep hover:text-wf-ink"
-                href="/personalization"
-                data-testid="nav-personalization-link"
-              >
-                Logo-Veredelung
-              </LocalizedClientLink>
-              <LocalizedClientLink
-                className="wf-link-sweep hover:text-wf-ink"
-                href="/account"
-                data-testid="nav-account-link"
-              >
-                Konto
-              </LocalizedClientLink>
-            </div>
+            <LocalizedClientLink
+              className="group inline-flex h-9 w-9 items-center justify-center rounded-circle transition-colors hover:bg-wf-bone-dark hover:text-wf-ink"
+              href="/account"
+              data-testid="nav-account-link"
+              aria-label="Konto"
+            >
+              <User
+                className="h-5 w-5 transition-transform duration-200 ease-out group-hover:-translate-y-0.5"
+                aria-hidden="true"
+              />
+            </LocalizedClientLink>
             <Suspense
               fallback={
                 <LocalizedClientLink
-                  className="hover:text-wf-ink flex gap-2"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-circle transition-colors hover:bg-wf-bone-dark hover:text-wf-ink"
                   href="/cart"
                   data-testid="nav-cart-link"
+                  aria-label="Warenkorb"
                 >
-                  Warenkorb (0)
+                  <ShoppingCart className="h-5 w-5" aria-hidden="true" />
                 </LocalizedClientLink>
               }
             >
               <CartButton />
             </Suspense>
           </div>
-        </nav>
+        </div>
       </header>
     </div>
   )

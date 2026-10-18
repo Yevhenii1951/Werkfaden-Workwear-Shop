@@ -4,6 +4,7 @@ import { Table, Text } from "@modules/common/components/ui"
 import LineItemOptions from "@modules/common/components/line-item-options"
 import LineItemPrice from "@modules/common/components/line-item-price"
 import LineItemUnitPrice from "@modules/common/components/line-item-unit-price"
+import { getProductImageUrls } from "@lib/util/product-images"
 import Thumbnail from "@modules/products/components/thumbnail"
 
 type ItemProps = {
@@ -12,11 +13,14 @@ type ItemProps = {
 }
 
 const Item = ({ item, currencyCode }: ItemProps) => {
+  const localImages = item.product_handle
+    ? getProductImageUrls(item.product_handle)
+    : []
   return (
     <Table.Row className="w-full" data-testid="product-row">
       <Table.Cell className="!pl-0 p-4 w-24">
         <div className="flex w-16">
-          <Thumbnail thumbnail={item.thumbnail} size="square" />
+          <Thumbnail thumbnail={localImages[0] ?? item.thumbnail} size="square" />
         </div>
       </Table.Cell>
 

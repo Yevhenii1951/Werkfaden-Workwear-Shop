@@ -122,10 +122,13 @@ const Search = () => {
         type="button"
         onClick={open}
         aria-label="Produkte suchen"
-        className="flex items-center hover:text-ui-fg-base"
+        className="group inline-flex h-9 w-9 items-center justify-center rounded-circle transition-colors hover:bg-wf-bone-dark hover:text-wf-ink"
         data-testid="nav-search-button"
       >
-        <MagnifyingGlass />
+        <MagnifyingGlass
+          className="h-5 w-5 transition-transform duration-200 ease-out group-hover:-translate-y-0.5"
+          aria-hidden="true"
+        />
       </button>
 
       <SearchDrawer isOpen={isOpen} close={close}>

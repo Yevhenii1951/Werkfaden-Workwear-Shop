@@ -93,25 +93,27 @@ const OptionRefinements = () => {
             value={group.title}
             className="overflow-hidden"
           >
-            <Accordion.Header>
-              <Accordion.Trigger className="flex w-full items-center justify-between py-3 text-left">
-                <div className="flex items-center gap-2">
-                  <span className="txt-compact-small-plus text-ui-fg-base">
-                    {group.title}
+            <Accordion.Header asChild>
+              <h2>
+                <Accordion.Trigger className="flex w-full items-center justify-between py-3 text-left">
+                  <div className="flex items-center gap-2">
+                    <span className="txt-compact-small-plus text-ui-fg-base">
+                      {group.title}
+                    </span>
+                    <span className="txt-compact-small-plus text-ui-fg-muted">
+                      ({selectedCount})
+                    </span>
+                  </div>
+                  <span
+                    className={clsx(
+                      "flex h-7 w-7 items-center justify-center text-ui-fg-muted transition-transform duration-150",
+                      { "rotate-180": isOpen }
+                    )}
+                  >
+                    <ChevronDownMini />
                   </span>
-                  <span className="txt-compact-small-plus text-ui-fg-muted">
-                    ({selectedCount})
-                  </span>
-                </div>
-                <span
-                  className={clsx(
-                    "flex h-7 w-7 items-center justify-center text-ui-fg-muted transition-transform duration-150",
-                    { "rotate-180": isOpen }
-                  )}
-                >
-                  <ChevronDownMini />
-                </span>
-              </Accordion.Trigger>
+                </Accordion.Trigger>
+              </h2>
             </Accordion.Header>
             <Accordion.Content className="pb-4 pt-1">
               <div className="flex flex-wrap gap-2">

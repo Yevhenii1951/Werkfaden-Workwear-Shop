@@ -19,13 +19,15 @@ const ItemsTemplate = ({ cart }: ItemsTemplateProps) => {
       <Table>
         <Table.Header className="border-t-0">
           <Table.Row className="text-ui-fg-subtle txt-medium-plus">
-            <Table.HeaderCell className="!pl-0">Artikel</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            <Table.HeaderCell className="pl-5 !pr-0">Artikel</Table.HeaderCell>
+            <Table.HeaderCell>
+              <span className="sr-only">Produktbild</span>
+            </Table.HeaderCell>
             <Table.HeaderCell>Menge</Table.HeaderCell>
             <Table.HeaderCell className="hidden small:table-cell">
               Preis
             </Table.HeaderCell>
-            <Table.HeaderCell className="!pr-0 text-right">
+            <Table.HeaderCell className="!pl-0 !pr-5 text-right">
               Summe
             </Table.HeaderCell>
           </Table.Row>

@@ -17,7 +17,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   thumbnail,
   images,
   size = "small",
-  isFeatured,
+  isFeatured: _isFeatured,
   className,
   "data-testid": dataTestid,
 }) => {
@@ -26,11 +26,10 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   return (
     <Container
       className={clx(
-        "relative w-full overflow-hidden p-0 bg-wf-bone-dark rounded-card",
+        "relative w-full overflow-hidden p-0 bg-wf-bone-dark",
         className,
         {
-          "aspect-[11/14]": isFeatured,
-          "aspect-[9/16]": !isFeatured && size !== "square",
+          "aspect-[4/5]": size !== "square",
           "aspect-[1/1]": size === "square",
           "w-[180px]": size === "small",
           "w-[290px]": size === "medium",

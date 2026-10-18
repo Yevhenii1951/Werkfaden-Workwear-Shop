@@ -47,12 +47,12 @@ module.exports = {
       },
       borderRadius: {
         none: "0px",
-        soft: "2px",
-        base: "4px",
-        rounded: "8px",
-        large: "16px",
-        card: "14px",
-        field: "10px",
+        soft: "0px",
+        base: "0px",
+        rounded: "0px",
+        large: "0px",
+        card: "0px",
+        field: "0px",
         circle: "9999px",
       },
       boxShadow: {
@@ -86,11 +86,7 @@ module.exports = {
           "Ubuntu",
           "sans-serif",
         ],
-        display: [
-          "var(--font-bricolage)",
-          "var(--font-instrument)",
-          "sans-serif",
-        ],
+        display: ["var(--font-barlow)", "var(--font-instrument)", "sans-serif"],
         mono: [
           "var(--font-jetbrains)",
           "ui-monospace",

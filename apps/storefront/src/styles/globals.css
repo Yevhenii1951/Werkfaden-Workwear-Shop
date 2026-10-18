@@ -6,24 +6,24 @@
    The :root block also overrides the Medusa UI light tokens so the whole
    storefront (catalog, PDP, cart, checkout) re-themes from one place. */
 :root {
-  --wf-bone: #f3efe7;
-  --wf-bone-dark: #e7e0d2;
+  --wf-bone: #f4efe6;
+  --wf-bone-dark: #e6dbcb;
   --wf-surface: #fbf8f2;
-  --wf-ink: #16150f;
-  --wf-ink-soft: #3c4a57;
+  --wf-ink: #0e0e0b;
+  --wf-ink-soft: #3c3931;
   --wf-muted: #625b4a;
-  --wf-line: #dad3c4;
+  --wf-line: #ddd3c3;
   --wf-accent: #e2571e;
   --wf-accent-strong: #b8400c;
 
   /* RGB channels so Tailwind can apply opacity (e.g. text-wf-bone/70). */
-  --wf-bone-rgb: 243 239 231;
-  --wf-bone-dark-rgb: 231 224 210;
+  --wf-bone-rgb: 244 239 230;
+  --wf-bone-dark-rgb: 230 219 203;
   --wf-surface-rgb: 251 248 242;
-  --wf-ink-rgb: 22 21 15;
-  --wf-ink-soft-rgb: 60 74 87;
+  --wf-ink-rgb: 14 14 11;
+  --wf-ink-soft-rgb: 60 57 49;
   --wf-muted-rgb: 98 91 74;
-  --wf-line-rgb: 218 211 196;
+  --wf-line-rgb: 221 211 195;
   --wf-accent-rgb: 226 87 30;
   --wf-accent-strong-rgb: 184 64 12;
 
@@ -111,7 +111,7 @@ body {
 
 @layer components {
   .content-container {
-    @apply max-w-[1440px] w-full mx-auto px-6;
+    @apply mx-auto w-full max-w-[1440px] px-5 sm:px-6 lg:px-8;
   }
 
   .contrast-btn {
@@ -173,7 +173,7 @@ body {
 
 @layer components {
   .wf-container {
-    @apply mx-auto w-full max-w-[1280px] px-6 md:px-8;
+    @apply mx-auto w-full max-w-[1440px] px-5 sm:px-6 lg:px-8;
   }
 
   .wf-eyebrow {
@@ -181,23 +181,23 @@ body {
   }
 
   .wf-display {
-    @apply font-display font-extrabold tracking-[-0.02em] text-wf-ink;
+    @apply font-display font-bold uppercase tracking-[0.01em];
   }
 
   .wf-btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-circle px-6 py-3 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wf-accent focus-visible:ring-offset-2 focus-visible:ring-offset-wf-bone;
+    @apply inline-flex items-center justify-center gap-2 px-8 py-5 text-[13px] font-semibold uppercase tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wf-accent focus-visible:ring-offset-2 focus-visible:ring-offset-wf-bone;
   }
 
   .wf-btn-primary {
-    @apply wf-btn bg-wf-accent text-wf-ink hover:bg-[#ef6f33];
+    @apply wf-btn bg-wf-ink text-wf-bone hover:bg-[#2a2822];
   }
 
   .wf-btn-secondary {
-    @apply wf-btn border border-wf-line bg-transparent text-wf-ink hover:bg-wf-bone-dark;
+    @apply wf-btn border border-wf-ink text-wf-ink hover:bg-wf-ink hover:text-wf-bone;
   }
 
   .wf-card {
-    @apply rounded-card border border-wf-line bg-wf-surface shadow-wf transition-shadow duration-200 hover:shadow-wf-hover;
+    @apply border border-wf-line bg-wf-surface transition-colors duration-200 hover:border-wf-muted;
   }
 
   .wf-link-sweep {
@@ -242,9 +242,26 @@ body {
   .wf-hero-media {
     animation: wf-media-in 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
   }
+
+  .wf-badge-pop {
+    animation: wf-badge-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .wf-pulse {
+    animation: wf-pulse 2.4s ease-in-out infinite;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
   .wf-link-sweep::after {
     transition: none;
   }
@@ -258,5 +275,30 @@ body {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes wf-badge-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes wf-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
   }
 }

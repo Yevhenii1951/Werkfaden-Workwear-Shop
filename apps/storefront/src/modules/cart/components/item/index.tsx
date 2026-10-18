@@ -2,6 +2,7 @@
 
 import { Table, Text, clx } from "@modules/common/components/ui"
 import { updateLineItem } from "@lib/data/cart"
+import { getProductImageUrls } from "@lib/util/product-images"
 import { HttpTypes } from "@medusajs/types"
 import CartItemSelect from "@modules/cart/components/cart-item-select"
 import ErrorMessage from "@modules/checkout/components/error-message"
@@ -44,9 +45,13 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
   const maxQtyFromInventory = 10
   const maxQuantity = item.variant?.manage_inventory ? 10 : maxQtyFromInventory
 
+  const localImages = item.product_handle
+    ? getProductImageUrls(item.product_handle)
+    : []
+
   return (
     <Table.Row className="w-full" data-testid="product-row">
-      <Table.Cell className="!pl-0 !p-1 small:!p-4 w-24">
+      <Table.Cell className="pl-5 !pr-0 !p-1 small:!p-4 w-24">
         <LocalizedClientLink
           href={`/products/${item.product_handle}`}
           aria-label={`Produktbild: ${item.product_title}`}
@@ -56,7 +61,7 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
           })}
         >
           <Thumbnail
-            thumbnail={item.thumbnail}
+            thumbnail={localImages[0] ?? item.thumbnail}
             images={item.variant?.product?.images}
             size="square"
           />
@@ -116,7 +121,7 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
         </Table.Cell>
       )}
 
-      <Table.Cell className="!pr-0 !p-1 small:!p-4">
+      <Table.Cell className="!pr-5 !p-1 small:!p-4">
         <span
           className={clx("!pr-0", {
             "flex flex-col items-end h-full justify-center": type === "preview",
