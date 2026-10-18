@@ -26,8 +26,11 @@ const Summary = ({ cart }: SummaryProps) => {
   const step = getCheckoutStep(cart)
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <Heading level="h2" className="text-[2rem] leading-[2.75rem]">
+    <div className="flex flex-col gap-y-4 px-5 sm:px-6 lg:px-8">
+      <Heading
+        level="h2"
+        className="text-2xl leading-8 md:text-[2rem] md:leading-[2.75rem]"
+      >
         Zusammenfassung
       </Heading>
       <DiscountCode cart={cart} />

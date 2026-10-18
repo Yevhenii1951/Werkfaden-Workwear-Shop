@@ -6,6 +6,7 @@ import {
   PopoverPanel,
   Transition,
 } from "@headlessui/react"
+import { ShoppingCart } from "@medusajs/icons"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@modules/common/components/ui"
@@ -14,6 +15,7 @@ import LineItemOptions from "@modules/common/components/line-item-options"
 import LineItemPrice from "@modules/common/components/line-item-price"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Thumbnail from "@modules/products/components/thumbnail"
+import { getProductImageUrls } from "@lib/util/product-images"
 import { usePathname } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
 
@@ -75,19 +77,34 @@ const CartDropdown = ({
 
   return (
     <div
-      className="h-full z-50"
+      className="relative z-50"
       onMouseEnter={openAndCancel}
       onMouseLeave={close}
     >
-      <Popover className="relative h-full">
+      <Popover className="relative">
         <PopoverButton
           as={Fragment}
         >
           <LocalizedClientLink
-            className="h-full hover:text-ui-fg-base"
+            className="group relative inline-flex h-9 w-9 items-center justify-center rounded-circle transition-colors hover:bg-wf-bone-dark hover:text-wf-ink"
             href="/cart"
             data-testid="nav-cart-link"
-          >{`Warenkorb (${totalItems})`}</LocalizedClientLink>
+            aria-label={`Warenkorb (${totalItems})`}
+          >
+            <ShoppingCart
+              className="h-5 w-5 transition-transform duration-200 ease-out group-hover:-translate-y-0.5"
+              aria-hidden="true"
+            />
+            {totalItems > 0 && (
+              <span
+                key={totalItems}
+                className="wf-badge-pop absolute -right-1 -top-1 flex h-4 min-w-[16px] items-center justify-center rounded-circle bg-wf-accent px-1 font-mono text-[10px] font-bold leading-none text-wf-ink"
+                data-testid="cart-item-count"
+              >
+                {totalItems}
+              </span>
+            )}
+          </LocalizedClientLink>
         </PopoverButton>
         <Transition
           show={cartDropdownOpen}
@@ -122,15 +139,15 @@ const CartDropdown = ({
                         key={item.id}
                         data-testid="cart-item"
                       >
-                        <LocalizedClientLink
-                          href={`/products/${item.product_handle}`}
-                          className="w-24"
-                        >
-                          <Thumbnail
-                            thumbnail={item.thumbnail}
-                            images={item.variant?.product?.images}
-                            size="square"
-                          />
+                          <LocalizedClientLink
+                            href={`/products/${item.product_handle}`}
+                            className="w-24"
+                          >
+                            <Thumbnail
+                              thumbnail={(item.product_handle ? getProductImageUrls(item.product_handle)[0] : null) ?? item.thumbnail}
+                              images={item.variant?.product?.images}
+                              size="square"
+                            />
                         </LocalizedClientLink>
                         <div className="flex flex-col justify-between flex-1">
                           <div className="flex flex-col flex-1">

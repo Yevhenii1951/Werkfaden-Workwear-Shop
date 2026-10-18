@@ -10,6 +10,7 @@ type AccordionItemProps = AccordionPrimitive.AccordionItemProps & {
   tooltip?: string
   forceMountContent?: true
   headingSize?: "small" | "medium" | "large"
+  headingLevel?: "h2" | "h3"
   customTrigger?: React.ReactNode
   complete?: boolean
   active?: boolean
@@ -38,6 +39,7 @@ const Item: React.FC<AccordionItemProps> = ({
   children,
   className,
   headingSize: _headingSize = "large",
+  headingLevel = "h3",
   customTrigger = undefined,
   forceMountContent = undefined,
   triggerable: _triggerable,
@@ -52,21 +54,31 @@ const Item: React.FC<AccordionItemProps> = ({
         className
       )}
     >
-      <AccordionPrimitive.Header className="px-1">
-        <div className="flex flex-col">
-          <div className="flex w-full items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Text className="text-ui-fg-subtle text-sm">{title}</Text>
+      <AccordionPrimitive.Header asChild>
+        <div className="px-1">
+          <div className="flex flex-col">
+            <div className="flex w-full items-center justify-between">
+              <div className="flex items-center gap-4">
+                {headingLevel === "h2" ? (
+                  <h2 className="text-ui-fg-subtle text-sm font-normal">
+                    {title}
+                  </h2>
+                ) : (
+                  <h3 className="text-ui-fg-subtle text-sm font-normal">
+                    {title}
+                  </h3>
+                )}
+              </div>
+              <AccordionPrimitive.Trigger aria-label={`${title} anzeigen`}>
+                {customTrigger || <MorphingTrigger />}
+              </AccordionPrimitive.Trigger>
             </div>
-            <AccordionPrimitive.Trigger aria-label={`${title} anzeigen`}>
-              {customTrigger || <MorphingTrigger />}
-            </AccordionPrimitive.Trigger>
+            {subtitle && (
+              <Text as="span" className="mt-1 text-sm">
+                {subtitle}
+              </Text>
+            )}
           </div>
-          {subtitle && (
-            <Text as="span" className="mt-1 text-sm">
-              {subtitle}
-            </Text>
-          )}
         </div>
       </AccordionPrimitive.Header>
       <AccordionPrimitive.Content

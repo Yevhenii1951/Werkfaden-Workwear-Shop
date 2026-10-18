@@ -2,11 +2,11 @@ import React, { Suspense } from "react"
 
 import ImageGallery from "@modules/products/components/image-gallery"
 import ProductActions from "@modules/products/components/product-actions"
-import ProductOnboardingCta from "@modules/products/components/product-onboarding-cta"
 import ProductTabs from "@modules/products/components/product-tabs"
 import RelatedProducts from "@modules/products/components/related-products"
 import ProductInfo from "@modules/products/templates/product-info"
 import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products"
+import Breadcrumbs, { BreadcrumbItem } from "@modules/common/components/breadcrumbs"
 import { notFound } from "next/navigation"
 import { HttpTypes } from "@medusajs/types"
 
@@ -16,7 +16,7 @@ type ProductTemplateProps = {
   product: HttpTypes.StoreProduct
   region: HttpTypes.StoreRegion
   countryCode: string
-  images: HttpTypes.StoreProductImage[]
+  images: { id: string; url: string }[]
 }
 
 const ProductTemplate: React.FC<ProductTemplateProps> = ({
@@ -29,32 +29,45 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
     return notFound()
   }
 
+  const breadcrumbs: BreadcrumbItem[] = [
+    { label: "Start", href: "/" },
+    {
+      label: product.collection?.title ?? "Kollektion",
+      href: product.collection
+        ? `/collections/${product.collection.handle}`
+        : "/store",
+    },
+    { label: product.title },
+  ]
+
   return (
     <>
       <div
-        className="content-container  flex flex-col small:flex-row small:items-start py-6 relative"
+        className="content-container"
         data-testid="product-container"
       >
-        <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-6">
-          <ProductInfo product={product} />
-          <ProductTabs product={product} />
-        </div>
-        <div className="block w-full relative">
-          <ImageGallery images={images} />
-        </div>
-        <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-12">
-          <ProductOnboardingCta />
-          <Suspense
-            fallback={
-              <ProductActions
-                disabled={true}
-                product={product}
-                region={region}
-              />
-            }
-          >
-            <ProductActionsWrapper id={product.id} region={region} />
-          </Suspense>
+        <Breadcrumbs items={breadcrumbs} />
+
+        <div className="flex flex-col gap-10 py-8 small:flex-row small:gap-12">
+          <div className="w-full small:w-7/12">
+            <ImageGallery images={images} />
+          </div>
+
+          <div className="flex w-full flex-col gap-10 small:sticky small:top-48 small:w-5/12 small:self-start">
+            <ProductInfo product={product} />
+            <Suspense
+              fallback={
+                <ProductActions
+                  disabled={true}
+                  product={product}
+                  region={region}
+                />
+              }
+            >
+              <ProductActionsWrapper id={product.id} region={region} />
+            </Suspense>
+            <ProductTabs product={product} />
+          </div>
         </div>
       </div>
       <div
