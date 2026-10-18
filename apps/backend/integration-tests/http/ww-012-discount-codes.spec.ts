@@ -3,7 +3,10 @@ import { createPromotionsWorkflow } from "@medusajs/medusa/core-flows"
 import { randomUUID } from "crypto"
 import { seedCheckout } from "../helpers/seed-checkout"
 
-jest.setTimeout(120 * 1000)
+const INTEGRATION_TEST_TIMEOUT_MS = 120_000
+const DAY_IN_MILLISECONDS = 86_400_000
+
+jest.setTimeout(INTEGRATION_TEST_TIMEOUT_MS)
 
 const codePrefix = `WW12-${randomUUID().slice(0, 8).toUpperCase()}`
 
@@ -149,7 +152,7 @@ medusaIntegrationTestRunner({
       await createPromotion(
         code,
         { type: "percentage", value: 10, currency_code: "eur" },
-        { endsAt: new Date(Date.now() - 24 * 60 * 60 * 1000) }
+        { endsAt: new Date(Date.now() - DAY_IN_MILLISECONDS) }
       )
       const checkout = await seedCheckout({ container: getContainer(), api })
       const initial = totals(

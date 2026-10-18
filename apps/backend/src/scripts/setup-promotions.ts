@@ -7,6 +7,7 @@ const PERCENT_CODE = "WERKFADEN10"
 const FIXED_CODE = "WERKFADEN5"
 const EXPIRED_CODE = "WERKFADEN-ABGELAUFEN"
 const EXHAUSTED_CODE = "WERKFADEN-LIMIT"
+const DAY_IN_MILLISECONDS = 86_400_000
 
 function assertIsolatedDb() {
   const databaseUrl = new URL(process.env.DATABASE_URL ?? "")
@@ -54,7 +55,7 @@ export default async function setupPromotions({ container }: ExecArgs): Promise<
       campaign: {
         name: "Abgelaufener Werkfaden Demo-Rabatt",
         campaign_identifier: EXPIRED_CODE,
-        ends_at: new Date(Date.now() - 24 * 60 * 60 * 1000),
+        ends_at: new Date(Date.now() - DAY_IN_MILLISECONDS),
       },
     },
     {
