@@ -73,6 +73,19 @@ Email is local: order confirmations and team-logo acknowledgments are written as
 - Order confirmation (`order.placed`) and personalization acknowledgment (`personalization-request.created`) are idempotent per order/request.
 - Provider options: `MAIL_FROM` and `MAIL_SINK_DIR` (see `apps/backend/.env.template`).
 
+## Discount codes (local demo)
+
+After `setup:store` and `setup:checkout`, run `npm run setup:promotions` to
+create repeatable demo codes in the isolated local development database:
+
+- `WERKFADEN10`: 10 % off eligible items.
+- `WERKFADEN5`: 5 EUR off eligible items.
+- `WERKFADEN-ABGELAUFEN`: expired test code.
+- `WERKFADEN-LIMIT`: usage limit already exhausted for negative testing.
+
+All codes are restricted to the local Deutschland/EUR demo region. They are
+test fixtures, not real offers, and are not configured in a live shop.
+
 ## Legal drafts
 
 `/impressum`, `/datenschutz`, `/agb` and `/widerruf` are **clearly labeled drafts** for the demo. Operator facts (company, address, register, VAT ID, contact) are explicit `[…]` placeholders and must be completed by a real operator. They are reachable from the footer and the persistent demo banner on every page, including checkout.

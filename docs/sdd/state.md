@@ -1,8 +1,10 @@
-# State — 2026-10-18 (phase 2 planned: WW-011..WW-014)
+# State — 2026-10-19 (WW-011 search coverage merged)
 
-- Purpose PORTFOLIO / Standard. Brand Werkfaden. de-DE, EUR, Germany only, sandbox payments. MVP WW-000..WW-010 all merged; PR #21 `3e785e8`, PR #22 `7f9dc4c` (storefront visual pass). `main` == origin, working tree clean, all checks green as of 2026-10-17.
-- Dev services: backend :9000 (admin `/app`), storefront :8000, Postgres :5544, Redis :6384. Admin users via `medusa user` (local only, no shared password). Restart `npm run dev` needs Ctrl+C first — a stale `next dev` holds :8000 (EADDRINUSE, fixed 2026-10-18 by killing old PID).
-- **WW-011 complete on `feature/ww-011-search-coverage`:** `/store` InstantSearch verified; `ww-011-search.spec.ts` passes all 5 cases. Test setup waits for initial Search index seeding before the runner's first DB snapshot, which otherwise terminates the seed connection. `npm run check` green: backend unit 39, storefront unit 24, integration HTTP 20; lint has two warnings, no errors.
-- Phase 2 tickets written 2026-10-18 (uncommitted): WW-011 search coverage (low), WW-012 discount codes (money → review; `setup-promotions.ts` + existing DiscountCode UI + reject tests), WW-013 B2B quotes (high; custom `quote` module, status map, offer → single-use promotion code → core checkout; blocked by WW-012), WW-014 embroidery calculator (server-side rate table, estimate only, never a cart line; blocked by WW-013 for quote prefill).
-- Still open / not started: Lighthouse baseline (NFR-P1), fresh read-only review of visual pass, FR-14 remainder (company accounts, negotiated price lists, repeat ordering) deferred, real launch needs purpose/tier revision + security gate.
-- Latest green `npm run check`: backend unit 39, storefront unit 24, integration HTTP 20 (WW-011 included). Integration needs `apps/backend/.env.test`; config-time env vars must be set at spec module scope (see WW-010).
+- Purpose PORTFOLIO / Standard. Brand Werkfaden. de-DE, EUR, Germany only, sandbox payments.
+- Merged to `main`: WW-000..WW-010 (PR #20/#21), storefront visual pass (PR #22 `7f9dc4c`), WW-012 discount codes (PR #23), WW-011 product search coverage (PR #24).
+- WW-011: `/store` InstantSearch verified operational; `integration-tests/http/ww-011-search.spec.ts` (5 cases) covers a hit, an unrelated-query miss, and the unknown-index / missing-key / malformed-body rejects. No production code change.
+- WW-012: Medusa server-calculated promos, local demo fixtures, German rejection handling, applied-code removal. `npm run setup:promotions` is idempotent against the guarded local dev DB.
+- Dev services: backend :9000 (admin `/app`), storefront :8000, Postgres :5544, Redis :6384. Integration config needs `apps/backend/.env.test`; config-time env vars must be set at spec module scope (see WW-010).
+- Phase 2: WW-013 B2B quotes (high; custom `quote` module, status map, offer → single-use promotion code → core checkout) and WW-014 embroidery calculator (server-side rate table, estimate only, never a cart line).
+- Open: Lighthouse baseline (NFR-P1), fresh read-only review of the visual pass; FR-14 remainder (company accounts, negotiated price lists, repeat ordering) deferred. Real launch needs purpose/tier revision + security gate.
+- `docs/sdd/state.md` holds per-session evidence; shipped history lives in PRs.
