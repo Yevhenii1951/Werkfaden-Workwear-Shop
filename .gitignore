@@ -64,3 +64,6 @@ Thumbs.db
 
 # Local mail sink (FR-11): generated demo emails must never be committed
 apps/backend/mail-sink/
+
+# Local browser-test artifacts (playwright MCP)
+.playwright-mcp/

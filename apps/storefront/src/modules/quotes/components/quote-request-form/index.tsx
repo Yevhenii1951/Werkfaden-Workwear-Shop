@@ -22,12 +22,18 @@ type Props = {
   countryCode: string
   products: QuoteProductOption[]
   initialItems: QuoteFormItem[]
+  initialComment?: string
 }
 
 const fieldClass =
   "block w-full h-11 px-4 bg-ui-bg-field border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active border-ui-border-base hover:bg-ui-bg-field-hover"
 
-const QuoteRequestForm = ({ countryCode, products, initialItems }: Props) => {
+const QuoteRequestForm = ({
+  countryCode,
+  products,
+  initialItems,
+  initialComment,
+}: Props) => {
   const [items, setItems] = useState<QuoteFormItem[]>(initialItems)
   const [selection, setSelection] = useState("")
   const [message, formAction] = useActionState<QuoteRequestState, FormData>(
@@ -204,6 +210,7 @@ const QuoteRequestForm = ({ countryCode, products, initialItems }: Props) => {
             name="comment"
             rows={4}
             maxLength={1000}
+            defaultValue={initialComment}
             className="block w-full p-3 bg-ui-bg-field border rounded-md border-ui-border-base focus:outline-none"
             data-testid="quote-comment-input"
           />

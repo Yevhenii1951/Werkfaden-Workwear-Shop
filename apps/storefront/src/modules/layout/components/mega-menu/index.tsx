@@ -22,6 +22,7 @@ const COLLECTIONS = [
 const QUICK_LINKS = [
   { label: "Alle Artikel", href: "/store" },
   { label: "Logo-Veredelung", href: "/personalization" },
+  { label: "Stickerei-Preisrechner", href: "/stickerei" },
   { label: "Angebote", href: "/angebote" },
 ]
 

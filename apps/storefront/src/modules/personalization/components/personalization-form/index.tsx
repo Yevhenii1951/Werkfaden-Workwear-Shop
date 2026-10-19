@@ -18,12 +18,18 @@ export type PersonalizationProduct = {
 
 type Props = {
   products: PersonalizationProduct[]
+  initialQuantity?: number
+  initialComment?: string
 }
 
 const fieldClass =
   "block w-full h-11 px-4 bg-ui-bg-field border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active border-ui-border-base hover:bg-ui-bg-field-hover"
 
-const PersonalizationForm = ({ products }: Props) => {
+const PersonalizationForm = ({
+  products,
+  initialQuantity,
+  initialComment,
+}: Props) => {
   const [message, formAction] = useActionState<
     PersonalizationState,
     FormData
@@ -95,7 +101,7 @@ const PersonalizationForm = ({ products }: Props) => {
         name="quantity"
         type="number"
         min={1}
-        defaultValue={1}
+        defaultValue={initialQuantity ?? 1}
         required
         data-testid="personalization-quantity-input"
       />
@@ -130,6 +136,7 @@ const PersonalizationForm = ({ products }: Props) => {
           name="comment"
           rows={4}
           maxLength={1000}
+          defaultValue={initialComment}
           className="block w-full px-4 py-3 bg-ui-bg-field border rounded-md focus:outline-none focus:ring-0 border-ui-border-base hover:bg-ui-bg-field-hover"
           data-testid="personalization-comment-input"
         />

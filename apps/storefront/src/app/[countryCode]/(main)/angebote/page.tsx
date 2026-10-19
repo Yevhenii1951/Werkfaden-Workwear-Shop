@@ -26,8 +26,10 @@ const STATUS_LABELS: Record<string, string> = {
 
 export default async function QuotesPage(props: {
   params: Promise<{ countryCode: string }>
+  searchParams: Promise<{ hinweis?: string }>
 }) {
   const { countryCode } = await props.params
+  const { hinweis } = await props.searchParams
   const region = await getRegion(countryCode)
 
   if (!region) {
@@ -102,6 +104,7 @@ export default async function QuotesPage(props: {
           countryCode={countryCode}
           products={options}
           initialItems={initialItems}
+          initialComment={hinweis?.slice(0, 1000)}
         />
       </div>
     </div>

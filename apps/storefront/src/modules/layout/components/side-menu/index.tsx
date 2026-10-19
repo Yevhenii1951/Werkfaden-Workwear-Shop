@@ -34,6 +34,11 @@ const MENU_GROUPS: {
         href: "/personalization",
         testid: "menu-personalization-link",
       },
+      {
+        label: "Stickerei-Preisrechner",
+        href: "/stickerei",
+        testid: "menu-embroidery-link",
+      },
       { label: "Angebote", href: "/angebote", testid: "menu-quotes-link" },
       { label: "Impressum", href: "/impressum" },
       { label: "Datenschutz", href: "/datenschutz" },

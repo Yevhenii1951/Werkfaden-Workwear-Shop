@@ -23,6 +23,7 @@ const ACCOUNT_LINKS = [
   { label: "Anmelden", href: "/account" },
   { label: "Warenkorb", href: "/cart" },
   { label: "Logo-Veredelung", href: "/personalization" },
+  { label: "Stickerei-Preisrechner", href: "/stickerei" },
   { label: "Angebote", href: "/angebote" },
 ]
 

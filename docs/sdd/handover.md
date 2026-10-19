@@ -46,6 +46,10 @@ database and refuses dev/prod databases.
 - Email notifications are written to `MAIL_SINK_DIR` (default
   `apps/backend/mail-sink`, gitignored) as `.eml` files.
 - Personalization is a reviewed request, never a paid order.
+- The embroidery calculator (`/stickerei`, `POST /store/embroidery/estimate`) is
+  a quoting aid: the server derives the surcharge from a demo rate table
+  (`apps/backend/src/lib/embroidery/rate-table.ts`), the estimate never becomes
+  a cart line, and it only prefills the personalization/quote forms.
 - Discount codes are server-calculated local demo fixtures; see `README.md`.
 
 ## Open items
@@ -59,4 +63,6 @@ database and refuses dev/prod databases.
 - B2B quotes are delivered (`ww-013-quotes.spec.ts`); a documented limitation
   is that a truly concurrent double-accept is not transactional (the sequential
   transition map still rejects a second accept).
+- Embroidery estimates are delivered (`ww-014-embroidery.spec.ts`); the rate
+  table is demo fixtures, not market prices.
 - `docs/sdd/state.md` holds per-session evidence; shipped history lives in PRs.
