@@ -1,5 +1,8 @@
 import { getProductPrice } from "@lib/util/get-product-price"
-import { getProductImageUrls } from "@lib/util/product-images"
+import {
+  getProductCardImageUrl,
+  getProductImageUrls,
+} from "@lib/util/product-images"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Thumbnail from "../thumbnail"
@@ -21,6 +24,10 @@ export default async function ProductPreview({
     product.handle,
     product.collection?.handle
   )
+  const cardImage = getProductCardImageUrl(
+    product.handle,
+    product.collection?.handle
+  )
 
   return (
     <LocalizedClientLink
@@ -33,7 +40,7 @@ export default async function ProductPreview({
         className="wf-card flex h-full min-w-0 flex-col overflow-hidden"
       >
         <Thumbnail
-          thumbnail={localImages[0] ?? product.thumbnail}
+          thumbnail={cardImage ?? localImages[0] ?? product.thumbnail}
           images={product.images}
           size="full"
           isFeatured={isFeatured}

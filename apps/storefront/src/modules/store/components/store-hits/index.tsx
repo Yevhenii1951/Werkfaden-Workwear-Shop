@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react"
 import { useHits, useInstantSearch } from "react-instantsearch"
 
 import useSearchSettled from "@lib/hooks/use-search-settled"
-import { getProductImageUrls } from "@lib/util/product-images"
+import { getProductCardImageUrl } from "@lib/util/product-images"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { Text } from "@modules/common/components/ui"
 import Thumbnail from "@modules/products/components/thumbnail"
@@ -78,9 +78,9 @@ const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
           data-testid="products-list"
         >
           {items.map((hit) => {
-            const localImages = hit.handle
-              ? getProductImageUrls(hit.handle)
-              : []
+            const localImage = hit.handle
+              ? getProductCardImageUrl(hit.handle)
+              : undefined
             return hit.handle ? (
               <li key={hit.objectID}>
                 <LocalizedClientLink
@@ -89,7 +89,7 @@ const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
                 >
                   <div data-testid="product-wrapper">
                     <Thumbnail
-                      thumbnail={localImages[0] ?? hit.thumbnail}
+                      thumbnail={localImage ?? hit.thumbnail}
                       size="full"
                     />
                     <div className="flex txt-compact-medium mt-4 justify-between">
