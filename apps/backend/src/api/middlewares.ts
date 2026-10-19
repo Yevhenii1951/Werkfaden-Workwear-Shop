@@ -13,6 +13,7 @@ import multer from 'multer'
 import { createRateLimiter } from '../lib/rate-limit'
 import { MAX_LOGO_BYTES } from '../modules/personalization/lib/validation'
 import { UpdatePersonalizationRequestStatusSchema } from './admin/personalization-requests/[id]/status/route'
+import { UpdateQuoteStatusSchema } from './admin/quotes/[id]/status/route'
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -89,6 +90,15 @@ const personalizationRateLimiter = createRateLimiter({
   max: 5,
 })
 
+const quoteRateLimiter = createRateLimiter({
+  windowMs: 60_000,
+  max: 10,
+})
+
+const optionalCustomerAuth = authenticate('customer', ['session', 'bearer'], {
+  allowUnauthenticated: true,
+})
+
 // The product index declares filterable `status` and `sales_channel_ids`, so
 // the route narrows it to published products in the key's sales channels.
 export default defineMiddlewares({
@@ -125,6 +135,26 @@ export default defineMiddlewares({
       middlewares: [
         validateAndTransformBody(UpdatePersonalizationRequestStatusSchema),
       ],
+    },
+    {
+      method: ['POST'],
+      matcher: '/store/quotes',
+      middlewares: [optionalCustomerAuth, quoteRateLimiter],
+    },
+    {
+      method: ['GET'],
+      matcher: '/store/quotes',
+      middlewares: [authenticate('customer', ['session', 'bearer'])],
+    },
+    {
+      method: ['GET', 'POST'],
+      matcher: '/store/quotes/:id*',
+      middlewares: [optionalCustomerAuth],
+    },
+    {
+      method: ['POST'],
+      matcher: '/admin/quotes/:id/status',
+      middlewares: [validateAndTransformBody(UpdateQuoteStatusSchema)],
     },
   ],
 })

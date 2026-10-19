@@ -41,6 +41,13 @@ const NavLinks = () => {
         >
           Logo-Veredelung
         </LocalizedClientLink>
+        <LocalizedClientLink
+          href="/angebote"
+          className={LINK_CLASS}
+          data-testid="nav-quotes-link"
+        >
+          Angebote
+        </LocalizedClientLink>
       </nav>
 
       <MegaMenu open={megaOpen} close={() => setMegaOpen(false)} />

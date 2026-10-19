@@ -19,6 +19,9 @@ module.exports = defineConfig({
       resolve: './src/modules/personalization',
     },
     {
+      resolve: './src/modules/quote',
+    },
+    {
       resolve: '@medusajs/medusa/notification',
       options: {
         providers: [
