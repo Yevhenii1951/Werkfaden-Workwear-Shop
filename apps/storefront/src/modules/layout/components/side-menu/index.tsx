@@ -34,6 +34,7 @@ const MENU_GROUPS: {
         href: "/personalization",
         testid: "menu-personalization-link",
       },
+      { label: "Angebote", href: "/angebote", testid: "menu-quotes-link" },
       { label: "Impressum", href: "/impressum" },
       { label: "Datenschutz", href: "/datenschutz" },
       { label: "AGB", href: "/agb" },

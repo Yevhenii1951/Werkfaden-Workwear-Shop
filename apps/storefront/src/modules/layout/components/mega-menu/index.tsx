@@ -22,6 +22,7 @@ const COLLECTIONS = [
 const QUICK_LINKS = [
   { label: "Alle Artikel", href: "/store" },
   { label: "Logo-Veredelung", href: "/personalization" },
+  { label: "Angebote", href: "/angebote" },
 ]
 
 const FEATURED_HANDLES = ["jacken-westen", "t-shirts", "arbeitshosen"]

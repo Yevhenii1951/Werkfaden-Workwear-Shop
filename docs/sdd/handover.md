@@ -39,6 +39,10 @@ database and refuses dev/prod databases.
 
 - No public deployment, live payments, real shipping or real email delivery.
 - Legal pages are clearly labeled drafts with placeholder operator facts.
+- B2B quotes (`/angebote`) create no order: accepting a quote only issues a
+  single-use, 7-day discount code for the offered amount, which the buyer then
+  applies in the normal cart/checkout. Operator pricing is set via the admin
+  `/admin/quotes` status route (no operator UI yet).
 - Email notifications are written to `MAIL_SINK_DIR` (default
   `apps/backend/mail-sink`, gitignored) as `.eml` files.
 - Personalization is a reviewed request, never a paid order.
@@ -52,4 +56,7 @@ database and refuses dev/prod databases.
 - Product search is operational: `POST /store/search` exposes the configured
   product index and returns hits for indexed products. Covered by
   `ww-011-search.spec.ts` against the isolated integration database.
+- B2B quotes are delivered (`ww-013-quotes.spec.ts`); a documented limitation
+  is that a truly concurrent double-accept is not transactional (the sequential
+  transition map still rejects a second accept).
 - `docs/sdd/state.md` holds per-session evidence; shipped history lives in PRs.

@@ -23,6 +23,7 @@ const ACCOUNT_LINKS = [
   { label: "Anmelden", href: "/account" },
   { label: "Warenkorb", href: "/cart" },
   { label: "Logo-Veredelung", href: "/personalization" },
+  { label: "Angebote", href: "/angebote" },
 ]
 
 const headingClass =
