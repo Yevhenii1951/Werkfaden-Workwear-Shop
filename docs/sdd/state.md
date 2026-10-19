@@ -1,9 +1,10 @@
-# State — 2026-10-18 (WW-012 verified)
+# State — 2026-10-19 (WW-011 search coverage merged)
 
-- Purpose PORTFOLIO / Standard. WW-000..WW-010 merged; main at PR #22. WW-011 remains separate and unmerged.
-- Current branch: `feature/ww-012-discount-codes`, PR #23; user authorized commit, push, and merge on 2026-10-18. Fresh review complete: Standards approve with one non-blocking nit; Spec approve.
-- WW-012 adds Medusa server-calculated promos, local fixtures, German rejection handling, and applied-code removal.
-- `npm run setup:promotions` ran twice against guarded local `127.0.0.1/werkfaden_dev`; second run confirmed idempotency.
-- Focused WW-012 integration tests: 6/6 passed. `npm run check`: passed; backend unit 39, storefront unit 29, HTTP integration 5 suites/21 tests. `npm run build`: passed.
-- Browser at 390/1440 px: 24,90 € → 22,41 € with `WERKFADEN10`; removal restored 24,90 €. Unknown and expired codes showed the German error with unchanged totals; no horizontal overflow. Cart cleared afterward.
-- Dev services: backend :9000, storefront :8000, Postgres :5544, Redis :6384. Integration config needs `apps/backend/.env.test`.
+- Purpose PORTFOLIO / Standard. Brand Werkfaden. de-DE, EUR, Germany only, sandbox payments.
+- Merged to `main`: WW-000..WW-010 (PR #20/#21), storefront visual pass (PR #22 `7f9dc4c`), WW-012 discount codes (PR #23), WW-011 product search coverage (PR #24).
+- WW-011: `/store` InstantSearch verified operational; `integration-tests/http/ww-011-search.spec.ts` (5 cases) covers a hit, an unrelated-query miss, and the unknown-index / missing-key / malformed-body rejects. No production code change.
+- WW-012: Medusa server-calculated promos, local demo fixtures, German rejection handling, applied-code removal. `npm run setup:promotions` is idempotent against the guarded local dev DB.
+- Dev services: backend :9000 (admin `/app`), storefront :8000, Postgres :5544, Redis :6384. Integration config needs `apps/backend/.env.test`; config-time env vars must be set at spec module scope (see WW-010).
+- Phase 2: WW-013 B2B quotes (high; custom `quote` module, status map, offer → single-use promotion code → core checkout) and WW-014 embroidery calculator (server-side rate table, estimate only, never a cart line).
+- Open: Lighthouse baseline (NFR-P1), fresh read-only review of the visual pass; FR-14 remainder (company accounts, negotiated price lists, repeat ordering) deferred. Real launch needs purpose/tier revision + security gate.
+- `docs/sdd/state.md` holds per-session evidence; shipped history lives in PRs.

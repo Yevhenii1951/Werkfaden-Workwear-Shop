@@ -148,7 +148,7 @@ then images move to a small placeholder map so they can be swapped in one place.
   (Werkfaden has no configurator), any new dependency, fake reviews/metrics,
   tests changes.
 - **Kept**: demo banner, a11y fixes already merged, German copy, legal pages,
-  instant-search gap (still open, not a design item).
+  InstantSearch behaviour is covered by WW-011 (not a design item).
 
 ## 9. Implementation notes
 

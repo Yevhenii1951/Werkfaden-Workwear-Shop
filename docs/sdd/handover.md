@@ -49,6 +49,7 @@ database and refuses dev/prod databases.
 - WW-012 discount codes are server-calculated local demo fixtures; a real
   launch needs revised purpose/tier, operator/legal facts, verified product
   facts and a separate operational/security gate.
-- WW-011 search coverage is in its own unmerged feature branch.
-- `/store` InstantSearch is still unavailable because no search module is configured.
+- Product search is operational: `POST /store/search` exposes the configured
+  product index and returns hits for indexed products. Covered by
+  `ww-011-search.spec.ts` against the isolated integration database.
 - `docs/sdd/state.md` holds per-session evidence; shipped history lives in PRs.
