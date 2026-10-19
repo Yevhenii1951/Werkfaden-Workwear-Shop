@@ -15,8 +15,10 @@ export const metadata: Metadata = {
 
 export default async function PersonalizationPage(props: {
   params: Promise<{ countryCode: string }>
+  searchParams: Promise<{ menge?: string; hinweis?: string }>
 }) {
   const { countryCode } = await props.params
+  const { menge, hinweis } = await props.searchParams
   const region = await getRegion(countryCode)
 
   if (!region) {
@@ -38,6 +40,12 @@ export default async function PersonalizationPage(props: {
       })),
     }))
 
+  const parsedQuantity = Number(menge)
+  const initialQuantity =
+    Number.isInteger(parsedQuantity) && parsedQuantity > 0
+      ? parsedQuantity
+      : undefined
+
   return (
     <div data-testid="personalization-page">
       <div className="content-container py-12">
@@ -48,7 +56,11 @@ export default async function PersonalizationPage(props: {
           individuellen Angebot. Die Anfrage ist unverbindlich und löst keine
           Bestellung aus.
         </p>
-        <PersonalizationForm products={options} />
+        <PersonalizationForm
+          products={options}
+          initialQuantity={initialQuantity}
+          initialComment={hinweis?.slice(0, 1000)}
+        />
       </div>
     </div>
   )

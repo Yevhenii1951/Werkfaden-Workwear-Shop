@@ -11,6 +11,7 @@ import {
 import { ContainerRegistrationKeys, MedusaError } from '@medusajs/framework/utils'
 import multer from 'multer'
 import { createRateLimiter } from '../lib/rate-limit'
+import { EstimateEmbroiderySchema } from '../lib/embroidery/validation'
 import { MAX_LOGO_BYTES } from '../modules/personalization/lib/validation'
 import { UpdatePersonalizationRequestStatusSchema } from './admin/personalization-requests/[id]/status/route'
 import { UpdateQuoteStatusSchema } from './admin/quotes/[id]/status/route'
@@ -95,6 +96,11 @@ const quoteRateLimiter = createRateLimiter({
   max: 10,
 })
 
+const embroideryRateLimiter = createRateLimiter({
+  windowMs: 60_000,
+  max: 30,
+})
+
 const optionalCustomerAuth = authenticate('customer', ['session', 'bearer'], {
   allowUnauthenticated: true,
 })
@@ -134,6 +140,14 @@ export default defineMiddlewares({
       matcher: '/admin/personalization-requests/:id/status',
       middlewares: [
         validateAndTransformBody(UpdatePersonalizationRequestStatusSchema),
+      ],
+    },
+    {
+      method: ['POST'],
+      matcher: '/store/embroidery/estimate',
+      middlewares: [
+        embroideryRateLimiter,
+        validateAndTransformBody(EstimateEmbroiderySchema),
       ],
     },
     {
