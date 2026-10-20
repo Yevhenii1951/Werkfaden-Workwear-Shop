@@ -24,7 +24,7 @@ const Hero = () => {
         <div className="absolute inset-x-0 bottom-0 pb-12 md:pb-20">
           <div className="content-container">
             <div className="max-w-2xl">
-              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-rose-700">
+              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-wf-accent">
                 Arbeitskleidung für Handwerk &amp; Team
               </span>
 
