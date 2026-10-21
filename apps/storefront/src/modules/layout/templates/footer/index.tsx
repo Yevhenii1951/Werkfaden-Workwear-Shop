@@ -1,6 +1,7 @@
 import { listCategories } from "@lib/data/categories"
 import { listCollections } from "@lib/data/collections"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import DemoContact from "@modules/layout/components/demo-contact"
 import FooterNewsletter from "@modules/layout/components/footer-newsletter"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
 
@@ -25,6 +26,7 @@ const ACCOUNT_LINKS = [
   { label: "Logo-Veredelung", href: "/personalization" },
   { label: "Stickerei-Preisrechner", href: "/stickerei" },
   { label: "Angebote", href: "/angebote" },
+  { label: "Kontakt", href: "/kontakt" },
 ]
 
 const headingClass =
@@ -55,8 +57,8 @@ export default async function Footer() {
           <FooterNewsletter />
         </div>
 
-        {/* Four columns */}
-        <div className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+        {/* Five columns */}
+        <div className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5 lg:gap-8">
           <div className="flex flex-col gap-4">
             <span className={headingClass}>Marke</span>
             <LocalizedClientLink
@@ -139,6 +141,10 @@ export default async function Footer() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <DemoContact />
           </div>
         </div>
 
