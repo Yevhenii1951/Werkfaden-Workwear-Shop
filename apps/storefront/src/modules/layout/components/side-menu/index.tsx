@@ -6,53 +6,11 @@ import { ArrowRightMini, XMark } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { Text, clx } from "@modules/common/components/ui"
+import { MENU_GROUPS } from "@modules/layout/lib/menu-groups"
 import { Fragment } from "react"
 import CountrySelect from "../country-select"
 import LanguageSelect from "../language-select"
 import { Locale } from "@lib/data/locales"
-
-const MENU_GROUPS: {
-  title: string
-  links: { label: string; href: string; testid?: string }[]
-}[] = [
-  {
-    title: "Kollektion",
-    links: [
-      { label: "Alle Artikel", href: "/store", testid: "menu-store-link" },
-      { label: "T-Shirts", href: "/collections/t-shirts" },
-      { label: "Poloshirts", href: "/collections/poloshirts" },
-      { label: "Sweatshirts & Hoodies", href: "/collections/sweatshirts-hoodies" },
-      { label: "Jacken & Westen", href: "/collections/jacken-westen" },
-      { label: "Arbeitshosen", href: "/collections/arbeitshosen" },
-    ],
-  },
-  {
-    title: "Service",
-    links: [
-      {
-        label: "Logo-Veredelung",
-        href: "/personalization",
-        testid: "menu-personalization-link",
-      },
-      {
-        label: "Stickerei-Preisrechner",
-        href: "/stickerei",
-        testid: "menu-embroidery-link",
-      },
-      { label: "Angebote", href: "/angebote", testid: "menu-quotes-link" },
-      { label: "Impressum", href: "/impressum" },
-      { label: "Datenschutz", href: "/datenschutz" },
-      { label: "AGB", href: "/agb" },
-    ],
-  },
-  {
-    title: "Konto",
-    links: [
-      { label: "Anmelden", href: "/account", testid: "menu-account-link" },
-      { label: "Warenkorb", href: "/cart", testid: "menu-cart-link" },
-    ],
-  },
-]
 
 type SideMenuProps = {
   regions: HttpTypes.StoreRegion[] | null

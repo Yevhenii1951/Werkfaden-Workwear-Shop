@@ -4,6 +4,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import DemoContact from "@modules/layout/components/demo-contact"
 import FooterNewsletter from "@modules/layout/components/footer-newsletter"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
+import { SERVICE_LINKS } from "@modules/layout/lib/service-links"
 
 const LEGAL_LINKS = [
   { label: "Impressum", href: "/impressum", testid: "footer-impressum-link" },
@@ -23,9 +24,14 @@ const LEGAL_LINKS = [
 const ACCOUNT_LINKS = [
   { label: "Anmelden", href: "/account" },
   { label: "Warenkorb", href: "/cart" },
-  { label: "Logo-Veredelung", href: "/personalization" },
-  { label: "Stickerei-Preisrechner", href: "/stickerei" },
-  { label: "Angebote", href: "/angebote" },
+]
+
+const FOOTER_LINKS = [
+  ...ACCOUNT_LINKS,
+  ...SERVICE_LINKS.map((service) => ({
+    label: service.label,
+    href: service.href,
+  })),
   { label: "Kontakt", href: "/kontakt" },
 ]
 
@@ -117,9 +123,9 @@ export default async function Footer() {
           )}
 
           <div className="flex flex-col gap-4">
-            <span className={headingClass}>Service &amp; Konto</span>
+            <span className={headingClass}>Leistungen &amp; Konto</span>
             <ul className="flex flex-col gap-2.5">
-              {ACCOUNT_LINKS.map((link) => (
+              {FOOTER_LINKS.map((link) => (
                 <li key={link.label}>
                   <LocalizedClientLink
                     className={linkClass}
