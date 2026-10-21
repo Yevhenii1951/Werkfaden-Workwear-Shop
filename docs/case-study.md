@@ -34,6 +34,9 @@ Mixing them in one flow misleads customers about what a click commits them to.
 - **Personalization**: logo upload with allowlisted raster types, decoded
   content validation and a 5 MiB limit; private storage; operator review with a
   status workflow.
+- **B2B quotes**: a buyer requests an offer for larger quantities, an operator
+  enters the offered total, and the acceptance hands out a single-use promotion
+  code for exactly that amount.
 - **Notifications (demo)**: order confirmation and logo acknowledgment written
   locally as `.eml` files; send failures surface as `FAILURE` records.
 - **Legal drafts**: `/impressum`, `/datenschutz`, `/agb`, `/widerruf` with
@@ -50,6 +53,11 @@ Mixing them in one flow misleads customers about what a click commits them to.
   provider is explicitly configured; the seam makes that swap a small change.
 - **Workflow-level events.** Notifications are triggered from Medusa events
   (`order.placed`, `personalization-request.created`) with idempotency keys.
+- **Compare-and-set instead of read-then-write.** Accepting a quote moves the
+  row from "quoted" to "accepted" in a single conditional `UPDATE` that only
+  matches while the row still is "quoted". The winner of that row issues the
+  offer code, every loser is rejected without creating a promotion, and a
+  failed workflow hands the quote back to the buyer.
 
 ## Evidence
 
@@ -57,6 +65,9 @@ Mixing them in one flow misleads customers about what a click commits them to.
   `pnpm run build` are the merge gate; both pass.
 - Integration specs cover payment retry, provider rejection, last-item stock
   protection, order ownership and admin operations.
+- The quote acceptance is proven by a concurrency spec: a row lock forces two
+  accepts to overlap, and the test asserts that exactly one succeeds, exactly
+  one promotion exists and the stored code is the winner's.
 
 ## Demo limitations
 
@@ -66,3 +77,5 @@ Mixing them in one flow misleads customers about what a click commits them to.
 - Product data and brand are fictional and not trademark-cleared.
 - Personalization, notifications and legal content require a real operator and
   a separate operational/security gate before any launch.
+- A crash between reserving an accepted quote and creating its offer code
+  leaves the quote "accepted" without a code; there is no recovery job.
