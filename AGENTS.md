@@ -12,6 +12,16 @@ Before writing code, verify whether Medusa core or the official starter already 
 
 New code follows parent readability/security/file-size standards; do not refactor inherited starter merely to change conventions. Keep MIT attribution. No editing build output or hand-editing lockfiles.
 
+## Ticket surface and gate
+
+Every ticket declares `Surface:` — `S` storefront (`apps/storefront/**`), `B` backend (`apps/backend/**`), `D` data/infra (migrations, seeds, env, docker, CI). Read `1_DEVELOPMENT_SDD/02_SDD_SYSTEM/medusa-workflow.md`.
+
+- `S`: no `apps/backend` file in the same PR. Iterate with `npm run check:ui`, the storefront build (`npm run build:ui`) and the browser scenario; run the full `npm run check` once before the merge decision.
+- `B`: full `npm run check`, reject-path tests for auth/payments/uploads, fresh security review.
+- `D`: full `npm run check`, migration rehearsal on a throwaway DB, human sign-off.
+
+The surface change mid-ticket is a stop, not a judgement call. Never upgrade a dependency inside a feature ticket; library facts come from Context7 or the official docs for the installed version, never from memory.
+
 German UI; working name Werkfaden; every public page clearly says demo. Never invent operator/legal/product certification facts. Existing starter design first; landing redesign needs separate design intake.
 
 Tests run sequentially on isolated test DB only. Auth/payments/uploads require reject-path tests and a fresh read-only security review before merge. No commits/push until explicitly requested by user.
