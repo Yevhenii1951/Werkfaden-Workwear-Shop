@@ -36,14 +36,12 @@ export default async function Nav() {
           <LocalizedClientLink
             href="/"
             className="wf-display shrink-0 text-[22px] text-wf-ink md:text-[26px]"
-            data-testid="nav-store-link"
+            data-testid="nav-logo-link"
           >
             Werkfaden
           </LocalizedClientLink>
 
-          <div className="hidden lg:flex lg:flex-1 lg:justify-center lg:absolute lg:left-1/2 lg:-translate-x-1/2">
-            <NavLinks />
-          </div>
+          <NavLinks />
 
           <div className="ml-auto flex items-center gap-4 text-wf-ink-soft md:gap-5">
             <Search />
