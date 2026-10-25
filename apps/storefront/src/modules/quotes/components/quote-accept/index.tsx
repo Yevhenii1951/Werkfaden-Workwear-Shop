@@ -24,7 +24,7 @@ const QuoteAccept = ({ id, token }: Props) => {
         data-testid="quote-accepted"
       >
         <p className="text-small-regular">
-          Ihr Angebot ist angenommen. Ihr persönlicher Rabattcode:
+          Ihre Anfrage ist angenommen. Ihr Rabattcode:
         </p>
         <code
           className="text-lg font-semibold tracking-wider"
@@ -33,11 +33,12 @@ const QuoteAccept = ({ id, token }: Props) => {
           {state.code}
         </code>
         <p className="text-small-regular text-ui-fg-subtle">
-          Der Code gilt einmalig und ist eine Woche gültig. Legen Sie die
-          Artikel in den Warenkorb und geben Sie den Code an der Kasse ein.
+          Der Code gilt einmalig und sieben Tage. Legen Sie die Artikel in den
+          Warenkorb und geben Sie den Code an der Kasse ein.
         </p>
         <p className="text-small-regular text-ui-fg-subtle">
-          Demo: Es wurde kein Auftrag erstellt.
+          Demo: Der Code ist ein fester Bestellrabatt und nicht an die
+          angefragten Artikel gebunden. Es wurde kein Auftrag erstellt.
         </p>
         <LocalizedClientLink href="/cart" className="underline w-fit">
           Zum Warenkorb

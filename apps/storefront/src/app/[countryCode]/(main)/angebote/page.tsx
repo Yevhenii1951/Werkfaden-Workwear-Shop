@@ -71,8 +71,10 @@ export default async function QuotesPage(props: {
         <p className="text-ui-fg-subtle max-w-2xl mb-8">
           Für Firmen, Teams und größere Bestellungen erstellen wir ein
           individuelles Angebot. Wählen Sie die Artikel und Mengen, nennen Sie
-          uns Ihre Kontaktdaten und wir melden uns mit einem unverbindlichen
-          Preis. Die Anfrage löst keine Bestellung aus.
+          uns Ihre Kontaktdaten — wir melden uns mit einem unverbindlichen
+          Angebot. Nehmen Sie es an, erhalten Sie einen einmaligen Rabattcode
+          über den angebotenen Betrag für eine Bestellung in diesem Shop. Die
+          Anfrage löst keine Bestellung aus.
         </p>
 
         {requests.length > 0 && (

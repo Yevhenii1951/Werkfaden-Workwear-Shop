@@ -72,11 +72,16 @@ export default async function QuoteDetailPage(props: {
         {request.status === "quoted" && (
           <div className="flex flex-col gap-y-4">
             <p className="text-large-semi" data-testid="quote-offer-total">
-              Angebot:{" "}
+              Angebotener Rabattwert:{" "}
               {convertToLocale({
                 amount: (request.offered_total_minor ?? 0) / 100,
                 currency_code: request.currency_code,
               })}
+            </p>
+            <p className="text-small-regular text-ui-fg-subtle">
+              Nach der Annahme wird dieser Betrag zu einem einmaligen
+              Rabattcode, gültig sieben Tage. Demo: Der Code ist ein fester
+              Bestellrabatt und nicht an die angefragten Artikel gebunden.
             </p>
             <QuoteAccept id={request.id} token={token} />
           </div>
@@ -92,8 +97,9 @@ export default async function QuoteDetailPage(props: {
               {request.promotion_code}
             </code>
             <p className="text-small-regular text-ui-fg-subtle">
-              Der Code gilt einmalig und ist eine Woche gültig. Geben Sie ihn an
-              der Kasse ein.
+              Der Code gilt einmalig und sieben Tage. Geben Sie ihn an der Kasse
+              ein. Demo: Er ist ein fester Bestellrabatt und nicht an die
+              angefragten Artikel gebunden.
             </p>
             <LocalizedClientLink href="/cart" className="underline w-fit">
               Zum Warenkorb
