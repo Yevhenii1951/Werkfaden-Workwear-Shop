@@ -1,14 +1,16 @@
-# State — 2026-10-22 (WW-017 + WW-018 merged, Medusa gate adopted)
+# State — 2026-10-25 (review remediation WW-019…WW-023, WW-027 merged)
 
 - Purpose PORTFOLIO / Standard. Brand Werkfaden. de-DE, EUR, Germany only, sandbox payments.
-- Merged to `main`: WW-000..WW-018 (PR #20–#30).
-  - WW-017 (PR #29 `f40e584`): contact page `/[countryCode]/kontakt` with the fictional Kassel demo address, OpenStreetMap embed (no API key), `Kontakt (Demo)` footer block + footer link. Impressum/Datenschutz deliberately untouched.
-  - WW-018 (PR #30 `16ca107`): header navigation — `Kollektion` (full-width mega menu, 1425 px at 1440, tiles `aspect-[16/10]`), `Alle Artikel` (link + hover/focus hint), `Leistungen` (dropdown with Logo-Veredelung, Angebote, Stickerei + descriptions + info-icon hints). One `openMenu` state, 200 ms close delay, chevron rotates for the open tab, Escape closes and returns the focus to the tab.
-- Evidence: `npm run check` green (backend lint 4 warnings/0 errors, backend unit 69/69, storefront unit 29/29, integration 9 suites/39 tests); storefront build green. Browser-checked at 1440×900, 1024×800 and 390×844 (tab order, Escape, hint placement, mega menu width).
-- Gotcha: `next build` needs the backend running (it fetches page data) and the storefront dev server stopped — `npm run build:ui` enforces both (backend `/health` + free `:8000`), cleans `.next` and builds. Do not call `next build` directly for this storefront.
-- Process (PR #31 `db9ad8d`): ticket declares `Surface:` `S`/`B`/`D`; `S` iterates with `npm run check:ui` (lint + tsc + 29 unit, ~8 s) and runs the full `npm run check` once before the merge decision. Canonical doc: `1_DEVELOPMENT_SDD/02_SDD_SYSTEM/medusa-workflow.md`.
-- Gotcha: a dropdown panel needs a positioned ancestor outside the centred nav row, otherwise it shrink-wraps to the row (565 px).
-- Gotcha: `group-hover` matches ANY hovered `.group` ancestor — the info hint is a sibling of the entry link, not a child.
-- Gotcha: a click that opens a panel must not toggle it again — the `focus` event opens the panel, so the click only opens.
-- Dev services: backend :9000 (admin `/app`, log `/tmp/opencode/004-backend-dev.log`), storefront :8000 (log `/tmp/opencode/004-storefront-dev.log`), Postgres :5544, Redis :6384. Integration needs `apps/backend/.env.test`.
-- Next: open follow-ups — accept no longer fires the quote module event (no subscriber today); FR-14 remainder (multi-user tiers, PDF); operator UI for quotes; the AI site helper (grounded, planned, not started); NFR-P1 Lighthouse baseline.
+- Merged to `main`: WW-000..WW-023, WW-027 (PR #20–#37).
+  - WW-019 (PR #32): personalization uploads land in gitignored `private/`, sharp input cap 40 MP.
+  - WW-020 (PR #33): listing filter needs ONE variant to match price + stock; `listAllProducts` walks every page (100/page, cap 5 000).
+  - WW-021 (PR #34): operator status changes are a compare-and-set (`quote/lib/status.ts`), race spec holds the row lock.
+  - WW-022 (PR #35): the offer is presented as a one-off discount, not an agreed price.
+  - WW-023 (PR #37): `npm run setup:demo` bootstraps an empty database end to end (store → search index → catalog → stock → checkout → promotions), shared `assertIsolatedLocalDb` guard reads `DB_NAME`, broken `backend:seed` removed. Rehearsal twice: identical counts, 0 errors, 25 documents indexed.
+  - WW-027 (PR #36): option / option-value events resolve to their products again (`products.id`, `option.products.id`); the indexer used to crash on every option change.
+- Evidence: `npm run check` green after each ticket (12 suites / 49 integration, 71 backend unit, 34 storefront unit); `npm run build:ui` green (41 pages).
+- Process gap: a fresh read-only review by a second agent is unavailable (`subagent` → "Free usage limit reached"); every PR carries a self-review instead, and `LICENSE` stays as the user edited it (proprietary, conflicts with the "keep MIT" line in AGENTS.md — user decision).
+- Gotcha: a fresh database has search-index records but no active version; the index is filled at boot, so scripted seeding needs `prepare-search` first.
+- Gotcha: option/option-value rows reach products only through link tables, never a `product_id` column — `query.graph` answers `null` for a wrong path instead of failing.
+- Dev services: backend :9000 (admin `/app`, log `/tmp/opencode/004-backend-dev.log`), storefront :8000, Postgres :5544, Redis :6384.
+- Next: WW-024 docs truth pass (stale InstantSearch/cent-integers claims, README test counts) + OSM map behind consent; WW-025 payment/stock evidence (webhook replay, real last-unit race); WW-026 account data `no-store`; then phase B — `store.config.ts` as the single source for brand/region/currency/port, add-ons as removable folders, second demo shop on a clean database.
