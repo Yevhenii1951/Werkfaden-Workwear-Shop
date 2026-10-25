@@ -8,7 +8,6 @@ import { revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import {
   getAuthHeaders,
-  getCacheOptions,
   getCacheTag,
   getCartId,
   getPendingCustomer,
@@ -50,10 +49,6 @@ export const retrieveCustomer =
       ...authHeaders,
     }
 
-    const next = {
-      ...(await getCacheOptions("customers")),
-    }
-
     return await sdk.client
       .fetch<{ customer: HttpTypes.StoreCustomer }>(`/store/customers/me`, {
         method: "GET",
@@ -61,8 +56,7 @@ export const retrieveCustomer =
           fields: "*orders",
         },
         headers,
-        next,
-        cache: "force-cache",
+        cache: "no-store",
       })
       .then(({ customer }) => customer)
       .catch(() => null)
@@ -73,15 +67,10 @@ export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
     ...(await getAuthHeaders()),
   }
 
-  const updateRes = await sdk.store.customer
+  return await sdk.store.customer
     .update(body, {}, headers)
     .then(({ customer }) => customer)
     .catch(medusaError)
-
-  const cacheTag = await getCacheTag("customers")
-  revalidateTag(cacheTag)
-
-  return updateRes
 }
 
 export async function signup(
@@ -220,9 +209,6 @@ async function completeLogin(
 
   await setAuthToken(token)
 
-  const customerCacheTag = await getCacheTag("customers")
-  revalidateTag(customerCacheTag)
-
   try {
     await transferCart()
   } catch (error) {
@@ -251,9 +237,6 @@ export async function signout(countryCode: string) {
   await sdk.auth.logout()
 
   await removeAuthToken()
-
-  const customerCacheTag = await getCacheTag("customers")
-  revalidateTag(customerCacheTag)
 
   await removeCartId()
 
@@ -306,11 +289,7 @@ export const addCustomerAddress = async (
 
   return sdk.store.customer
     .createAddress(address, {}, headers)
-    .then(async () => {
-      const customerCacheTag = await getCacheTag("customers")
-      revalidateTag(customerCacheTag)
-      return { success: true, error: null }
-    })
+    .then(() => ({ success: true, error: null }))
     .catch((err) => {
       return { success: false, error: err.toString() }
     })
@@ -325,11 +304,7 @@ export const deleteCustomerAddress = async (
 
   await sdk.store.customer
     .deleteAddress(addressId, headers)
-    .then(async () => {
-      const customerCacheTag = await getCacheTag("customers")
-      revalidateTag(customerCacheTag)
-      return { success: true, error: null }
-    })
+    .then(() => ({ success: true, error: null }))
     .catch((err) => {
       return { success: false, error: err.toString() }
     })
@@ -370,11 +345,7 @@ export const updateCustomerAddress = async (
 
   return sdk.store.customer
     .updateAddress(addressId, address, {}, headers)
-    .then(async () => {
-      const customerCacheTag = await getCacheTag("customers")
-      revalidateTag(customerCacheTag)
-      return { success: true, error: null }
-    })
+    .then(() => ({ success: true, error: null }))
     .catch((err) => {
       return { success: false, error: err.toString() }
     })
