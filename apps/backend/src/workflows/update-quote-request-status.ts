@@ -16,6 +16,7 @@ import {
   isValidOfferMinor,
   offerToMinor,
 } from "../modules/quote/lib/validation"
+import { transitionQuoteStatus } from "../modules/quote/lib/status"
 
 export type UpdateQuoteStatusInput = {
   id: string
@@ -43,10 +44,7 @@ const updateQuoteStatusStep = createStep(
       )
     }
 
-    const update: Record<string, unknown> = {
-      id: request.id,
-      status: input.status,
-    }
+    let offer: { offeredTotalMinor: number; quotedAt: Date } | undefined
 
     if (input.status === QuoteRequestStatus.QUOTED) {
       if (typeof input.offered_total !== "number") {
@@ -62,29 +60,44 @@ const updateQuoteStatusStep = createStep(
           "The offer total is outside the allowed range."
         )
       }
-      update.offered_total_minor = offeredMinor
-      update.quoted_at = new Date()
+      offer = { offeredTotalMinor: offeredMinor, quotedAt: new Date() }
     }
 
-    const updated = await service.updateQuoteRequests(update)
-
-    return new StepResponse(updated, {
+    // Compare-and-set against the status this step validated: a buyer who
+    // accepted in the meantime keeps the decision, and the operator gets a
+    // conflict instead of overwriting it.
+    const applied = await transitionQuoteStatus(container, {
       id: request.id,
-      status: request.status,
-      offered_total_minor: request.offered_total_minor,
-      quoted_at: request.quoted_at,
+      from: request.status,
+      to: input.status,
+      ...offer,
+    })
+
+    if (!applied) {
+      throw new MedusaError(
+        MedusaError.Types.NOT_ALLOWED,
+        "This quote changed in the meantime. Reload it and try again."
+      )
+    }
+
+    return new StepResponse(await service.retrieveQuoteRequest(request.id), {
+      id: request.id,
+      written: input.status,
+      previous: request.status,
+      previous_offered_total_minor: request.offered_total_minor ?? undefined,
+      previous_quoted_at: request.quoted_at ?? undefined,
     })
   },
   async (compensation, { container }) => {
     if (!compensation) {
       return
     }
-    const service = container.resolve<QuoteModuleService>(QUOTE_MODULE)
-    await service.updateQuoteRequests({
+    await transitionQuoteStatus(container, {
       id: compensation.id,
-      status: compensation.status,
-      offered_total_minor: compensation.offered_total_minor,
-      quoted_at: compensation.quoted_at,
+      from: compensation.written,
+      to: compensation.previous,
+      offeredTotalMinor: compensation.previous_offered_total_minor,
+      quotedAt: compensation.previous_quoted_at,
     })
   }
 )
