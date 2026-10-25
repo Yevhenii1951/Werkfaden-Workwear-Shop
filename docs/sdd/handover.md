@@ -67,9 +67,11 @@ database and refuses dev/prod databases.
 - Product search is operational: `POST /store/search` exposes the configured
   product index and returns hits for indexed products. Covered by
   `ww-011-search.spec.ts` against the isolated integration database.
-- B2B quotes are delivered (`ww-013-quotes.spec.ts`); a documented limitation
-  is that a truly concurrent double-accept is not transactional (the sequential
-  transition map still rejects a second accept).
+- B2B quotes are delivered (`ww-013-quotes.spec.ts`). Accepting and the operator
+  status change are compare-and-set writes (`quote/lib/acceptance.ts`,
+  `quote/lib/status.ts`); `ww-016-quote-acceptance.spec.ts` and
+  `ww-021-quote-status-race.spec.ts` hold both requests at the row lock and
+  prove that exactly one succeeds.
 - Embroidery estimates are delivered (`ww-014-embroidery.spec.ts`); the rate
   table is demo fixtures, not market prices.
 - `docs/sdd/state.md` holds per-session evidence; shipped history lives in PRs.

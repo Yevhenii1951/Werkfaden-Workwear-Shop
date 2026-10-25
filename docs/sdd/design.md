@@ -188,5 +188,5 @@ a product and `/cart` to keep NFR-A1 at 0 serious/critical, with
   routes were checked at 320, 390, 768, 1024, and 1440 px with no horizontal
   overflow. axe-core reported zero violations on home, store, PDP, and cart at
   390 and 1440 px. All 16 local image URLs return HTTP 200.
-- The existing `/store` InstantSearch issue remains open; it is independent of
-  this visual pass.
+- The `/store` search endpoint works (`POST /store/search`, covered by
+  `ww-011-search.spec.ts`); the earlier InstantSearch warning no longer applies.
