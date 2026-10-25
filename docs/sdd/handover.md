@@ -75,3 +75,15 @@ database and refuses dev/prod databases.
 - Embroidery estimates are delivered (`ww-014-embroidery.spec.ts`); the rate
   table is demo fixtures, not market prices.
 - `docs/sdd/state.md` holds per-session evidence; shipped history lives in PRs.
+
+## Open decisions
+
+- The review findings WW-019…WW-028 are closed. No further remediation is
+  queued.
+- Template extraction (brand config + removable add-ons + a second demo shop)
+  was considered and dropped: the next project is not known to overlap, and a
+  config file without a second consumer is speculative. The seams that would
+  make it cheap later are listed in `state.md`.
+- Licence: MIT, as the upstream DTC starter; own additions are marked in
+  `LICENSE`, and the README already states the attribution and the upstream
+  commit.
