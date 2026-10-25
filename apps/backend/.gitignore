@@ -3,6 +3,7 @@
 .DS_Store
 /uploads
 /static
+/private
 /node_modules
 yarn-error.log
 

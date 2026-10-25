@@ -62,7 +62,12 @@ module.exports = defineConfig({
             id: 'local',
             options: {
               upload_dir: 'static',
-              private_upload_dir: 'static',
+              // Never the same directory as `upload_dir`: the framework serves
+              // `static/` at `/static` for everyone, so a private file placed
+              // there is public as soon as its name is known. The local
+              // provider reads private files from this directory for the
+              // authenticated admin download route.
+              private_upload_dir: 'private',
               backend_url: `${
                 process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000'
               }/static`,
