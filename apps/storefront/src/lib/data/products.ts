@@ -18,6 +18,15 @@ type ProductListQueryParams = (HttpTypes.FindParams &
   option_value_id?: string | string[]
 }
 
+/** One page of the store API; the listing walks pages until the catalog ends. */
+const LISTING_PAGE_SIZE = 100
+
+/**
+ * A hard stop so a broken `count` cannot turn the listing into an endless loop.
+ * Above this size the catalog needs server-side filtering, not a bigger loop.
+ */
+const MAX_LISTING_PRODUCTS = 5_000
+
 export const listProducts = async ({
   pageParam = 1,
   queryParams,
@@ -97,8 +106,45 @@ export const listProducts = async ({
 }
 
 /**
- * This will fetch 100 products to the Next.js cache and sort them based on the sortBy parameter.
- * It will then return the paginated products based on the page and limit parameters.
+ * The store API only offers offset/limit; price, availability and option
+ * filters run after the fetch, so the listing needs the whole catalog and not
+ * the first page. Every request goes through the Next data cache with the
+ * `products` tag, so this walk happens once per revalidation, not per visitor.
+ */
+const listAllProducts = async ({
+  queryParams,
+  countryCode,
+}: {
+  queryParams?: ProductListQueryParams
+  countryCode: string
+}): Promise<HttpTypes.StoreProduct[]> => {
+  const products: HttpTypes.StoreProduct[] = []
+
+  for (let pageParam = 1; ; pageParam++) {
+    const { response, nextPage } = await listProducts({
+      pageParam,
+      queryParams: { ...queryParams, limit: LISTING_PAGE_SIZE },
+      countryCode,
+    })
+
+    products.push(...response.products)
+
+    if (!nextPage) {
+      return products
+    }
+
+    if (products.length >= MAX_LISTING_PRODUCTS) {
+      throw new Error(
+        `The catalog listing is capped at ${MAX_LISTING_PRODUCTS} products. A larger catalog needs server-side filtering instead of this walk.`
+      )
+    }
+  }
+}
+
+/**
+ * Fetches the whole catalog, then filters, sorts and paginates in memory so the
+ * active filters decide the page count. The returned `count` is the filtered
+ * count, not the backend total.
  */
 export const listProductsWithSort = async ({
   page = 0,
@@ -124,14 +170,10 @@ export const listProductsWithSort = async ({
     new Set((optionValueIds || []).filter(Boolean))
   )
 
-  const {
-    response: { products },
-  } = await listProducts({
-    pageParam: 0,
+  const products = await listAllProducts({
     queryParams: {
       ...queryParams,
       ...(optionFilters.length ? { option_value_id: optionFilters } : {}),
-      limit: 100,
     },
     countryCode,
   })
@@ -145,7 +187,7 @@ export const listProductsWithSort = async ({
 
   const filteredCount = listingProducts.length
 
-  const nextPage = filteredCount > pageParam + limit ? pageParam + limit : null
+  const nextPage = filteredCount > pageParam + limit ? page + 1 : null
 
   const paginatedProducts = sortedProducts.slice(pageParam, pageParam + limit)
 
