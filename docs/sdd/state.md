@@ -1,7 +1,7 @@
-# State — 2026-10-25 (review remediation WW-019…WW-028 merged)
+# State — 2026-10-25 (review remediation WW-019…WW-028 closed)
 
 - Purpose PORTFOLIO / Standard. Brand Werkfaden. de-DE, EUR, Germany only, sandbox payments.
-- Merged to `main`: WW-000..WW-024, WW-026..WW-028 (PR #20–#40).
+- Merged to `main`: WW-000..WW-028 (PR #20–#41). Review findings closed.
   - WW-019 (PR #32): personalization uploads land in gitignored `private/`, sharp input cap 40 MP.
   - WW-020 (PR #33): listing filter needs ONE variant to match price + stock; `listAllProducts` walks every page (100/page, cap 5 000).
   - WW-021 (PR #34): operator status changes are a compare-and-set (`quote/lib/status.ts`), race spec holds the row lock.
@@ -10,10 +10,11 @@
   - WW-027 (PR #36): option / option-value events resolve to their products again (`products.id`, `option.products.id`); the indexer used to crash on every option change.
   - WW-024 (PR #38): docs match the code — foreign order is 401 (not 404), `--passWithNoTests` removed, euro vs. cents split, test/ticket counts, search and quote-accept claims corrected.
   - WW-028 (PR #39): the contact map loads only after a click; before it, zero requests to openstreetmap.org (proven in the browser log).
+  - WW-025 (PR #41): the last unit is proven under real concurrency (two parallel `complete`, one order, stock never negative) and the same payment event is processed twice in a row and twice in parallel without a second order or payment. Proven live by a mutation: 2 units in stock -> both succeed and the spec fails.
   - WW-026 (PR #40): customer and order reads use `no-store` instead of `force-cache`; no cross-account leak (Next keys the cache by header), but the order page never saw webhook changes. Measured: 1 → 6 backend calls per three views.
 - Evidence: `npm run check` green after each ticket (12 suites / 49 integration, 71 backend unit, 34 storefront unit); `npm run build:ui` green (41 pages).
 - Process gap: a fresh read-only review by a second agent is unavailable (`subagent` → "Free usage limit reached"); every PR carries a self-review instead, and `LICENSE` stays as the user edited it (proprietary, conflicts with the "keep MIT" line in AGENTS.md — user decision).
 - Gotcha: a fresh database has search-index records but no active version; the index is filled at boot, so scripted seeding needs `prepare-search` first.
 - Gotcha: option/option-value rows reach products only through link tables, never a `product_id` column — `query.graph` answers `null` for a wrong path instead of failing.
 - Dev services: backend :9000 (admin `/app`, log `/tmp/opencode/004-backend-dev.log`), storefront :8000, Postgres :5544, Redis :6384.
-- Next: WW-025 payment/stock evidence (webhook replay, real last-unit race); then phase B — `store.config.ts` as the single source for brand/region/currency/port, add-ons as removable folders, second demo shop on a clean database.
+- Next: phase B — template extraction (`store.config.ts` as the single source for brand/contacts/region/VAT/shipping/ports/DB name, add-ons as removable folders: personalization, quotes, embroidery; a second demo shop on a clean DB via `setup:demo`). — `store.config.ts` as the single source for brand/region/currency/port, add-ons as removable folders, second demo shop on a clean database.

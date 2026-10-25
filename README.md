@@ -185,7 +185,7 @@ npm run check
 | --- | --- | --- |
 | Backend-Unit | 71 Tests | Preis- und Steuerberechnung, Rabattlogik, Token-Erzeugung, Bildvalidierung, Rate-Limit, E-Mail-Sink |
 | Storefront-Unit | 34 Tests | Filter- und Sortierlogik, Variantenverfügbarkeit, Rabattcodes |
-| HTTP-Integration | 12 Suites, 49 Tests gegen eine isolierte `_test`-Datenbank | Zahlung, Kunden- und Admin-Zugriff, Benachrichtigungen, Suche, Rabattcodes, Angebote, Stickerei, Angebotsannahme-Wettlauf |
+| HTTP-Integration | 13 Suites, 51 Tests gegen eine isolierte `_test`-Datenbank | Zahlung und Zahlungs-Idempotenz, letzter Bestand im Wettlauf, Kunden- und Admin-Zugriff, Benachrichtigungen, Suche, Rabattcodes, Angebote, Stickerei, Angebotsannahme-Wettlauf |
 
 Zwei Beispiele für Tests, die wirklich etwas beweisen:
 
