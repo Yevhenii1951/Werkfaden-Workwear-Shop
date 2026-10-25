@@ -84,11 +84,6 @@ type ListingVariant = HttpTypes.StoreProductVariant & {
   allow_backorder?: boolean | null
 }
 
-const variantAmounts = (product: HttpTypes.StoreProduct): number[] =>
-  (product.variants ?? [])
-    .map((variant) => (variant as ListingVariant).calculated_price?.calculated_amount)
-    .filter((amount): amount is number => typeof amount === "number")
-
 const isVariantAvailable = (variant: HttpTypes.StoreProductVariant): boolean => {
   const listingVariant = variant as ListingVariant
   if (listingVariant.manage_inventory === false) {
@@ -100,11 +95,17 @@ const isVariantAvailable = (variant: HttpTypes.StoreProductVariant): boolean => 
   return (listingVariant.inventory_quantity ?? 0) > 0
 }
 
-export const productMatchesFilters = (
-  product: HttpTypes.StoreProduct,
-  filters: ListingFilters
+/**
+ * Price and availability are properties of a variant, not of a product. Checking
+ * them separately lets a product pass a stock filter through one variant and a
+ * price filter through another, which shows a card the buyer cannot actually buy
+ * at the filtered price.
+ */
+export const variantMatchesListing = (
+  variant: HttpTypes.StoreProductVariant,
+  filters: Pick<ListingFilters, "priceMinEur" | "priceMaxEur" | "inStock">
 ): boolean => {
-  if (filters.inStock && !(product.variants ?? []).some(isVariantAvailable)) {
+  if (filters.inStock && !isVariantAvailable(variant)) {
     return false
   }
 
@@ -112,16 +113,29 @@ export const productMatchesFilters = (
     return true
   }
 
-  const amounts = variantAmounts(product)
-  if (!amounts.length) {
+  const amount = (variant as ListingVariant).calculated_price?.calculated_amount
+  if (typeof amount !== "number") {
     return false
   }
 
-  const minBound = filters.priceMinEur != null ? filters.priceMinEur : -Infinity
-  const maxBound = filters.priceMaxEur != null ? filters.priceMaxEur : Infinity
+  if (filters.priceMinEur != null && amount < filters.priceMinEur) {
+    return false
+  }
 
-  return Math.min(...amounts) <= maxBound && Math.max(...amounts) >= minBound
+  if (filters.priceMaxEur != null && amount > filters.priceMaxEur) {
+    return false
+  }
+
+  return true
 }
+
+export const productMatchesFilters = (
+  product: HttpTypes.StoreProduct,
+  filters: ListingFilters
+): boolean =>
+  (product.variants ?? []).some((variant) =>
+    variantMatchesListing(variant, filters)
+  )
 
 export const filterProductsByListing = (
   products: HttpTypes.StoreProduct[],

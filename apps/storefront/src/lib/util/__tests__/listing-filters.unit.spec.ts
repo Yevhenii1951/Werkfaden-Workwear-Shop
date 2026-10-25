@@ -130,4 +130,34 @@ describe("filterProductsByListing", () => {
     ])
     expect(filterProductsByListing([mixed], filters)).toEqual([mixed])
   })
+
+  it("does not match a product whose variants only straddle the range", () => {
+    const filters = { ...baseFilters, priceMinEur: 50, priceMaxEur: 60 }
+    const straddling = product([
+      { calculated_price: { calculated_amount: 10 } },
+      { calculated_price: { calculated_amount: 100 } },
+    ])
+    expect(filterProductsByListing([straddling], filters)).toEqual([])
+  })
+
+  it("requires one and the same variant to be priced and available", () => {
+    const filters = { ...baseFilters, priceMinEur: 50, priceMaxEur: 60, inStock: true }
+    const soldOutCheap = {
+      calculated_price: { calculated_amount: 55 },
+      inventory_quantity: 0,
+    }
+    const availableExpensive = {
+      calculated_price: { calculated_amount: 100 },
+      inventory_quantity: 4,
+    }
+
+    const split = product([soldOutCheap, availableExpensive])
+    expect(filterProductsByListing([split], filters)).toEqual([])
+
+    const buyable = product([
+      soldOutCheap,
+      { calculated_price: { calculated_amount: 58 }, inventory_quantity: 2 },
+    ])
+    expect(filterProductsByListing([buyable], filters)).toEqual([buyable])
+  })
 })
