@@ -11,20 +11,9 @@ import {
   MedusaError,
 } from "@medusajs/framework/utils"
 
-const LOCATION_NAME = "Werkfaden Lager"
+import { assertIsolatedLocalDb } from "./lib/isolated-db"
 
-function assertIsolatedDb() {
-  const dbUrl = process.env.DATABASE_URL ?? ""
-  try {
-    const url = new URL(dbUrl)
-    if (url.hostname !== "127.0.0.1" || url.pathname !== "/werkfaden_dev") {
-      throw new MedusaError(MedusaError.Types.NOT_ALLOWED, "Refusing to seed outside isolated werkfaden_dev")
-    }
-  } catch (e) {
-    if (e instanceof MedusaError) throw e
-    throw new MedusaError(MedusaError.Types.INVALID_DATA, "Invalid DATABASE_URL")
-  }
-}
+const LOCATION_NAME = "Werkfaden Lager"
 
 function readStockBySku(): Map<string, number> {
   const contentDir = path.resolve(process.cwd(), "..", "..", "docs", "content")
@@ -42,7 +31,7 @@ export default async function setupInventory({ container }: ExecArgs) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
   const query = container.resolve(ContainerRegistrationKeys.QUERY)
 
-  assertIsolatedDb()
+  assertIsolatedLocalDb("Inventory setup")
 
   const stockBySku = readStockBySku()
 

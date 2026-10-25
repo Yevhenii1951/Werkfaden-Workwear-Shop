@@ -22,9 +22,12 @@
     "check": "npx --yes pnpm@10.11.1 run lint && npx --yes pnpm@10.11.1 run typecheck && npx --yes pnpm@10.11.1 --filter @dtc/backend run test:unit && npx --yes pnpm@10.11.1 --filter @dtc/storefront run test:unit && npx --yes pnpm@10.11.1 --filter @dtc/backend run test:integration:http",
     "check:ui": "pnpm --filter @dtc/storefront run lint && pnpm --filter @dtc/storefront exec tsc --noEmit && pnpm --filter @dtc/storefront run test:unit",
     "build:ui": "node scripts/build-storefront.mjs",
+    "setup:catalog": "pnpm --filter @dtc/backend exec medusa exec ./src/scripts/seed-werkfaden-catalog.ts",
+    "setup:inventory": "pnpm --filter @dtc/backend exec medusa exec ./src/scripts/setup-inventory.ts",
     "setup:store": "pnpm --filter @dtc/backend exec medusa exec ./src/scripts/setup-store.ts",
     "setup:checkout": "pnpm --filter @dtc/backend exec medusa exec ./src/scripts/setup-checkout.ts",
-    "setup:promotions": "pnpm --filter @dtc/backend exec medusa exec ./src/scripts/setup-promotions.ts"
+    "setup:promotions": "pnpm --filter @dtc/backend exec medusa exec ./src/scripts/setup-promotions.ts",
+    "setup:demo": "pnpm --filter @dtc/backend exec medusa exec ./src/scripts/setup-demo.ts"
   },
   "pnpm": {
     "overrides": {

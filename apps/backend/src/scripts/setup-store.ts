@@ -1,7 +1,8 @@
 import { writeFileSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import type { MedusaContainer } from "@medusajs/framework"
-import { ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
+import type { Logger } from "@medusajs/framework/types"
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import {
   createApiKeysWorkflow,
   createRegionsWorkflow,
@@ -11,11 +12,10 @@ import {
   linkSalesChannelsToApiKeyWorkflow,
 } from "@medusajs/medusa/core-flows"
 
+import { assertIsolatedLocalDb } from "./lib/isolated-db"
+
 export default async function setupStore({ container }: { container: MedusaContainer }): Promise<void> {
-  const databaseUrl = new URL(process.env.DATABASE_URL ?? "")
-  if (databaseUrl.hostname !== "127.0.0.1" || databaseUrl.pathname !== "/werkfaden_dev") {
-    throw new MedusaError(MedusaError.Types.NOT_ALLOWED, "Store bootstrap is restricted to the isolated local werkfaden_dev database")
-  }
+  assertIsolatedLocalDb("Store bootstrap")
 
   const query = container.resolve(ContainerRegistrationKeys.QUERY)
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
@@ -59,18 +59,28 @@ export default async function setupStore({ container }: { container: MedusaConta
     input: { data: [{ name: "Werkfaden Default", type: "default" }] },
   })
 
+  if (process.env.SETUP_WRITE_STOREFRONT_KEY === "false") {
+    logger.info(`Storefront key not written (SETUP_WRITE_STOREFRONT_KEY=false); set NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=${key.token} manually.`)
+  } else {
+    writePublishableKey(key.token, logger)
+  }
+  logger.info("Local German EUR store configured. Catalog, shipping, tax and Stripe remain pending.")
+}
+
+// A rehearsal database creates its own key; writing it here would break a
+// storefront that is already pointed at the dev database.
+function writePublishableKey(token: string, logger: Logger): void {
   const envPath = resolve(process.cwd(), "../storefront/.env.local")
+  const keyLine = /^NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=.*$/m
+
   try {
     const envContent = readFileSync(envPath, "utf8")
-    if (!/^NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=.*$/m.test(envContent)) {
-      throw new MedusaError(MedusaError.Types.INVALID_DATA, "Store created, but storefront env requires manual publishable-key configuration")
+    if (!keyLine.test(envContent)) {
+      logger.warn(`${envPath} has no NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY line; set it to ${token} manually.`)
+      return
     }
-    writeFileSync(envPath, envContent.replace(
-      /^NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=.*$/m,
-      `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=${key.token}`,
-    ), { mode: 0o600 })
-  } catch (e) {
+    writeFileSync(envPath, envContent.replace(keyLine, `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=${token}`), { mode: 0o600 })
+  } catch {
     logger.warn("Storefront env.local not found or not writable; publishable key not written to file")
   }
-  logger.info("Local German EUR store configured; storefront key saved privately. Catalog, shipping, tax and Stripe remain pending.")
 }

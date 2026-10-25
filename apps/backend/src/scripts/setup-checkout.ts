@@ -10,6 +10,8 @@ import {
   updateRegionsWorkflow,
 } from "@medusajs/medusa/core-flows"
 
+import { assertIsolatedLocalDb } from "./lib/isolated-db"
+
 const REGION_NAME = "Deutschland (Demo)"
 const LOCATION_NAME = "Werkfaden Lager"
 const FULFILLMENT_SET_NAME = "Werkfaden Versand"
@@ -21,21 +23,11 @@ const FREE_SHIPPING_THRESHOLD = 100
 const VAT_RATE = 19
 const STRIPE_PROVIDER_ID = "pp_stripe_stripe"
 
-function assertIsolatedDb() {
-  const databaseUrl = new URL(process.env.DATABASE_URL ?? "")
-  if (databaseUrl.hostname !== "127.0.0.1" || databaseUrl.pathname !== "/werkfaden_dev") {
-    throw new MedusaError(
-      MedusaError.Types.NOT_ALLOWED,
-      "Checkout bootstrap is restricted to the isolated local werkfaden_dev database",
-    )
-  }
-}
-
 export default async function setupCheckout({ container }: ExecArgs): Promise<void> {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
   const query = container.resolve(ContainerRegistrationKeys.QUERY)
 
-  assertIsolatedDb()
+  assertIsolatedLocalDb("Checkout bootstrap")
 
   const { data: regions } = await query.graph({
     entity: "region",
