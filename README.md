@@ -241,10 +241,30 @@ npx --yes pnpm@10.11.1 install --frozen-lockfile
 npm run setup:env
 docker compose up -d --wait
 npx --yes pnpm@10.11.1 --filter @dtc/backend exec medusa db:migrate --skip-scripts --execute-safe-links --execute-safe-search
-npx --yes pnpm@10.11.1 run setup:store      # Store (Deutschland/EUR) + Publishable Key
-npx --yes pnpm@10.11.1 run setup:checkout   # Versand, Steuer, Zahlungsanbieter
-npx --yes pnpm@10.11.1 run setup:promotions # Demo-Rabattcodes
+npm run setup:demo   # Store, Suche, Katalog, Bestand, Versand/Steuer, Rabattcodes
 ```
+
+`setup:demo` ist die einzige Einrichtungskette: sie legt den Store (Deutschland/EUR)
+mit Publishable Key an, füllt den Suchindex, sät die 25 Demo-Produkte samt
+Lagerbeständen, richtet Versand, Steuer und Zahlungsanbieter ein und erzeugt die
+Demo-Rabattcodes. Jeder Schritt ist idempotent — ein zweiter Lauf ändert keine
+Zahlen und legt nichts doppelt an. Einzelschritte für die Fehlersuche:
+`setup:store`, `setup:catalog`, `setup:inventory`, `setup:checkout`,
+`setup:promotions`.
+
+Alle Einrichtungsskripte schreiben nur in eine lokale Datenbank, deren Name zu
+`DB_NAME` passt (`werkfaden_dev` aus `.env`); sonst brechen sie mit einer
+klaren Meldung ab, bevor sie etwas anlegen. Für eine zweite, saubere Datenbank
+(z. B. eine Probeinstallation) überschreibt man deshalb beide Werte und
+verhindert, dass der Publishable Key der laufenden Storefront ersetzt wird:
+
+```bash
+DATABASE_URL=postgres://…:5544/werkfaden_rehearsal DB_NAME=werkfaden_rehearsal \
+  SETUP_WRITE_STOREFRONT_KEY=false npm run setup:demo
+```
+
+Genau diesen Lauf macht `scripts/rehearse-demo-setup.sh`: Datenbank neu anlegen,
+migrieren, die Kette zweimal ausführen und die Zeilenzahlen vergleichen.
 
 Der Env-Generator überschreibt nichts Bestehendes; Secrets bleiben in
 ignorierten lokalen Dateien. PostgreSQL lauscht auf `localhost:5544`, Redis auf

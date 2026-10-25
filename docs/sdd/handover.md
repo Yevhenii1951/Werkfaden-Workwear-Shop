@@ -13,12 +13,19 @@ never add a second lockfile).
 npx --yes pnpm@10.11.1 install --frozen-lockfile
 npm run setup:env
 docker compose up -d --wait
-npx --yes pnpm@10.11.1 run setup:store          # Germany/EUR store + publishable key
-npx --yes pnpm@10.11.1 run setup:checkout       # tax, shipping, Stripe (sandbox)
-npx --yes pnpm@10.11.1 run setup:promotions     # local demo discount codes
+npx --yes pnpm@10.11.1 --filter @dtc/backend exec medusa db:migrate --skip-scripts --execute-safe-links --execute-safe-search
+npx --yes pnpm@10.11.1 run setup:demo            # store, search, catalog, stock, shipping/tax, codes
 npx --yes pnpm@10.11.1 run backend:dev          # :9000  (admin at /app)
 npx --yes pnpm@10.11.1 run storefront:dev       # :8000
 ```
+
+`setup:demo` is the whole bootstrap and is idempotent; single steps
+(`setup:store|catalog|inventory|checkout|promotions`) exist for debugging. Every
+setup script writes only into a local database whose name matches `DB_NAME`
+(`werkfaden_dev`); a second database needs both values overridden, plus
+`SETUP_WRITE_STOREFRONT_KEY=false` so the running storefront keeps its key.
+`scripts/rehearse-demo-setup.sh` proves the chain from scratch: fresh database,
+migrate, run twice, compare row counts.
 
 Secrets stay in gitignored `.env` files; `.env.template` is the public
 contract. Stripe test-mode keys are required to pay for an order. Admin users

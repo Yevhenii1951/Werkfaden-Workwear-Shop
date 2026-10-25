@@ -112,14 +112,10 @@ docker compose up -d --wait      # или: npm run infra:up
 npx --yes pnpm@10.11.1 --filter @dtc/backend exec medusa db:migrate \
   --skip-scripts --execute-safe-links --execute-safe-search
 
-# 5. создать немецкий магазин (регион EUR, канал, publishable key)
-npm run setup:store        # ключ запишется приватно
+# 5. магазин, поисковый индекс, каталог, склад, доставка/налог, промокоды
+npm run setup:demo         # идемпотентно: повторный запуск ничего не дублирует
 
-# 6. сид каталога, склад, доставка/налог
-npm run backend:seed       # seed-werkfaden-catalog.ts: 25 товаров / 150 вариантов
-npm run setup:checkout     # DE-налог 19%, доставка 5.90, бесплатно от 100 EUR
-
-# 7. запуск
+# 6. запуск
 npm run backend:dev        # :9000  (админка :9000/app)
 npm run storefront:dev     # :8000
 ```
@@ -458,9 +454,7 @@ npm run storefront:dev         # Next.js :8000
 
 # данные/настройка
 npm run setup:env              # секреты + .env (однократно)
-npm run setup:store            # регион Germany/EUR + канал + ключ
-npm run backend:seed           # 25 товаров / 150 вариантов
-npm run setup:checkout         # налог 19% + доставка 5.90 / free от 100
+npm run setup:demo             # магазин + поиск + каталог + склад + доставка/налог + промокоды
 pnpm -w run db:migrate         # миграции
 
 # качество

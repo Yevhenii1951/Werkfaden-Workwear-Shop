@@ -2,6 +2,8 @@ import type { ExecArgs } from "@medusajs/framework/types"
 import { ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
 import { createPromotionsWorkflow } from "@medusajs/medusa/core-flows"
 
+import { assertIsolatedLocalDb } from "./lib/isolated-db"
+
 const REGION_NAME = "Deutschland (Demo)"
 const PERCENT_CODE = "WERKFADEN10"
 const FIXED_CODE = "WERKFADEN5"
@@ -9,18 +11,8 @@ const EXPIRED_CODE = "WERKFADEN-ABGELAUFEN"
 const EXHAUSTED_CODE = "WERKFADEN-LIMIT"
 const DAY_IN_MILLISECONDS = 86_400_000
 
-function assertIsolatedDb() {
-  const databaseUrl = new URL(process.env.DATABASE_URL ?? "")
-  if (databaseUrl.hostname !== "127.0.0.1" || databaseUrl.pathname !== "/werkfaden_dev") {
-    throw new MedusaError(
-      MedusaError.Types.NOT_ALLOWED,
-      "Promotion setup is restricted to the isolated local werkfaden_dev database"
-    )
-  }
-}
-
 export default async function setupPromotions({ container }: ExecArgs): Promise<void> {
-  assertIsolatedDb()
+  assertIsolatedLocalDb("Promotion setup")
 
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
   const query = container.resolve(ContainerRegistrationKeys.QUERY)

@@ -16,20 +16,13 @@ import {
   ProductStatus,
 } from "@medusajs/framework/utils"
 
+import { assertIsolatedLocalDb } from "./lib/isolated-db"
+
 export default async function seedWerkfadenCatalog({ container }: ExecArgs) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
   const query = container.resolve(ContainerRegistrationKeys.QUERY)
 
-  const dbUrl = process.env.DATABASE_URL ?? ""
-  try {
-    const u = new URL(dbUrl)
-    if (u.hostname !== "127.0.0.1" || u.pathname !== "/werkfaden_dev") {
-      throw new MedusaError(MedusaError.Types.NOT_ALLOWED, "Refusing to seed outside isolated werkfaden_dev")
-    }
-  } catch (e) {
-    if (e instanceof MedusaError) throw e
-    throw new MedusaError(MedusaError.Types.INVALID_DATA, "Invalid DATABASE_URL")
-  }
+  assertIsolatedLocalDb("Catalog seeding")
 
   const contentDir = path.resolve(process.cwd(), "..", "..", "docs", "content")
   const products = JSON.parse(fs.readFileSync(path.join(contentDir, "products.json"), "utf8"))
