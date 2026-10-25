@@ -147,8 +147,8 @@ geschwärzt. Der Admin selbst ist der unveränderte Medusa-Admin.
 **Konto & Bestellungen**
 
 - Registrierung, Login, Logout, Bestellhistorie.
-- Zugriff nur auf eigene Bestellungen; fremde Bestellung liefert 404, nicht 403 —
-  keine Bestätigung, dass die ID existiert.
+- Zugriff nur auf eigene Bestellungen: fremde Bestellung, anonyme Anfrage und
+  ungültiges Token erhalten 401, nicht 403 (`ww-007-customer-access.spec.ts`).
 
 **Veredelung, Angebote & Stickerei**
 
@@ -183,9 +183,9 @@ npm run check
 
 | Ebene | Umfang | Prüft |
 | --- | --- | --- |
-| Backend-Unit | 69 Tests | Preis- und Steuerberechnung, Rabattlogik, Token-Erzeugung, Bildvalidierung, Rate-Limit, E-Mail-Sink |
-| Storefront-Unit | 29 Tests | Filter- und Sortierlogik, Variantenverfügbarkeit, Rabattcodes |
-| HTTP-Integration | 9 Suites, 39 Tests gegen eine isolierte `_test`-Datenbank | Zahlung, Kunden- und Admin-Zugriff, Benachrichtigungen, Suche, Rabattcodes, Angebote, Stickerei, Angebotsannahme-Wettlauf |
+| Backend-Unit | 71 Tests | Preis- und Steuerberechnung, Rabattlogik, Token-Erzeugung, Bildvalidierung, Rate-Limit, E-Mail-Sink |
+| Storefront-Unit | 34 Tests | Filter- und Sortierlogik, Variantenverfügbarkeit, Rabattcodes |
+| HTTP-Integration | 12 Suites, 49 Tests gegen eine isolierte `_test`-Datenbank | Zahlung, Kunden- und Admin-Zugriff, Benachrichtigungen, Suche, Rabattcodes, Angebote, Stickerei, Angebotsannahme-Wettlauf |
 
 Zwei Beispiele für Tests, die wirklich etwas beweisen:
 
@@ -193,7 +193,8 @@ Zwei Beispiele für Tests, die wirklich etwas beweisen:
   Aktionen erzeugen. Der Test erzwingt genau eine erfolgreiche Antwort und
   mindestens eine Ablehnung — er prüft das Ergebnis, nicht die Absicht.
 - **Fremde Bestellung:** ein Konto darf die Bestellung eines anderen Kontos nicht
-  lesen, und zwar mit derselben Antwort wie eine nicht existierende ID.
+  lesen; fremde ID, anonyme Anfrage und ungültiges Token bekommen dieselbe
+  Ablehnung (401).
 
 Kein `passWithNoTests`, keine ignorierten Build-Fehler, keine Mocks statt
 Datenbank, wo Bestand und Wettlauf das eigentliche Risiko sind.
@@ -208,7 +209,7 @@ Jede Änderung beginnt in `docs/sdd/`, nicht im Code:
 | `docs/sdd/tier.md` | Zweck (PORTFOLIO) und Tier (Standard) — legt fest, wie viel Zeremonie gilt |
 | `docs/sdd/spec.md` | 14 funktionale Anforderungen (FR), nicht-funktionale Anforderungen (NFR), UX-Akzeptanz, Nicht-Ziele |
 | `docs/sdd/contract.md` | Datenmodell, Modulgrenzen, Zod-Verträge, Berechtigungen |
-| `docs/sdd/tickets/` | 19 vertikale Tickets WW-000…WW-018, je ein Branch, je ein PR |
+| `docs/sdd/tickets/` | 25 vertikale Tickets WW-000…WW-027, je ein Branch, je ein PR |
 | `docs/sdd/security-review.md` | Sicherheitsprüfung für Auth, Uploads und Zahlungen |
 | `docs/sdd/state.md` | Übergabe: erledigt, offen, Branch, Umgebung |
 
@@ -216,7 +217,9 @@ Jedes Ticket liefert einen senkrechten Schnitt mit eigenem Prüfszenario und
 Evidenz im PR. Zwei Beispiele für Entscheidungen, die dort dokumentiert sind und
 den Code geformt haben:
 
-- Geldbeträge sind ganzzahlige Cent — nie `Math.round(…*100)/100`.
+- Die Medusa-API liefert Preise in Euro (`29.9`), nicht in Cent; nur eigene
+  Beträge wie der Angebotswert liegen als ganzzahlige Cent in der Datenbank
+  (`offered_total_minor`) und werden an der Grenze einmal gerundet.
 - Ein Angebot ist ohne Login über einen einmaligen Token erreichbar; der Token
   wird nur als Hash gespeichert und in konstanter Zeit verglichen.
 
@@ -285,7 +288,7 @@ Zwei Stolpersteine, die im Projekt codiert sind statt dokumentiert:
 - `npm run build:ui` baut die Storefront nur, wenn das Backend auf `:9000`
   antwortet und kein Dev-Server auf `:8000` läuft (beide teilen sich `.next`).
   Sonst bricht der Build mit einer verständlichen Meldung ab.
-- `npm run check:ui` prüft nur die Storefront-Oberfläche (Lint, Typen, 29 Tests,
+- `npm run check:ui` prüft nur die Storefront-Oberfläche (Lint, Typen, 34 Tests,
   unter 10 Sekunden) — für UI-Tickets statt des vollen Laufs.
 
 ## Demo-Grenzen
